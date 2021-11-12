@@ -18,7 +18,10 @@ nav_order: 2
 
 ---
 
-Laravel Translate can be used with no configuration. To ensure this package can be used for any project, we provide multiple entry points including a Facade and an API. 
+
+
+
+
 
 ## Facade
 
@@ -70,7 +73,7 @@ To simplify the detection of this language, the Laravel Translate package provid
 $targetLocale = \Twigger\Translate\Detect::lang();
 ```
 
-The strategies used to detect the requested locale can be modified, which is described further in the [configuration option]({{ site.baseurl }}{% link _docs/configuration/package-configuration.md %}#detection) section.
+The strategies used to detect the requested locale can be modified, which is described further in the  section.
 
 ### Source Language
 
