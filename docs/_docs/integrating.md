@@ -109,25 +109,4 @@ If you use your own API to update settings, or a standard web request, you can u
 
 ## Creating a settings page
 
-Using the methods to get setting values as a form in the get settings docs, you can get a Form instance of the settings you want to show. These will be in groups, depending on the group defined in the setting. Pass this schema to the frontend and render it using a dynamic form generator.
-
-If you want to give the groups more information, such as a proper title and description, you may set it in config.
-
-```php
-<?php
-
-// config/settings.php
-
-return [
-
-    'groups' => [
-        'security' [
-            'title' => 'Security',
-            'subtitle' => 'Settings related to the security of the site'
-        ],
-        ...
-    ]
-]
-
-]
-```
+We've previously covered getting a Form instance from settings/groups of settings. Pass this schema to the frontend and render it using a dynamic form generator. Each setting group will appear in a different form group.

@@ -22,7 +22,7 @@ nav_order: 7
 
 Since the frontend makes use of the settings too, it's easy to use this package directly from your js.
 
-You will need to install the js package. If using Vue, add the following to your app.js file. Here we use 1 as the model ID, replace with whatever the actual model ID is`
+You will need to install the js package. If using Vue, add the following to your app.js file. Here we use 1 as the model ID, replace with whatever the actual model ID is.
 
 ```js
 import Settings from '@twigger/settings';
