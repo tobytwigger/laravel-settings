@@ -30,5 +30,5 @@ composer require twigger/laravel-settings
 
 You can publish the configuration file by running 
 ```console
-php artisan vendor:publish --provider="Twigger\Settings\SettingsServiceProvider"
+php artisan vendor:publish --provider="Settings\SettingsServiceProvider"
 ```
