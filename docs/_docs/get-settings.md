@@ -49,14 +49,16 @@ return [
 ];
 ```
 
+If the setting name is ambiguous (e.g. there's no other setting with the same name, not including the FQDN), then the alias will be automatically set up.
+
 ## Getting multiple setting information
 
 To display the settings to users, you need to get information about the registered settings. These all use the setting service class, which you can access through the facade or the helper (passing it no parameters).
 
 **Groups**
 - Get all settings with a given group: `\Settings\Setting::withGroup('group-name')->get()`
-- Get all settings with any of the given groups: `settings()->withAnyGroups(['group-name', 'group-name-2'])->get()`
-- Get all settings with all the given groups: `settings()->withAllGroups(['group-name', 'group-name-2'])->get()`
+- Get all settings with at least one of the given groups: `settings()->withAnyGroups(['group-name', 'group-name-2'])->get()`
+- Get all settings that have all the given groups: `settings()->withAllGroups(['group-name', 'group-name-2'])->get()`
 
 **Types**
 - Get all settings of a certain type: `settings()->withType(\Acme\Setting\TeamSettingType::class)->get()`

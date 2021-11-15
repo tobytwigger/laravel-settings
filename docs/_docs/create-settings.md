@@ -124,7 +124,7 @@ See the integrate section for information about how to add metadata to these.
 
 ### Encryption
 
-The value of all settings is encrypted automatically. If the data in the setting is not sensitive and you'd rather not encrypt it, set a public `$shouldEncrypt` property to false in your setting.
+The value of all settings are encrypted automatically, since it adds very little overhead. If the data in the setting is not sensitive and you'd rather not encrypt it, set a public `$shouldEncrypt` property to false in your setting.
 
 ```php
     protected boolean $shouldEncrypt = false;
