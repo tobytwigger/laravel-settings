@@ -16,6 +16,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: 'build/documentation'
+        fetch-depth: 0
 
     - name: Install Ruby
       id: build-docs
