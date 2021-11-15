@@ -3,7 +3,6 @@ name: Build docs and commit to build branch
 on:
   push:
     branches: 
-      - develop
       - master
 
 jobs:
@@ -15,7 +14,7 @@ jobs:
     - name: Checkout package
       uses: actions/checkout@v2
       with:
-        ref: 'build/documentation'
+        ref: 'develop'
         fetch-depth: 0
 
     - name: Install Ruby
@@ -24,17 +23,17 @@ jobs:
       with:
         ruby-version: 2.6
 
-    - name: Update build/documentation with changes from develop
-      uses: devmasx/merge-branch@v1.3.1
+    - uses: Embraser01/update-git-branch-action@v1.0.0
       with:
-        type: now
-        from_branch: develop
-        target_branch: build/documentation
-        github_token: ${{ github.token }}
-
-    - name: Remove old site
-      working-directory: ./docs
-      run: rm -r _site
+        branch: build/documentation
+        force: 1
+        githubToken: ${{ github.token }}
+    
+    - name: Checkout package
+      uses: actions/checkout@v2
+      with:
+        ref: 'build/documentation'
+        fetch-depth: 0
 
     - name: Build Docs
       working-directory: ./docs
