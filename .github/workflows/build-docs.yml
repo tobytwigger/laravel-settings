@@ -43,6 +43,7 @@ jobs:
       run: |
         git config user.name "Toby Twigger"
         git config user.email "tobytwigger1@gmail.com"
+        git config pull.rebase false
         git pull origin develop
         git add ./docs
         git commit -am "🧪 Build docs"
