@@ -72,6 +72,8 @@ You can access this object with `this.$setting.keys`. If you don't dig into the 
 
 To make accessing these settings easier, the aliases referenced in the configuration will also be applied to these keys. If `\Acme\Settings\SiteName` is aliases to `SiteName`, then you can access the JS key with `this.$settings.aliases.siteName`, where you can then call `.get()` or `.set()` as necessary.
 
+You can also just use `this.$settings.siteName` and omit `aliases`, but please note this may cause issues if your setting name is `aliases` or `keys`, or any other property of `$settings`, so it's usually best to use the `this.$settings.aliases` key directly.
+
 ## JS
 
 Using functions directly
