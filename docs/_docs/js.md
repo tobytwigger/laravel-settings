@@ -35,7 +35,7 @@ Then in your Vue app
 
 ```vue
 <template>
-    Setting value: { { $setting.get('key', 1) } }
+    Setting value: <span v-text="$setting.get('key', 1)"></span>
 </template>
 <!--...-->
 computed: {
@@ -61,12 +61,16 @@ On the PHP side, since all settings are class based it's impossible to use the i
     }
 ```
 
-You can access this object with `this.$setting.keys`. Once you have a setting object, you can call the following functions
+You can access this object with `this.$setting.keys`. If you don't dig into the object you'll have a list of all settings. If you dig through the namespaces to get a setting object, you can then call the following functions
 
 - `this.$setting.keys.acme.settings.siteName.get(1)` - Get the value for the model with an ID 1
-- `...siteName.get()` - Get the default value/global setting value
-- `...siteName.set('value', 1)` - Set the value for the model 1
-- `...siteName.set('value')` - Set the default/global value
+- `this.$setting.keys.acme.settings.siteName.get()` - Get the default value/global setting value
+- `this.$setting.keys.acme.settings.siteName.set('value', 1)` - Set the value for the model 1
+- `this.$setting.keys.acme.settings.siteName.set('value')` - Set the default/global value
+
+### Aliases
+
+To make accessing these settings easier, the aliases referenced in the configuration will also be applied to these keys. If `\Acme\Settings\SiteName` is aliases to `SiteName`, then you can access the JS key with `this.$settings.aliases.siteName`, where you can then call `.get()` or `.set()` as necessary.
 
 ## JS
 

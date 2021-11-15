@@ -71,11 +71,11 @@ class SiteName extends Setting
     }
     
     /**
-     * @return string
+     * @return array
      */
-    public static function group(): string
+    public static function group(): array
     {
-        return 'branding';
+        return ['branding', 'appearance'];
     }
 }
 ```
@@ -111,33 +111,26 @@ To ensure the settings entered into the database are valid, you can define rules
 
 Groups are a way to order settings to the user. By grouping together similar settings (such as those related to the site theme, authentication, emails etc), it helps users quickly find what they're looking for.
 
-To define a group, define a `group` function.
+To define a group, define a `group` function. This should return an array of groups the setting is in. When retrieving a form schema to represent settings, the first group will be taken as the group, and therefore the first group should be the 'main' group.
 
 ```php
-    public function group(): string
+    public function group(): array
     {
-        return 'branding';
+        return ['branding', 'appearance'];
     }
 ```
 
 See the integrate section for information about how to add metadata to these.
 
-### Tags
-
-Tags can be used to further sort settings. These are simple strings that can later be used to retrieve matching settings.
-
-To define settings, define a `tags` function.
-
-```php
-    public function tags(): array
-    {
-        return ['appearance', 'text', 'language'];
-    }
-```
-
 ### Encryption
 
-If the data in the setting is sensitive, it can be encrypted automatically using the Laravel encryption tools. To turn on encryption for a setting, make sure to implement the `\Settings\Contracts\ShouldEncrypt` interface on the setting.
+The value of all settings is encrypted automatically. If the data in the setting is not sensitive and you'd rather not encrypt it, set a public `$shouldEncrypt` property to false in your setting.
+
+```php
+    protected boolean $shouldEncrypt = false;
+```
+
+You can also make the default behaviour be that encryption is not automatic, but can be turned on with `$shouldEncrypt = true`. To do this, set `encryption` to `false` in the config file.
 
 ### Complex data types
 
@@ -145,17 +138,23 @@ All values in the database are automatically serialised to preserve type. This m
 
 If you want to control how the setting is saved in the database, define `castToString` and `castToValue` functions on the setting which will convert your validated setting value to a database-friendly string and back.
 
-This example would handle an array (though would be pointless since arrays are already casted automatically).
+This example would handle a complex data object, such as something returned from an API client.
 
 ```php
-    public function castToString(array $value): string
+    public function castToString(\My\Api\Result $value): string
     {
-        return json_encode($value);
+        return json_encode([
+            'id' => $value->getId(),
+            'result' => $value->getResult()
+        ]);
     }
 
-    public function castToValue(string $value): array
+    public function castToValue(string $value): \My\Api\Result
     {
-        return json_decode($value, true);
+        $value = json_decode($value, true);
+        
+        return new \My\Api\Result($value['id'])
+            ->getResult($value['result']);
     }
 ```
 
@@ -174,7 +173,7 @@ You can also register information about groups, which will be automatically pull
             \Acme\Setting\SiteTheme::class
         ]);
         
-        \Settings\Setting::register(\Acme\Setting\SiteName::class, ['extra', 'tags', 'for', 'the', 'setting']);
+        \Settings\Setting::register(\Acme\Setting\SiteName::class, ['extra', 'groups', 'for', 'the', 'setting']);
         
         \Settings\Setting::registerGroup(
             'branding', // Group Key
@@ -216,7 +215,7 @@ By default, you have the setting types global and user. The global setting type 
 
 For some sites, the settings will depend on the team a user is in, the module you're operating in, or the country you're in. When creating a setting, you can assign it to be of one type. Whenever you then get the value of that setting, it will depend on the model logged in.
 
-To create a new type, create an abstract class that implements `Settings\Contracts\SettingType`. 
+To create a new type, create an abstract class that implements `Settings\Contracts\SettingType`. You can then use this setting type by extending the new class in your setting.
 
 ```php
 abstract class TeamSettingType implements \Settings\Contracts\SettingType
