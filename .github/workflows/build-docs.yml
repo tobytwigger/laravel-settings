@@ -31,6 +31,10 @@ jobs:
         target_branch: build/documentation
         github_token: ${{ github.token }}
 
+    - name: Remove old site
+      working-directory: ./docs
+      run: rm -r _site
+
     - name: Build Docs
       working-directory: ./docs
       run: |
