@@ -78,3 +78,21 @@ Needs method documenting
 {: .label .label-yellow }
 
 When using `asForm`, you can change how a collection casts settings to a form.
+
+## Multi-tenancy
+
+To support multi tenancy, you can set a tenant during the boot of your app. This will usually be an ID, but could be a string of some sort.
+
+When set, each tenant has their own settings and only their settings are queried.
+
+### Setting the tenant
+
+In the boot method of your service provider, you should add
+
+```php
+\Settings\Setting::resolveTenantKeyUsing(function(): string {
+    // Get the tenant key
+});
+```
+
+In this closure, you can resolve the tenant from the route/session/anywhere else, and return a string unique to that tenant (such as their ID as a string, or some other unique key).
