@@ -4,7 +4,6 @@ on:
   push:
     branches: 
       - develop
-      - master
 
 jobs:
   build:
@@ -16,6 +15,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: 'build/documentation'
+        fetch-depth: 0
 
     - name: Install Ruby
       id: build-docs
@@ -39,14 +39,10 @@ jobs:
         bundle install --jobs 4 --retry 3
         bundle exec jekyll build        
 
-    - name: 'Commit build artifacts to branch'
-      uses: EndBug/add-and-commit@v5
-      with:
-        add: 'docs/_site --force'
-        author_name: Toby Twigger
-        author_email: tobytwigger1@gmail.com
-        branch: build/documentation
-        message: 'Build site documentation'
-        pull_strategy: '--no-ff'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+    - name: 🧪 Deploy build
+      run: |
+        git config user.name "Toby Twigger"
+        git config user.email "tobytwigger1@gmail.com"
+        git add ./docs
+        git commit -am "🧪 Build docs"
+        git push  -f https://${{ github.token }}@github.com/tobytwigger/laravel-settings.git
