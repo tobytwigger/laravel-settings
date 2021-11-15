@@ -30,19 +30,33 @@ You can also use
 
 For setting types like users and teams, where the setting value depends on the session, you can use the same function. This will automatically resolve the current user/team/model from the session and use that. If you do pass an ID in as the first parameter though, it will get the setting value for the given model instead.
 
-## Getting setting information
+### Aliases
+
+For common settings, you can alias the getters to a single function. Rather than using `\Settings\Setting::getValue(\Acme\Setting\SiteName::class)`, you can use `\Settings\Setting::getSiteName()`.
+
+By doing this you won't get IDE typehinting, but it is a more concise way to refer to settings.
+
+To alias a setting like this, add it to the config file
+
+```php
+<?php
+
+return [
+    'aliases' => [
+        'SiteName' => \Acme\Setting\SiteName::class,
+        ...
+    ]
+];
+```
+
+## Getting multiple setting information
 
 To display the settings to users, you need to get information about the registered settings. These all use the setting service class, which you can access through the facade or the helper (passing it no parameters).
 
-
-
-**Group**
-- Get all settings from a group: `settings()->withGroup('group-name')->get()`
-
-**Tags**
-- Get all settings with a given tag: `\Settings\Setting::withTag('tag-name')->get()`
-- Get all settings with any of the given tags: `settings()->withAnyTags(['tag-name', 'tag-name-2'])->get()`
-- Get all settings with all the given tags: `settings()->withAllTags(['tag-name', 'tag-name-2'])->get()`
+**Groups**
+- Get all settings with a given group: `\Settings\Setting::withGroup('group-name')->get()`
+- Get all settings with any of the given groups: `settings()->withAnyGroups(['group-name', 'group-name-2'])->get()`
+- Get all settings with all the given groups: `settings()->withAllGroups(['group-name', 'group-name-2'])->get()`
 
 **Types**
 - Get all settings of a certain type: `settings()->withType(\Acme\Setting\TeamSettingType::class)->get()`
@@ -57,3 +71,8 @@ These will all return a `Settings\Support\SettingCollection` instance. You can u
 
 - `asForm()` - turn the settings into a `\FormSchema\Schema\Form`.
 - `toKeyValuePair()` - get all settings and their values as key value pairs.
+
+Needs method documenting
+{: .label .label-yellow }
+
+When using `asForm`, you can change how a collection casts settings to a form.
