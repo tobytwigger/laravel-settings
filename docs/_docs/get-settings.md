@@ -66,8 +66,7 @@ To display the settings to users, you need to get information about the register
 - Get all user settings: `settings()->withUser()->get()`.
 
  
-The functions can be chained, so to get all global settings that belong to a group called 'Blog Module', you'd use
-```\Settings\Setting::withGlobal()->withGroup('blog-module')->get()```.
+The functions can be chained, so to get all global settings that belong to a group called 'Blog Module', you'd use `\Settings\Setting::withGlobal()->withGroup('blog-module')->get()`.
 
 These will all return a `Settings\Support\SettingCollection` instance. You can use this like a normal Laravel collection, but you will also have access to the following functions.
 
