@@ -43,6 +43,6 @@ jobs:
       run: |
         git config user.name "Toby Twigger"
         git config user.email "tobytwigger1@gmail.com"
-        git add /docs
+        git add ./docs
         git commit -am "🧪 Build docs"
         git push  -f https://${{ github.token }}@github.com/tobytwigger/laravel-settings.git
