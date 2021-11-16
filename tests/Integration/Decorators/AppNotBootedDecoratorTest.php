@@ -2,19 +2,10 @@
 
 namespace Settings\Tests\Integration\Decorators;
 
-use FormSchema\Generator\Field;
-use FormSchema\Schema\Form;
-use Settings\Anonymous\AnonymousSetting;
-use Settings\Anonymous\AnonymousSettingFactory;
-use Settings\Collection\SettingCollection;
-use Settings\Contracts\Setting;
 use Settings\Decorators\AppNotBootedDecorator;
 use Settings\Exceptions\AppNotBooted;
-use Settings\Store\Query;
 use Settings\Tests\TestCase;
 use Settings\Tests\Traits\CreatesSettings;
-use Settings\Types\GlobalSetting;
-use Settings\Types\UserSettings;
 
 class AppNotBootedDecoratorTest extends TestCase
 {
