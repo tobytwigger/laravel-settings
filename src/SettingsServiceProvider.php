@@ -2,7 +2,6 @@
 
 namespace Settings;
 
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingService as SettingServiceContract;
@@ -39,6 +38,7 @@ class SettingsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishAssets();
+        $this->registerConfigBindings();
     }
 
     /**
@@ -79,6 +79,13 @@ class SettingsServiceProvider extends ServiceProvider
         $this->app->extend(PersistedSettingRepository::class, fn(PersistedSettingRepository $service, $app) => $app->make(CacheDecorator::class, ['baseService' => $service]));
         $this->app->extend(PersistedSettingRepository::class, fn(PersistedSettingRepository $service, $app) => $app->make(EncryptionDecorator::class, ['baseService' => $service]));
         $this->app->extend(PersistedSettingRepository::class, fn(PersistedSettingRepository $service, $app) => $app->make(SerializationDecorator::class, ['baseService' => $service]));
+    }
+
+    private function registerConfigBindings()
+    {
+        foreach(config('laravel-settings.groups', []) as $group => $data) {
+            Setting::registerGroup($group, $data['title'] ?? null, $data['subtitle'] ?? null);
+        }
     }
 
 }

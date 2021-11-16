@@ -4,8 +4,10 @@ namespace Settings\Contracts;
 
 use Illuminate\Validation\ValidationException;
 
-interface SettingService
+interface SettingService extends CreatesQuery
 {
+
+    public function store(): SettingStore;
 
     /**
      * Register a new setting or settings
@@ -21,37 +23,45 @@ interface SettingService
      *
      * @param string $key The key of the group.
      * @param string|null $title The title of the group
-     * @param string|null $description A description pf the group
+     * @param string|null $subtitle A subtitle for the group
      * @return void
      */
-    public function registerGroup(string $key, ?string $title = null, ?string $description = null): void;
+    public function registerGroup(string $key, ?string $title = null, ?string $subtitle = null): void;
 
     /**
      * Get the value of a setting
      *
-     * @param string $settingClass The setting class
+     * @param string $key The setting class
      * @param int|null $id The ID of the model to query against.
      * @return mixed
      */
-    public function getValue(string $settingClass, ?int $id = null): mixed;
+    public function getValue(string $key, ?int $id = null): mixed;
 
     /**
      * Set the default value for a setting
      *
-     * @param string $settingClass The setting class
+     * @param string $key The setting class
      * @param mixed $value The new value of the setting
      *
      * @throws ValidationException If the validation fails.
      */
-    public function setDefaultValue(string $settingClass, mixed $value): void;
+    public function setDefaultValue(string $key, mixed $value): void;
 
     /**
      * Set the value of a specific setting.
      *
-     * @param string $settingClass The setting class
+     * @param string $key The setting class
      * @param mixed $value The new value of the setting
      * @param int|null $id The ID of the model to query. Leave blank to resolve.
      */
-    public function setValue(string $settingClass, mixed $value, ?int $id = null): void;
+    public function setValue(string $key, mixed $value, ?int $id = null): void;
+
+    /**
+     * Get the setting by its key
+     *
+     * @param string $key The key of the setting
+     * @return Setting
+     */
+    public function getSettingByKey(string $key): Setting;
 
 }

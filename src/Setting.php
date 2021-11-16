@@ -3,14 +3,25 @@
 namespace Settings;
 
 use Illuminate\Support\Facades\Facade;
+use Settings\Contracts\SettingStore;
+use Settings\Store\Query;
 
 /**
  *
  * @method static void register(\Settings\Contracts\Setting|array $settings, array $extraGroups = []) Register new settings
- * @method static void registerGroup(string $key, string $title, ?string $description) Register information about a group
- * @method static mixed getValue(string $settingClass, ?int $id = null) Get the value of a setting
- * @method static void setDefaultValue(string $settingClass, mixed $value) Set the default value of a setting
- * @method static void setValue(string $settingClass, mixed $value, ?int $id = null) Set the value of a setting
+ * @method static void registerGroup(string $key, string $title, ?string $subtitle) Register information about a group
+ * @method static mixed getValue(string $key, ?int $id = null) Get the value of a setting
+ * @method static void setDefaultValue(string $key, mixed $value) Set the default value of a setting
+ * @method static void setValue(string $key, mixed $value, ?int $id = null) Set the value of a setting
+ * @method static Setting getSettingByKey(string $key) Get the setting class
+ * @method static Query search() Start a query
+ * @method static SettingStore store() Access the setting store directly
+ * @method static Query withGroup(string $groupName) Only settings with the given group
+ * @method static Query withAnyGroups(array $groups) Only settings with at least one of the given groups
+ * @method static Query withAllGroups(array $groups) Only settings with all the given groups
+ * @method static Query withType(string $type) Only settings of the given type
+ * @method static Query withGlobalType() Only global settings
+ * @method static Query withUserType() Only user settings
  *
  * @see \Settings\Contracts\SettingService
  */
