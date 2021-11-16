@@ -4,12 +4,15 @@ namespace Settings\Types;
 
 use Settings\Contracts\Setting;
 
-abstract class GlobalSetting implements Setting
+abstract class GlobalSetting extends Setting
 {
-    use ImplementsSetting;
-
     public function resolveId(): ?int
     {
         return null;
+    }
+
+    public function type(): string
+    {
+        return GlobalSetting::class;
     }
 }
