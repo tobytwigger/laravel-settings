@@ -30,18 +30,19 @@
     ],
     "require": {
         "laravel/framework": "^8.0",
-        "php": "^8.0"
+        "php": "^8.0",
+        "tobytwigger/form-schema-generator": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.4",
         "phpspec/prophecy-phpunit": "^2.0",
-        "orchestra/testbench": "^6.2",
+        "orchestra/testbench": "^6.2"
     },
     "suggest": {
     },
     "autoload": {
         "psr-4": {
-            "Twigger\\Settings\\": "src/"
+            "Settings\\": "src/"
         },
         "files": [
             "src/helpers.php"
@@ -49,7 +50,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Twigger\\Settings\\Tests\\": "tests/"
+            "Settings\\Tests\\": "tests/",
+            "Settings\\Database\\Factories\\": "database/factories/"
         }
     },
     "extra": {
