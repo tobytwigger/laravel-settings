@@ -23,12 +23,13 @@ class SingletonSettingStore implements SettingStore
     }
 
     /**
-     * @param array|Setting[] $settings
+     * @param Setting[] $settings
      * @param array $extraGroups
      */
     public function register(array $settings, array $extraGroups): void
     {
         foreach($settings as $setting) {
+            $setting->appendGroups($extraGroups);
             $this->settings[$setting->key()] = $setting;
         }
     }
