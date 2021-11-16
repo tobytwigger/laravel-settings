@@ -36,7 +36,7 @@ class QueryExecutor
         }
 
         foreach($parameters->getGroups() as $group) {
-            if(!in_array($group, $setting->groups())) {
+            if(!in_array($group, $setting->getGroups())) {
                 return false;
             }
         }
@@ -50,7 +50,7 @@ class QueryExecutor
         }
 
         foreach($parameters->getAnyGroups() as $group) {
-            if(in_array($group, $setting->groups())) {
+            if(in_array($group, $setting->getGroups())) {
                 return true;
             }
         }

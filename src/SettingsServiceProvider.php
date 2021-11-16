@@ -2,17 +2,24 @@
 
 namespace Settings;
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
+use Settings\Anonymous\AnonymousSetting;
+use Settings\Anonymous\AnonymousSettingFactory;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingService as SettingServiceContract;
 use Settings\Contracts\SettingStore as SettingStoreContract;
 use Settings\DatabaseSettings\DatabaseSettingRepository;
+use Settings\Decorators\AppNotBootedDecorator;
 use Settings\Decorators\CacheDecorator;
 use Settings\Decorators\EncryptionDecorator;
 use Settings\Decorators\SerializationDecorator;
 use Settings\Decorators\SettingExistsDecorator;
 use Settings\Decorators\ValidationDecorator;
 use Settings\Store\SingletonSettingStore;
+use Settings\Types\GlobalSetting;
+use Settings\Types\UserSettings;
 
 /**
  * The service provider for loading Laravel Setting
@@ -26,6 +33,7 @@ class SettingsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerBindings();
+        App::booted(fn($app) => AppNotBootedDecorator::$booted = true);
     }
 
     /**
@@ -39,6 +47,7 @@ class SettingsServiceProvider extends ServiceProvider
     {
         $this->publishAssets();
         $this->registerConfigBindings();
+        $this->setupTypes();
     }
 
     /**
@@ -75,6 +84,7 @@ class SettingsServiceProvider extends ServiceProvider
 
         $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(ValidationDecorator::class, ['baseService' => $service]));
         $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(SettingExistsDecorator::class, ['baseService' => $service]));
+        $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(AppNotBootedDecorator::class, ['baseService' => $service]));
 
         $this->app->extend(PersistedSettingRepository::class, fn(PersistedSettingRepository $service, $app) => $app->make(CacheDecorator::class, ['baseService' => $service]));
         $this->app->extend(PersistedSettingRepository::class, fn(PersistedSettingRepository $service, $app) => $app->make(EncryptionDecorator::class, ['baseService' => $service]));
@@ -86,6 +96,12 @@ class SettingsServiceProvider extends ServiceProvider
         foreach(config('laravel-settings.groups', []) as $group => $data) {
             Setting::registerGroup($group, $data['title'] ?? null, $data['subtitle'] ?? null);
         }
+    }
+
+    private function setupTypes()
+    {
+        AnonymousSettingFactory::mapType('global', fn() => null);
+        AnonymousSettingFactory::mapType('user', fn() => Auth::id());
     }
 
 }

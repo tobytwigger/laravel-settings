@@ -42,6 +42,20 @@ class SettingQueryTest extends TestCase
     }
 
     /** @test */
+    public function it_includes_extra_groups_with_filtering(){
+        $setting1 = $this->makeSetting('key1', 'val1', 'string', true, null, ['group1', 'group3']);
+        $setting2 = $this->makeSetting('key2', 'val1', 'string', true, null, []);
+        $setting3 = $this->makeSetting('key3', 'val1', 'string', true, null, ['group3', 'group1']);
+
+        \Settings\Setting::register([$setting1, $setting2], ['group1', 'group2']);
+        \Settings\Setting::register($setting3);
+
+        $this->assertFilters([
+            $setting1, $setting2
+        ], Query::newQuery()->withGroup('group2')->withGroup('group1')->get());
+    }
+
+    /** @test */
     public function it_filters_by_having_one_of_many_groups(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2']);
         $setting2 = $this->createSetting('key2', 'val1', 'string', true, null, ['group2', 'group3']);

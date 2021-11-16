@@ -9,6 +9,8 @@ use Illuminate\Validation\ValidationException;
 abstract class Setting
 {
 
+    private array $appendedGroups = [];
+
     /**
      * Get the ID of the current model type
      *
@@ -56,7 +58,7 @@ abstract class Setting
 
     abstract public function type(): string;
 
-    abstract public function groups(): array;
+    abstract protected function groups(): array;
 
     /**
      * Get the value of a setting
@@ -90,6 +92,19 @@ abstract class Setting
     public static function setValue(mixed $value, ?int $id = null): void
     {
         \Settings\Setting::setValue(static::class, $value, $id);
+    }
+
+    public function appendGroups(array $extraGroups): void
+    {
+        $this->appendedGroups = $extraGroups;
+    }
+
+    public function getGroups(): array
+    {
+        return array_merge(
+            $this->groups(),
+            $this->appendedGroups
+        );
     }
 
 }

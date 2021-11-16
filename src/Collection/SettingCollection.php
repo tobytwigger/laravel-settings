@@ -27,7 +27,7 @@ class SettingCollection extends Collection
 
         $form = new Form();
 
-        $this->groupBy(fn(Setting $setting) => collect($setting->groups())->first())
+        $this->groupBy(fn(Setting $setting) => collect($setting->getGroups())->first())
             ->map(function(SettingCollection $settingCollection, string $groupId){
                 $group = GroupGenerator::make()->getSchema();
                 if(\Settings\Setting::store()->groupIsRegistered($groupId)) {
