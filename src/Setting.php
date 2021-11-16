@@ -1,33 +1,30 @@
 <?php
 
-namespace Twigger\Translate;
+namespace Settings;
 
-use Twigger\Translate\Translate\Translator;
-use Twigger\Translate\Translate\TranslationManager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static string translate(string $line, string $to, string $from) Setting a single line
- * @method static string translateMany(array $line, string $to, string $from) Setting an array of lines
- * @method static Translator driver(string $driver) Retrieve a specific translation driver
  *
- * @method static void pushDriver(string $driver, \Closure $callback) Push the given driver and create it with the given callback
- * @method static void pushConfiguration(string $name, string $driver, array $configuration) Push the given configuration
- * @method static void setDefaultDriver(string $name) Set the default configuration to use
+ * @method static void register(\Settings\Contracts\Setting|array $settings, array $extraGroups = []) Register new settings
+ * @method static void registerGroup(string $key, string $title, ?string $description) Register information about a group
+ * @method static mixed getValue(string $settingClass, ?int $id = null) Get the value of a setting
+ * @method static void setDefaultValue(string $settingClass, mixed $value) Set the default value of a setting
+ * @method static void setValue(string $settingClass, mixed $value, ?int $id = null) Set the value of a setting
  *
- * @see TranslationManager
+ * @see \Settings\Contracts\SettingService
  */
 class Setting extends Facade
 {
 
     /**
-     * Retrieve the key the TranslationManager is bound to
+     * Retrieve the key the setting service is bound to
      *
      * @return string The facade accessor
      */
     protected static function getFacadeAccessor()
     {
-        return 'laravel-translate';
+        return 'laravel-settings';
     }
 
 }
