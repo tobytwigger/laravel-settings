@@ -55,7 +55,7 @@
   },"9": {
     "doc": "Get Settings",
     "title": "Multi-tenancy",
-    "content": "To support multi tenancy, you can set a tenant during the boot of your app. This will usually be an ID, but could be a string of some sort. When set, each tenant has their own settings and only their settings are queried. Setting the tenant . In the boot method of your service provider, you should add . \\Settings\\Setting::resolveTenantKeyUsing(function(): string { // Get the tenant key }); . In this closure, you can resolve the tenant from the route/session/anywhere else, and return a string unique to that tenant (such as their ID as a string, or some other unique key). ",
+    "content": "To support multi tenancy, you can set a tenant during the boot of your app. This will usually be an ID, but could be any unique string. When set, each tenant has their own settings and only their settings are queried. Setting the tenant . In the boot method of your service provider, you should add . \\Settings\\Setting::resolveTenantKeyUsing(function(): ?string { // Get the tenant key }); . In this closure, you can resolve the tenant from the route/session/anywhere else, and return a string unique to that tenant (such as their ID as a string, or some other unique key). If you return null, the default tenant will be used, which can be useful for public, non-tenanted parts of your site. ",
     "url": "/get-settings#multi-tenancy",
     "relUrl": "/get-settings#multi-tenancy"
   },"10": {
@@ -133,14 +133,20 @@
   },"22": {
     "doc": "Set Settings",
     "title": "Set Settings",
-    "content": ". | Set a setting value . | Setting types | . | . ",
+    "content": ". | Set a setting value . | Setting types | . | Multi-tenancy | . ",
     "url": "/set-settings",
     "relUrl": "/set-settings"
   },"23": {
     "doc": "Set Settings",
     "title": "Set a setting value",
-    "content": "To set a setting, you can use the setValue method on the setting, such as Acme\\Setting\\SiteName::setValue('New site name'). This will set the setting value, or throw a validation exception if there was a problem with the value. Setting types . Most setting types (such as user and team settings) have a value that depends on the current session. For these settings, you may pass in the ID of the user/team/model as a second parameter. \\Acme\\Setting\\Team2FAEnabled::setValue(true, 5) will enable 2FA for the team with an ID of 5. For the settings that depend on a model like this, if you don’t pass an ID in as the second parameter it will be automatically resolved from the session. To update the default, which will affect any users that haven’t changed their settings yet, you can use \\Acme\\Setting\\Team2FAEnabled::setDefaultValue(true) to enable 2FA by default. ",
+    "content": "To set a setting, you can use the setValue method on the setting, such as Acme\\Setting\\SiteName::setValue('New site name'). This will set the setting value, or throw a validation exception if there was a problem with the value. To set the default value of any setting, which is returned if the setting does not yet have a value, you can use Acme\\Setting\\SiteName::setDefaultValue('Default site name'). Or use the facade with \\Settings\\Setting::setDefaultValue(\\Acme\\Setting\\SiteName::class, 'Default Site Name'); . Setting types . Most setting types (such as user and team settings) have a value that depends on the current session. For these settings, you may pass in the ID of the user/team/model as a second parameter. \\Acme\\Setting\\Team2FAEnabled::setValue(true, 5) will enable 2FA for the team with an ID of 5. For the settings that depend on a model like this, if you don’t pass an ID in as the second parameter it will be automatically resolved from the session. To update the default, which will affect any users that haven’t changed their settings yet, you can use \\Acme\\Setting\\Team2FAEnabled::setDefaultValue(true) to enable 2FA by default. ",
     "url": "/set-settings#set-a-setting-value",
     "relUrl": "/set-settings#set-a-setting-value"
+  },"24": {
+    "doc": "Set Settings",
+    "title": "Multi-tenancy",
+    "content": "When using multi-tenancy tools to provide settings to multiple tenants, setting the value of a setting as normal will always set it for the current tenant. You can set the default value for all tenants by using \\Settings\\Setting::withoutTenant()-&gt;setDefaultValue(\\Acme\\Setting\\SiteName::class, 'Default Site Name'). Any tenant who has not set the setting will get ‘Default Site Name’ as a response. If this is used without withoutTenant(), it will set the default value for the current tenant. ",
+    "url": "/set-settings#multi-tenancy",
+    "relUrl": "/set-settings#multi-tenancy"
   }
 }
