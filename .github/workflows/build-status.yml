@@ -1,4 +1,4 @@
-name: Test build of laravel translate
+name: Test build of laravel settings
 
 on:
     push:
@@ -8,7 +8,7 @@ jobs:
     build_php:
         strategy:
             matrix:
-                php: [ '8.0', '8.1', '8.2' ]
+                php: [ '8.0', '8.1' ]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
