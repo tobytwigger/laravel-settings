@@ -29,13 +29,15 @@ To use class-based settings, just pass in the class in place of the key. If you 
 ### Setting types
 
 Most setting types (such as user and team settings) have a value that depends on the current session. For these settings, you may pass
-in the ID of the user/team/model as a second parameter.
+in the ID of the user/team/model as a third parameter.
 
 `\Settings\Setting::setValue('enable2FA', true, 5)` will enable 2FA for the team with an ID of 5.
 
 For the settings that depend on a model like this, if you don't pass an ID in as the second parameter it will be automatically resolved from the session.
 
 To update the default, which will affect any users that haven't changed their settings yet, you can use `\Settings\Setting::setDefaultValue('enable2FA', true)` to enable 2FA by default.
+
+As normal, you can use class-based settings directly and remove the key argument, such as `\Acme\Setting\SiteName::setDefaultValue('New Site')`.
 
 ## Multi-tenancy
 

@@ -67,7 +67,7 @@ public function boot()
 }
 ```
 
-Aliasing in this way also makes your class-based settings accessible through the alias, so site name can now be accessed with `settings(\Acme\Setting\SiteName::class)` or `settings('siteName').
+Aliasing in this way also makes your class-based settings accessible through the alias, so site name can now be accessed with `settings(\Acme\Setting\SiteName::class)` or `settings('siteName')`.
 
 ## Getting multiple setting information
 
