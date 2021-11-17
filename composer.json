@@ -66,6 +66,6 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit --colors=always --process-isolation --verbose --configuration phpunit.xml"
+        "test": "vendor/bin/paratest --colors --verbose --configuration phpunit.xml"
     }
 }
