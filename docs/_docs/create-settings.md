@@ -29,16 +29,16 @@ Any setting must have at least the following information:
 - The form field for the setting (using
   the [form schema generator](https://tobytwigger.github.io/form-schema-generator/))
 
-For smaller apps, you can use simple string-based setting keys to get going quickly. These require less boilerplate code
+For smaller apps, you can use simple anonymous setting keys to get going quickly. These require less boilerplate code
 to get running, but it's up to you to manage the keys and make sure you don't re-use any.
 
-For larger apps, or as your app grows, you can migrate over to using class based settings. These give you more control
+For larger apps, or as your app grows, you can migrate over to using class-based settings. These give you more control
 over your settings and their appearance and use, whilst also leveraging your IDE to give you typehinting for available
 settings and make setting name clashes impossible.
 
-### String-based settings
+### Anonymous settings
 
-To create a new string-based setting, you can define it in the `boot` method of your service provider.
+To create a new anonymous setting, you can define it in the `boot` method of your service provider.
 
 ```php
     public function boot()
@@ -120,7 +120,7 @@ Form fields are defined using the [form schema generator](https://tobytwigger.gi
 
 The input name for the field is defined in `$this->key()`, and the default value in `$this->defaultValue()` so to define a simple text field you'd use this plus a label/hint/other fields.
 
-When using string settings, hardcode the key and value and just pass the result of the field generator directly to `::create`.
+When using anonymous settings, hardcode the key and value and just pass the result of the field generator directly to `::create`.
 
 ```php
     public function fieldOptions(): \FormSchema\Schema\Field
@@ -166,7 +166,7 @@ The value of all settings are encrypted automatically, since it adds very little
     protected boolean $shouldEncrypt = false;
 ```
 
-You can also make the default behaviour be that encryption is not automatic, but can be turned on with `$shouldEncrypt = true`. To do this, set `encryption` to `false` in the config file. String-based settings use this default behaviour to encrypt or not encrypt settings.
+You can also make the default behaviour be that encryption is not automatic, but can be turned on with `$shouldEncrypt = true`. To do this, set `encryption` to `false` in the config file. Anonymous settings use this default behaviour to encrypt or not encrypt settings.
 
 #### Complex data types
 
@@ -194,7 +194,7 @@ This example would handle a complex data object, such as something returned from
     }
 ```
 
-If the setting value cannot be serialized, it cannot be used with a string-based setting, so you'll have to implement it as a class using casting.
+If the setting value cannot be serialized, it cannot be used with an anonymous setting, so you'll have to implement it as a class using casting.
 
 ## Registering
 
@@ -224,7 +224,7 @@ You can also register information about groups, which will be automatically pull
     }
 ```
 
-String-based settings are automatically registered for you when using `create::`, `createUser::` or `createGlobal::`. If you want to just create a setting rather than register one, you can use the factory directly.
+Anonymous settings are automatically registered for you when using `create::`, `createUser::` or `createGlobal::`. If you want to just create a setting rather than register one, you can use the factory directly.
 
 ```php
 $setting = \Settings\Anonymous\AnonymousSettingFactory::make(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null);
@@ -243,7 +243,7 @@ return [
     'settings' => [
         \Acme\Setting\SiteName::class,
         \Acme\Setting\SiteTheme::class,
-        [ // A string-based setting
+        [ // An anonymous setting
             'type' => 'user', // 'user', 'global', or a custom type
             'key' => 'timezone', // The setting key
             'defaultValue' => 'Europe/London', // The default value
@@ -294,7 +294,7 @@ abstract class TeamSettingType implements \Settings\Contracts\SettingType
 }
 ```
 
-For string-based classes which don't extend a type, you can define an alias instead. To define a team type to use in your anonymous settings, that can be used in place of 'global' and 'user', call this in your `boot()` method in the service provider.
+For anonymous classes which don't extend a type, you can define an alias instead. To define a team type to use in your anonymous settings, that can be used in place of 'global' and 'user', call this in your `boot()` method in the service provider.
 
 ```php
 public function boot()
@@ -308,7 +308,7 @@ public function boot()
 }
 ```
 
-If the setting is a one-off and you don't want to create a type, you can override the function used to resolve the ID by passing in a final parameter when creating the string-based setting. 
+If the setting is a one-off and you don't want to create a type, you can override the function used to resolve the ID by passing in a final parameter when creating the anonymous setting. 
 
 ```php
     public function boot()

@@ -52,7 +52,7 @@ computed: {
 
 ## Setting Keys
 
-On the PHP side, since all settings are class based it's impossible to use the incorrect setting key. To keep this consistency in js, the keys can be retrieved from a json object. This is automatically generated for you. For our site name example (`\Acme\Settings\SiteName`), this looks like
+On the PHP side, since all settings are class-based it's impossible to use the incorrect setting key. To keep this consistency in js, the keys can be retrieved from a json object. This is automatically generated for you. For our site name example (`\Acme\Settings\SiteName`), this looks like
 
 ```
     {

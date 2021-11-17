@@ -23,8 +23,8 @@ nav_order: 1
 Laravel Settings provides simple but flexible settings to any Laravel app.
 
 - Quick to set up and use, but powerful enough to scale as your app does.
-- Supports string and class based keys.
-- Supports encryption and storing non-primative values.
+- Supports anonymous and class-based keys.
+- Supports encryption and storing non-primitive values.
 - User and global settings provided by default.
 - Can add custom types such as a team or organisation.
 

@@ -24,7 +24,7 @@ To set a setting, you can use the `setValue` method, such as `\Settings\Setting:
 
 To set the default value of any setting, which is returned if the setting does not yet have a value, you can use `\Settings\Setting::setDefaultValue('siteName', 'Default Site Name')`;
 
-To use class based settings, just pass in the class in place of the key. If you want to use the setting directly, you can access all set and get functions through the setting `\Acme\Setting\SiteName::setValue('New Site Name')`.
+To use class-based settings, just pass in the class in place of the key. If you want to use the setting directly, you can access all set and get functions through the setting `\Acme\Setting\SiteName::setValue('New Site Name')`.
 
 ### Setting types
 

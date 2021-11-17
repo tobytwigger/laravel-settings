@@ -26,7 +26,7 @@ You can also use
 - The facade: `\Settings\Setting::getValue(\Acme\Setting\SiteName::class)`
 - The helper: `settings(\Settings\Setting::class)`
 
-To access string-based settings with their key, you can replace the class name with the key
+To access anonymous settings with their key, you can replace the class name with the key
 - The facade: `\Settings\Setting::getValue('siteName')`
 - The helper: `settings('siteName')`
 
