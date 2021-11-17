@@ -1,5 +1,7 @@
 ---
-layout: docs title: Creating Settings nav_order: 3
+layout: docs 
+title: Creating Settings
+nav_order: 3
 ---
 
 # Creating a Setting
@@ -44,7 +46,7 @@ To create a new string-based setting, you can define it in the `boot` method of 
         \Settings\Setting::createGlobal(
             'siteName', // The key
             'My App', // The default value
-            \FormSchema\Generator\Field::textInput($this->inputName())->setValue($this->defaultValue()), // The form field
+            \FormSchema\Generator\Field::textInput($this->key())->setValue($this->defaultValue()), // The form field
             ['branding', 'appearance'], // The groups the setting is in
             ['string'], // The laravel validation rules
        )
@@ -83,7 +85,7 @@ class SiteName extends Setting
      */
     public function fieldOptions(): \FormSchema\Schema\Field
     {
-        return \FormSchema\Generator\Field::textInput($this->inputName())->setValue($this->defaultValue());
+        return \FormSchema\Generator\Field::textInput($this->key())->setValue($this->defaultValue());
     }
 
     /**
@@ -116,17 +118,19 @@ These classes should extend a setting type such as `Settings\Schema\UserSetting`
 
 Form fields are defined using the [form schema generator](https://tobytwigger.github.io/form-schema-generator/). You can define any field you need here, including complex fields that return objects.
 
-The input name for the field is defined in `$this->inputName()`, and the default value in `$this->defaultValue()` so to define a simple text field you'd use this plus a label/hint/other fields.
+The input name for the field is defined in `$this->key()`, and the default value in `$this->defaultValue()` so to define a simple text field you'd use this plus a label/hint/other fields.
 
 When using string settings, hardcode the key and value and just pass the result of the field generator directly to `::create`.
 
 ```php
     public function fieldOptions(): \FormSchema\Schema\Field
     {
-        return \FormSchema\Generator\Field::textInput($this->inputName())->setValue($this->defaultValue());
+        return \FormSchema\Generator\Field::textInput($this->key())->setValue($this->defaultValue());
     }
 
 ```
+
+Fields are currently a required property of any setting, to allow you to dynamically create setting pages. You can learn more about how to integrate your frontend with the form schema in the [integrate documentation](integrating.md).
 
 #### Validation
 
@@ -141,7 +145,7 @@ To ensure the settings entered into the database are valid, you can define rules
 
 #### Groups
 
-Groups are a way to order settings to the user. By grouping together similar settings (such as those related to the sitetheme, authentication, emails etc), it helps users quickly find what they're looking for.
+Groups are a way to order settings to the user. By grouping together similar settings (such as those related to the site theme, authentication, emails etc), it helps users quickly find what they're looking for.
 
 To define a group, define a `group` function. This should return an array of groups the setting is in. When retrieving aform schema to represent settings, the first group will be taken as the group, and therefore the first group should be the 'main' group.
 
@@ -162,7 +166,7 @@ The value of all settings are encrypted automatically, since it adds very little
     protected boolean $shouldEncrypt = false;
 ```
 
-You can also make the default behaviour be that encryption is not automatic, but can be turned on with `$shouldEncrypt = true`. To do this, set `encryption` to `false` in the config file. String-based settings use this default behaviour to encrypt or not encrypt settings. If you need to override the default behaviour, you'll have to use a class-based setting instead.
+You can also make the default behaviour be that encryption is not automatic, but can be turned on with `$shouldEncrypt = true`. To do this, set `encryption` to `false` in the config file. String-based settings use this default behaviour to encrypt or not encrypt settings.
 
 #### Complex data types
 
@@ -198,18 +202,19 @@ You can then register settings in the `boot` function of a service provider usin
 
 You can also register information about groups, which will be automatically pulled into any form schemas you extract from settings.
 
-String-based settings are automatically registered for you when using `create::`, `createUser::` or `createGlobal::`.
-
 ```php
     public function boot()
     {
-        \Settings\Setting::register(\Acme\Setting\SiteName::class);
+        \Settings\Setting::register(new \Acme\Setting\SiteName());
         \Settings\Setting::register([
-            \Acme\Setting\SiteName::class,
-            \Acme\Setting\SiteTheme::class
+            // Create a new class instance manually
+            new \Acme\Setting\SiteName(),
+            
+             // Letting the service container build the setting means you can inject dependencies into the setting construct.
+            $this->app->make(\Acme\Setting\SiteTheme::class)
         ]);
         
-        \Settings\Setting::register(\Acme\Setting\SiteName::class, ['extra', 'groups', 'for', 'the', 'setting']);
+        \Settings\Setting::register(new \Acme\Setting\SiteName(), ['extra', 'groups', 'for', 'the', 'setting']);
         
         \Settings\Setting::registerGroup(
             'branding', // Group Key
@@ -219,7 +224,14 @@ String-based settings are automatically registered for you when using `create::`
     }
 ```
 
-You can also register settings and groups in the config
+String-based settings are automatically registered for you when using `create::`, `createUser::` or `createGlobal::`. If you want to just create a setting rather than register one, you can use the factory directly.
+
+```php
+$setting = \Settings\Anonymous\AnonymousSettingFactory::make(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null);
+\Setting\Setting::register($setting);
+```
+
+You can also register settings and groups in the config. You need to make sure these settings can be resolved from the service container - if your setting doesn't rely on any dependencies being passed in then you won't need to worry about this.
 
 ```php
 <?php
@@ -231,7 +243,15 @@ return [
     'settings' => [
         \Acme\Setting\SiteName::class,
         \Acme\Setting\SiteTheme::class,
-        ...
+        [ // A string-based setting
+            'type' => 'user', // 'user', 'global', or a custom type
+            'key' => 'timezone', // The setting key
+            'defaultValue' => 'Europe/London', // The default value
+            // The field. You must serialize this so your config can still be cached.
+            'fieldOptions' => serialize(\FormSchema\Generator\Field::textInput('timezone')->setValue('Europe/London')),
+            'groups' => ['language', 'content'], // Groups to put the setting in
+            'rules' => ['string|timezone'] // Laravel validation rules to check the setting value       
+        ]
     ],
     'groups' => [
         'branding' [
@@ -272,4 +292,35 @@ abstract class TeamSettingType implements \Settings\Contracts\SettingType
     }
 
 }
+```
+
+For string-based classes which don't extend a type, you can define an alias instead. To define a team type to use in your anonymous settings, that can be used in place of 'global' and 'user', call this in your `boot()` method in the service provider.
+
+```php
+public function boot()
+{
+    \Settings\Anonymous\AnonymousSettingFactory::mapType(
+        // The key to refer to the type as
+        'team',
+        // Return the current team ID, or null if there is no team. This will be used to filter the settings.
+        fn() => \App\Team\Resolver::hasCurrentTeam() ? \App\Team\Resolver::currentTeam()->id() : null
+    );
+}
+```
+
+If the setting is a one-off and you don't want to create a type, you can override the function used to resolve the ID by passing in a final parameter when creating the string-based setting. 
+
+```php
+    public function boot()
+    {
+        \Settings\Setting::create(
+            'team', // Although you still have to define a type, it doesn't mean any thing and doesn't have to exist. This can be useful for retrieving settings though.
+            'siteName', // The key
+            'My App', // The default value
+            \FormSchema\Generator\Field::textInput($this->key())->setValue($this->defaultValue()), // The form field
+            ['branding', 'appearance'], // The groups the setting is in
+            ['string'], // The laravel validation rules,
+            fn() => \App\Team\Resolver::hasCurrentTeam() ? \App\Team\Resolver::currentTeam()->id() : null
+       )
+    }
 ```

@@ -18,6 +18,9 @@ nav_order: 7
 
 ---
 
+{: .label .label-red }
+This page currently documents features that haven't yet been created.
+
 ## Vue
 
 Since the frontend makes use of the settings too, it's easy to use this package directly from your js.

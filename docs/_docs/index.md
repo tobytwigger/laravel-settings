@@ -22,6 +22,12 @@ nav_order: 1
 
 Laravel Settings provides simple but flexible settings to any Laravel app.
 
+- Quick to set up and use, but powerful enough to scale as your app does.
+- Supports string and class based keys.
+- Supports encryption and storing non-primative values.
+- User and global settings provided by default.
+- Can add custom types such as a team or organisation.
+
 ## Installation
 
 All you need to do to use this project is pull it into an existing Laravel app using composer.
@@ -57,10 +63,7 @@ You can create settings in the service provider, in your `boot` method
 
 #### Class-based settings
 
-Class based settings let you do everything you can with normal settings, as well as letting you
-- Use complex objects (that can't be serialized by default)
-- Use more complex validation
-- Use the class name as the setting key, letting your IDE tell you when you've got something wrong.
+To make use of static analysis and IDE typehinting support, and to help you manage the defined settings, you can use class-based settings.
 
 ### Set a setting
 
@@ -69,3 +72,6 @@ Class based settings let you do everything you can with normal settings, as well
     \Settings\Setting::setDefaultValue('theme', 'my-custom-theme', 2); // User with an ID of `2` sets their own value.
 ```
 
+### Read more
+
+Read on to learn more about creating, getting and setting settings.
