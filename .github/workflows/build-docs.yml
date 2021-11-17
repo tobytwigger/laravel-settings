@@ -2,7 +2,7 @@ name: Build docs and commit to build branch
 
 on:
   push:
-    branches: 
+    branches:
       - develop
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
         sudo apt-get -yqq install libpq-dev
         gem install bundler
         bundle install --jobs 4 --retry 3
-        bundle exec jekyll build        
+        bundle exec jekyll build
 
     - name: 🧪 Deploy build
       run: |
@@ -47,4 +47,4 @@ jobs:
         git pull origin develop
         git add ./docs
         git commit -am "🧪 Build docs"
-        git push  -f https://${{ github.token }}@github.com/tobytwigger/laravel-settings.git
+        git push  -f https://${{ github.token }}@github.com/ElbowSpaceUK/laravel-settings.git
