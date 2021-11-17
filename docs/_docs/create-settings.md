@@ -29,8 +29,8 @@ Any setting must have at least the following information:
 - The form field for the setting (using
   the [form schema generator](https://tobytwigger.github.io/form-schema-generator/))
 
-For smaller apps, you can use simple anonymous setting keys to get going quickly. These require less boilerplate code
-to get running, but it's up to you to manage the keys and make sure you don't re-use any.
+For smaller apps, you can use simple anonymous settings to get going quickly. These require less boilerplate code
+to get running, but it's up to you to keep track of the keys and make sure you don't re-use any.
 
 For larger apps, or as your app grows, you can migrate over to using class-based settings. These give you more control
 over your settings and their appearance and use, whilst also leveraging your IDE to give you typehinting for available
@@ -53,7 +53,7 @@ To create a new anonymous setting, you can define it in the `boot` method of you
     }
 ```
 
-You can use `createGlobal` or `createUser` by default, and if you add a custom type reference it with `\Settings\Setting::create('custom-type', 'siteName', ...)`.
+You can use `createGlobal` or `createUser` by default, and if you add a custom type you can reference it with `\Settings\Setting::create('custom-type', 'siteName', ...)`.
 
 ### Class-based settings
 
@@ -147,7 +147,7 @@ To ensure the settings entered into the database are valid, you can define rules
 
 Groups are a way to order settings to the user. By grouping together similar settings (such as those related to the site theme, authentication, emails etc), it helps users quickly find what they're looking for.
 
-To define a group, define a `group` function. This should return an array of groups the setting is in. When retrieving aform schema to represent settings, the first group will be taken as the group, and therefore the first group should be the 'main' group.
+To define a group, define a `group` function. This should return an array of groups the setting is in. When retrieving a form schema to represent settings, the first group will be taken as the group, and therefore the first group should be the 'main' group.
 
 ```php
     public function group(): array
@@ -166,7 +166,7 @@ The value of all settings are encrypted automatically, since it adds very little
     protected boolean $shouldEncrypt = false;
 ```
 
-You can also make the default behaviour be that encryption is not automatic, but can be turned on with `$shouldEncrypt = true`. To do this, set `encryption` to `false` in the config file. Anonymous settings use this default behaviour to encrypt or not encrypt settings.
+You can also make the default behaviour be that encryption is not automatic, but can be turned on with `$shouldEncrypt = true`. To do this, set `encryption` to `false` in the config file. Anonymous settings use this default behaviour to determine if settings should be encrypted.
 
 #### Complex data types
 
@@ -193,8 +193,6 @@ This example would handle a complex data object, such as something returned from
             ->getResult($value['result']);
     }
 ```
-
-If the setting value cannot be serialized, it cannot be used with an anonymous setting, so you'll have to implement it as a class using casting.
 
 ## Registering
 

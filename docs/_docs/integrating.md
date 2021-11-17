@@ -4,7 +4,7 @@ title: Integrate
 nav_order: 6
 ---
 
-# Basic Usage
+# Integrate
 {: .no_toc }
 
 <details open markdown="block">
@@ -17,7 +17,7 @@ nav_order: 6
 </details>
 
 ---
-7
+
 {: .label .label-red }
 This page currently documents features that haven't yet been created.
 
