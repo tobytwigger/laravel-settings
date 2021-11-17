@@ -11,7 +11,7 @@ computed: {
         return this.$setting.get('key', 1)
     }
 }
-</code></pre></div></div> <h2 id="setting-keys"> <a href="#setting-keys" class="anchor-heading" aria-labelledby="setting-keys"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Setting Keys </h2> <p>On the PHP side, since all settings are class based it’s impossible to use the incorrect setting key. To keep this consistency in js, the keys can be retrieved from a json object. This is automatically generated for you. For our site name example (<code class="language-plaintext highlighter-rouge">\Acme\Settings\SiteName</code>), this looks like</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {
+</code></pre></div></div> <h2 id="setting-keys"> <a href="#setting-keys" class="anchor-heading" aria-labelledby="setting-keys"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Setting Keys </h2> <p>On the PHP side, since all settings are class-based it’s impossible to use the incorrect setting key. To keep this consistency in js, the keys can be retrieved from a json object. This is automatically generated for you. For our site name example (<code class="language-plaintext highlighter-rouge">\Acme\Settings\SiteName</code>), this looks like</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {
         acme: {
             settings: {
                 siteName: SettingObject
