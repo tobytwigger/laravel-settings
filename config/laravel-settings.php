@@ -12,6 +12,10 @@ return [
         'default' => false
     ],
 
+    'settings' => [
+
+    ],
+
     'aliases' => [
         // 'siteName' => \My\Settings\SiteName::class
     ]

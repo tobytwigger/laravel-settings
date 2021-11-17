@@ -2,6 +2,7 @@
 
 namespace Settings;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -31,6 +32,7 @@ class SettingsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerBindings();
+        $this->setupTypes();
         App::booted(fn($app) => AppNotBootedDecorator::$booted = true);
     }
 
@@ -45,7 +47,6 @@ class SettingsServiceProvider extends ServiceProvider
     {
         $this->publishAssets();
         $this->registerConfigBindings();
-        $this->setupTypes();
     }
 
     /**
@@ -98,6 +99,24 @@ class SettingsServiceProvider extends ServiceProvider
 
         foreach(config('laravel-settings.aliases', []) as $alias => $key) {
             Setting::alias($alias, $key);
+        }
+
+        foreach(config('laravel-settings.settings', []) as $setting) {
+            if(is_string($setting)) {
+                Setting::register(app($setting));
+            } elseif(is_array($setting)) {
+                if(!Arr::has($setting, ['type', 'key', 'defaultValue', 'fieldOptions'])) {
+                    throw new \Exception(sprintf('Setting [%s] does not have type, key, defaultValue and fieldOptions defined in config', json_encode($setting)));
+                }
+                Setting::create(
+                    $setting['type'],
+                    $setting['key'],
+                    $setting['defaultValue'],
+                    unserialize($setting['fieldOptions']),
+                    $setting['groups'] ?? [],
+                    $setting['rules'] ?? []
+                );
+            }
         }
     }
 
