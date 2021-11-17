@@ -159,5 +159,21 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->create('customType', 'key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null);
     }
 
+    /** @test */
+    public function createUser_proxies_the_underlying_service()
+    {
+        $this->baseService->createUser('key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null)->shouldBeCalled()->willReturn($this->prophesize(AnonymousSetting::class)->reveal());
+        $decorator = new BaseSettingServiceDecorator($this->baseService());
+        $decorator->createUser('key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null);
+    }
+
+    /** @test */
+    public function createGlobal_proxies_the_underlying_service()
+    {
+        $this->baseService->createGlobal('key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null)->shouldBeCalled()->willReturn($this->prophesize(AnonymousSetting::class)->reveal());
+        $decorator = new BaseSettingServiceDecorator($this->baseService());
+        $decorator->createGlobal('key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null);
+    }
+
 }
 
