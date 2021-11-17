@@ -20,15 +20,24 @@ nav_order: 4
 
 ## Getting a setting value
 
-The easiest way to get the value of a setting is by referencing the setting class directly, e.g. `\Acme\Setting\SiteName::getValue()`. 
+The easiest way to get the value of a setting is by referencing the setting class directly, e.g. `\Acme\Setting\SiteName::getValue()`.
 
 You can also use
 - The facade: `\Settings\Setting::getValue(\Acme\Setting\SiteName::class)`
 - The helper: `settings(\Settings\Setting::class)`
 
+To access string-based settings with their key, you can replace the class name with the key
+- The facade: `\Settings\Setting::getValue('siteName')`
+- The helper: `settings('siteName')`
+
 ### Getting values for types
 
 For setting types like users and teams, where the setting value depends on the session, you can use the same function. This will automatically resolve the current user/team/model from the session and use that. If you do pass an ID in as the first parameter though, it will get the setting value for the given model instead.
+
+```php
+\Settings\Setting::getValue('theme') // Get the value for the current user, or the default if no-one is logged in
+\Settings\Setting::getValue('theme', 5) // Get the value for user #5, even if someone else is logged in
+```
 
 ### Aliases
 
@@ -43,13 +52,22 @@ To alias a setting like this, add it to the config file
 
 return [
     'aliases' => [
-        'SiteName' => \Acme\Setting\SiteName::class,
+        'siteName' => \Acme\Setting\SiteName::class,
         ...
     ]
 ];
 ```
 
-If the setting name is ambiguous (e.g. there's no other setting with the same name, not including the FQDN), then the alias will be automatically set up.
+You can also add it directly in your service provider `boot` method
+
+```php
+public function boot()
+{
+    \SettingsSetting::alias('siteName', \Acme\Setting\SiteName::class);
+}
+```
+
+Aliasing in this way also makes your class-based settings accessible through the alias, so site name can now be accessed with `settings(\Acme\Setting\SiteName::class)` or `settings('siteName').
 
 ## Getting multiple setting information
 
@@ -61,7 +79,7 @@ To display the settings to users, you need to get information about the register
 - Get all settings that have all the given groups: `settings()->withAllGroups(['group-name', 'group-name-2'])->get()`
 
 **Types**
-- Get all settings of a certain type: `settings()->withType(\Acme\Setting\TeamSettingType::class)->get()`
+- Get all settings of a certain type: `settings()->withType(\Acme\Setting\TeamSettingType::class)->get()` or `settings()->withType('team')->get()`.
 - Get all global settings: `settings()->withGlobal()->get()`. This is the same as calling `settings()->withType(\Settings\Schema\GlobalSetting::class)`.
 - Get all user settings: `settings()->withUser()->get()`.
 
@@ -70,13 +88,19 @@ The functions can be chained, so to get all global settings that belong to a gro
 
 These will all return a `Settings\Support\SettingCollection` instance. You can use this like a normal Laravel collection, but you will also have access to the following functions.
 
-- `asForm()` - turn the settings into a `\FormSchema\Schema\Form`.
+- `toForm()` - turn the settings into a `\FormSchema\Schema\Form`.
 - `toKeyValuePair()` - get all settings and their values as key value pairs.
 
-Needs method documenting
-{: .label .label-yellow }
+When using `toForm`, you can change how a collection casts settings to a form. Define a callback in the `register` function of your service provider, which accepts a collection of settings and returns a Form Schema instance.
 
-When using `asForm`, you can change how a collection casts settings to a form.
+```php
+public function register()
+{
+    \Settings\Collection\SettingCollection::$convertToFormUsing = function(\Settings\Collection\SettingCollection $settings) {
+        return \FormSchema\Generator\Form::make()->withGroup(<...>)->form();
+    }
+}
+```
 
 ## Multi-tenancy
 
