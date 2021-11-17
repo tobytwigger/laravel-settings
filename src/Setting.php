@@ -25,6 +25,8 @@ use Settings\Store\Query;
  * @method static Query withUserType() Only user settings
  * @method static void alias(string $alias, string $key) Alias the $key with $alias
  * @method static \Settings\Contracts\Setting create(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null) Create and register a new setting
+ * @method static \Settings\Contracts\Setting createUser(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null) Create and register a user setting
+ * @method static \Settings\Contracts\Setting createGlobal(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null) Create and register a global setting
  *
  * @see \Settings\Contracts\SettingService
  */

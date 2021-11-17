@@ -13,6 +13,8 @@ use Settings\SettingService;
 use Settings\Store\Query;
 use Settings\Tests\TestCase;
 use Settings\Tests\Traits\CreatesSettings;
+use Settings\Types\GlobalSetting;
+use Settings\Types\UserSetting;
 
 class SettingServiceTest extends TestCase
 {
@@ -108,6 +110,44 @@ class SettingServiceTest extends TestCase
         $this->assertEquals(['group1', 'group2'], $setting->getGroups());
         $this->assertEquals(1, $setting->resolveId());
         $this->assertEquals('customType', $setting->type());
+    }
+
+    /** @test */
+    public function createUser_returns_a_new_registered_user_setting(){
+        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class));
+
+        $guard = $this->prophesize(\Illuminate\Contracts\Auth\Guard::class);
+        $guard->id()->shouldBeCalled()->willReturn(4);
+        $this->instance('auth', $guard->reveal());
+
+        $setting = $service->createUser(
+            'key1',
+            'Default Val',
+            Field::text('key1')->setValue('Default Val')
+        );
+
+        $this->assertCount(1, \Settings\Setting::search()->get());
+
+        $this->assertInstanceOf(AnonymousSetting::class, $setting);
+        $this->assertEquals('user', $setting->type());
+        $this->assertEquals(4, $setting->resolveId());
+    }
+
+    /** @test */
+    public function createGlobal_returns_a_new_registered_global_setting(){
+        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class));
+
+        $setting = $service->createGlobal(
+            'key1',
+            'Default Val',
+            Field::text('key1')->setValue('Default Val')
+        );
+
+        $this->assertCount(1, \Settings\Setting::search()->get());
+
+        $this->assertInstanceOf(AnonymousSetting::class, $setting);
+        $this->assertEquals('global', $setting->type());
+        $this->assertNull($setting->resolveId());
     }
 
     /** @test */
