@@ -19,5 +19,5 @@ interface CreatesQuery
 
     public function withUserType(): Query;
 
-    public function search();
+    public function search(): Query;
 }

@@ -1,20 +1,14 @@
 <?php
 
-namespace Settings\Tests\Integration;
+namespace Settings\Tests\Integration\Anonymous;
 
 use FormSchema\Generator\Field;
-use FormSchema\Schema\Form;
 use Settings\Anonymous\AnonymousSetting;
 use Settings\Anonymous\AnonymousSettingFactory;
-use Settings\Collection\SettingCollection;
-use Settings\Contracts\Setting;
-use Settings\Store\Query;
 use Settings\Tests\TestCase;
 use Settings\Tests\Traits\CreatesSettings;
-use Settings\Types\GlobalSetting;
-use Settings\Types\UserSettings;
 
-class AnonymouSettingTest extends TestCase
+class AnonymousSettingFactoryTest extends TestCase
 {
     use CreatesSettings;
 
@@ -65,11 +59,11 @@ class AnonymouSettingTest extends TestCase
     }
 
     /** @test */
-    public function a_value_can_be_set_and_got_for_an_anonymous_setting()
+    public function anonymous_is_an_alias_of_create()
     {
-        AnonymousSettingFactory::mapType('customType', fn() => null);
+        AnonymousSettingFactory::mapType('customType', fn() => 1);
 
-        $setting = AnonymousSettingFactory::create(
+        $setting = AnonymousSettingFactory::anonymous(
             'customType',
             'key1',
             'Default Val',
@@ -78,46 +72,7 @@ class AnonymouSettingTest extends TestCase
             'string'
         );
 
-        \Settings\Setting::setValue('key1', 'New Value');
-
-        $this->assertEquals('New Value', \Settings\Setting::getValue('key1'));
-    }
-
-    /** @test */
-    public function a_default_value_can_be_set_and_is_returned(){
-        AnonymousSettingFactory::mapType('customType', fn() => null);
-
-        $setting = AnonymousSettingFactory::create(
-            'customType',
-            'key1',
-            'Default Val',
-            Field::text('key1')->setValue('Default Val'),
-            ['group1', 'group2'],
-            'string'
-        );
-
-        \Settings\Setting::setDefaultValue('key1', 'New Default Value');
-
-        \Settings\Setting::setValue('key1', 'New Custom Value', 1);
-
-        $this->assertEquals('New Default Value', \Settings\Setting::getValue('key1'));
-        $this->assertEquals('New Custom Value', \Settings\Setting::getValue('key1', 1));
-    }
-
-    /** @test */
-    public function the_hardcoded_default_value_is_given_as_default(){
-        AnonymousSettingFactory::mapType('customType', fn() => null);
-
-        $setting = AnonymousSettingFactory::create(
-            'customType',
-            'key1',
-            'Default Val',
-            Field::text('key1')->setValue('Default Val'),
-            ['group1', 'group2'],
-            'string'
-        );
-
-        $this->assertEquals('Default Val', \Settings\Setting::getValue('key1'));
+        $this->assertCount(1, \Settings\Setting::search()->get());
     }
 
     /** @test */

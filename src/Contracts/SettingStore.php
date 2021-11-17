@@ -9,6 +9,8 @@ interface SettingStore
 
     public function getByKey(string $key): Setting;
 
+    public function alias(string $alias, string $key): void;
+
     public function register(array $settings, array $extraGroups): void;
 
     public function registerGroup(string $key, ?string $title = null, ?string $subtitle = null): void;

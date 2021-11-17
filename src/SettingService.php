@@ -2,20 +2,22 @@
 
 namespace Settings;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Settings\Contracts\Setting;
 use Settings\Contracts\SettingStore;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingService as SettingServiceContract;
 use Settings\Exceptions\PersistedSettingNotFound;
+use Settings\Exceptions\SettingNotRegistered;
 use Settings\Store\Query;
 
 class SettingService implements SettingServiceContract
 {
 
     private PersistedSettingRepository $persistedSettings;
+
     private SettingStore $settingStore;
 
     public function __construct(PersistedSettingRepository $persistedSettings, SettingStore $settingStore)
@@ -26,17 +28,22 @@ class SettingService implements SettingServiceContract
 
     public function register(Setting|array $settings, array $extraGroups = []): void
     {
-        $this->settingStore->register(Arr::wrap($settings), $extraGroups);
+        $this->store()->register(Arr::wrap($settings), $extraGroups);
+    }
+
+    public function alias(string $alias, string $key): void
+    {
+        $this->store()->alias($alias, $key);
     }
 
     public function registerGroup(string $key, ?string $title = null, ?string $subtitle = null): void
     {
-        $this->settingStore->registerGroup($key, $title, $subtitle);
+        $this->store()->registerGroup($key, $title, $subtitle);
     }
 
     public function getValue(string $key, ?int $id = null): mixed
     {
-        $setting = $this->settingStore->getByKey($key);
+        $setting = $this->store()->getByKey($key);
 
         // If the ID is null, try and resolve it from the setting type.
         if($id === null) {
@@ -61,14 +68,14 @@ class SettingService implements SettingServiceContract
 
     public function setDefaultValue(string $key, mixed $value): void
     {
-        $setting = $this->settingStore->getByKey($key);
+        $setting = $this->store()->getByKey($key);
 
         $this->persistedSettings->setDefaultValue($setting, $value);
     }
 
     public function setValue(string $key, mixed $value, ?int $id = null): void
     {
-        $setting = $this->settingStore->getByKey($key);
+        $setting = $this->store()->getByKey($key);
         // If the ID is null, try and resolve it from the setting type.
         if($id === null) {
             $id = $setting->resolveId();
@@ -118,11 +125,12 @@ class SettingService implements SettingServiceContract
 
     public function getSettingByKey(string $key): Setting
     {
-        return $this->settingStore->getByKey($key);
+        return $this->store()->getByKey($key);
     }
 
     public function store(): SettingStore
     {
         return $this->settingStore;
     }
+
 }

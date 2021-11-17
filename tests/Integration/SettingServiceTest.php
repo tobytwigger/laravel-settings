@@ -5,6 +5,7 @@ namespace Settings\Tests\Integration;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Settings\Contracts\CastsSettingValue;
 use Settings\DatabaseSettings\SavedSetting;
 use Settings\Exceptions\SettingNotRegistered;
@@ -14,7 +15,7 @@ use Settings\Tests\Traits\CreatesSettings;
 use Settings\Tests\Traits\FakeSetting;
 use Settings\Types\GlobalSetting;
 
-class SettingTest extends TestCase
+class SettingServiceTest extends TestCase
 {
     use CreatesSettings;
 
@@ -52,6 +53,20 @@ class SettingTest extends TestCase
             ['My new value'],
             Setting::getValue('key1')
         );
+    }
+
+    /** @test */
+    public function settings_can_be_aliased()
+    {
+        $setting = $this->createSetting('key1', ['default' => 'value'], ['array'], true, null);
+        Setting::alias('key2', 'key1');
+
+        Setting::setValue('key1', ['My new value']);
+        $this->assertEquals(['My new value'], Setting::getValue('key1'));
+        $this->assertEquals(['My new value'], Setting::getValue('key2'));
+        Setting::setValue('key2', ['My new value 2']);
+        $this->assertEquals(['My new value 2'], Setting::getValue('key1'));
+        $this->assertEquals(['My new value 2'], Setting::getValue('key2'));
     }
 
     /** @test */
@@ -131,53 +146,5 @@ class SettingTest extends TestCase
         );
     }
 
-    /** @test */
-    public function settings_can_control_serialization(){
-        $object = new class {
-            public $test = 1;
-            public $otherTest = ['testing', '123'];
-        };
-        $setting = new DummySettingTestWithCasting('key-object', null);
-        Setting::register($setting);
-
-        Setting::setValue('key-object', $object);
-
-
-        $this->assertEquals(
-            1,
-            Setting::getValue('key-object')->test
-        );
-        $this->assertEquals(
-            ['testing', '123'],
-            Setting::getValue('key-object')->otherTest
-        );
-    }
-
 }
 
-
-class DummySettingTestWithCasting extends FakeSetting implements CastsSettingValue
-{
-
-    public function castToString($value): string
-    {
-        return json_encode([
-            'test' => $value->test,
-            'other' => $value->otherTest
-        ]);
-    }
-
-    public function castToValue(string $value): mixed
-    {
-        $value = json_decode($value, true);
-        $class = new class {
-            public $test;
-            public $otherTest;
-        };
-        $class->test = $value['test'];
-        $class->otherTest = $value['other'];
-        return $class;
-    }
-
-
-}

@@ -1,17 +1,15 @@
 <?php
 
-namespace Settings\Tests\Integration;
+namespace Settings\Tests\Integration\Store;
 
-use FormSchema\Schema\Form;
-use Settings\Collection\SettingCollection;
 use Settings\Contracts\Setting;
 use Settings\Store\Query;
 use Settings\Tests\TestCase;
 use Settings\Tests\Traits\CreatesSettings;
 use Settings\Types\GlobalSetting;
-use Settings\Types\UserSettings;
+use Settings\Types\UserSetting;
 
-class SettingQueryTest extends TestCase
+class QueryExecutorTest extends TestCase
 {
     use CreatesSettings;
 
@@ -96,79 +94,17 @@ class SettingQueryTest extends TestCase
     /** @test */
     public function it_filters_by_being_a_user()
     {
-        $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2'], UserSettings::class);
+        $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2'], UserSetting::class);
         $setting2 = $this->createSetting('key2', 'val1', 'string', true, null, ['group2', 'group3'], 'type');
-        $setting3 = $this->createSetting('key3', 'val1', 'string', true, null, ['group3', 'group1'], UserSettings::class);
+        $setting3 = $this->createSetting('key3', 'val1', 'string', true, null, ['group3', 'group1'], UserSetting::class);
 
         $this->assertFilters([
             $setting1, $setting3
-        ], Query::newQuery()->withType(UserSettings::class)->get());
+        ], Query::newQuery()->withType(UserSetting::class)->get());
 
         $this->assertFilters([
             $setting1, $setting3
         ], Query::newQuery()->withUserType()->get());
-    }
-
-    /** @test */
-    public function toKeyValuePair_converts_the_settings_to_key_value_pairs()
-    {
-        $setting1 = $this->createSetting('key1', 'val1', 'string', true, null);
-        $setting2 = $this->createSetting('key2', 'val2', 'string', true, 1);
-        $setting3 = $this->createSetting('key3', 'val3', 'string', true, null);
-
-        \Settings\Setting::setValue('key2', 'val2-updated');
-        \Settings\Setting::setValue('key3', 'val3-updated');
-
-        $this->assertEquals(SettingCollection::make([
-            'key1' => 'val1',
-            'key2' => 'val2-updated',
-            'key3' => 'val3-updated'
-        ]), \Settings\Setting::search()->get()->toKeyValuePair());
-    }
-
-    /** @test */
-    public function toForm_converts_a_search_to_a_form(){
-        $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2']);
-        $setting2 = $this->createSetting('key2', 'val2', 'string', true, 1, ['group1', 'group3']);
-        $setting3 = $this->createSetting('key3', 'val3', 'string', true, null, ['group2', 'group3']);
-
-        \Settings\Setting::setValue('key2', 'val2-updated');
-        \Settings\Setting::setValue('key3', 'val3-updated');
-
-        $form = Query::newQuery()->get()->toForm();
-        $this->assertInstanceOf(Form::class, $form);
-        $this->assertCount(2, $form->groups());
-
-        $this->assertCount(2, $form->groups()[0]->fields());
-        $this->assertEquals('key1', $form->groups()[0]->fields()[0]->getId());
-        $this->assertEquals('key2', $form->groups()[0]->fields()[1]->getId());
-
-        $this->assertCount(1, $form->groups()[1]->fields());
-        $this->assertEquals('key3', $form->groups()[1]->fields()[0]->getId());
-
-    }
-
-    /** @test */
-    public function toForm_adds_group_meta_information_if_present(){
-        $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2']);
-        $setting2 = $this->createSetting('key2', 'val2', 'string', true, 1, ['group2', 'group3']);
-        $setting3 = $this->createSetting('key3', 'val3', 'string', true, null, ['group3', 'group2']);
-
-        \Settings\Setting::registerGroup('group1', 'Group 1', 'Testing Group 1');
-        \Settings\Setting::registerGroup('group2', 'Group 2', 'Testing Group 2');
-
-        $form = Query::newQuery()->get()->toForm();
-        $this->assertInstanceOf(Form::class, $form);
-        $this->assertCount(3, $form->groups());
-
-        $this->assertEquals('Group 1', $form->groups()[0]->getTitle());
-        $this->assertEquals('Testing Group 1', $form->groups()[0]->getSubtitle());
-
-        $this->assertEquals('Group 2', $form->groups()[1]->getTitle());
-        $this->assertEquals('Testing Group 2', $form->groups()[1]->getSubtitle());
-
-        $this->assertNull($form->groups()[2]->getTitle());
-        $this->assertNull($form->groups()[2]->getSubtitle());
     }
 
     /**

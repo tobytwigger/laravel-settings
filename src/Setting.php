@@ -22,6 +22,7 @@ use Settings\Store\Query;
  * @method static Query withType(string $type) Only settings of the given type
  * @method static Query withGlobalType() Only global settings
  * @method static Query withUserType() Only user settings
+ * @method static void alias(string $alias, string $key) Alias the $key with $alias
  *
  * @see \Settings\Contracts\SettingService
  */
