@@ -2,6 +2,7 @@
 
 namespace Settings;
 
+use FormSchema\Schema\Field;
 use Illuminate\Support\Facades\Facade;
 use Settings\Contracts\SettingStore;
 use Settings\Store\Query;
@@ -23,6 +24,7 @@ use Settings\Store\Query;
  * @method static Query withGlobalType() Only global settings
  * @method static Query withUserType() Only user settings
  * @method static void alias(string $alias, string $key) Alias the $key with $alias
+ * @method static \Settings\Contracts\Setting create(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null) Create and register a new setting
  *
  * @see \Settings\Contracts\SettingService
  */

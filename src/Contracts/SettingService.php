@@ -2,6 +2,7 @@
 
 namespace Settings\Contracts;
 
+use FormSchema\Schema\Field;
 use Illuminate\Validation\ValidationException;
 
 interface SettingService extends CreatesQuery
@@ -65,5 +66,7 @@ interface SettingService extends CreatesQuery
      * @return Setting
      */
     public function getSettingByKey(string $key): Setting;
+
+    public function create(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting;
 
 }

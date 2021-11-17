@@ -2,9 +2,9 @@
 
 namespace Settings;
 
+use FormSchema\Schema\Field;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
+use Settings\Anonymous\AnonymousSettingFactory;
 use Settings\Contracts\Setting;
 use Settings\Contracts\SettingStore;
 use Settings\Contracts\PersistedSettingRepository;
@@ -133,4 +133,8 @@ class SettingService implements SettingServiceContract
         return $this->settingStore;
     }
 
+    public function create(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting
+    {
+        return AnonymousSettingFactory::anonymous($type, $key, $defaultValue, $fieldOptions, $groups, $rules, $resolveIdUsing);
+    }
 }
