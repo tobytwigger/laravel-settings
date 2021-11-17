@@ -116,15 +116,15 @@ We've previously covered getting a Form instance from settings/groups of setting
 
 Integrating with Form schema generator
 
-## Transition from keys to class based
+## Transition from keys to class-based
 
-You can alias the old string key to the new class based name
+You can alias the old anonymous setting key to the new class-based name
 
 ```php
     \Settings\Setting::alias(\Acme\Settings\SiteName::class, 'siteName');
 ```
 
-Now, when you call `\Acme\Settings\SiteName::getValue()`, the class will automatically be replaced with the alias. This means there should be no friction when changing over to class based settings, since both options are viable. 
+Now, when you call `\Acme\Settings\SiteName::getValue()`, the class will automatically be replaced with the alias. This means there should be no friction when changing over to class-based settings, since both options are viable. 
 
 ### Removing the anonymous setting
 
