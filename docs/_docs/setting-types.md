@@ -27,7 +27,7 @@ For some sites, the settings will depend on the team a user is in, the module yo
 
 ## Creating a Type
 
-## Customising auth
+### Customising auth
 
 By default, the user settings uses the Laravel `Auth` facade to resolve the user ID. If your app gets users a different way, you can override this functionality with a callback in the register function of your service provider.
 
