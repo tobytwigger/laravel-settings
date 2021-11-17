@@ -5,14 +5,14 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/tobytwigger/laravel-settings/releases">
-        <img src="https://img.shields.io/github/v/release/tobytwigger/laravel-settings?label=Latest%20Version&sort=semver&style=plastic" alt="Latest Version">
+    <a href="https://github.com/elbowSpaceUK/laravel-settings/releases">
+        <img src="https://img.shields.io/github/v/release/elbowSpaceUK/laravel-settings?label=Latest%20Version&sort=semver&style=plastic" alt="Latest Version">
     </a>
-    <a href="https://github.com/tobytwigger/laravel-settings/tree/master">
-        <img src="https://img.shields.io/github/workflow/status/tobytwigger/laravel-settings/build-status/master?label=release%20status&style=plastic" alt="Master branch status">
+    <a href="https://github.com/elbowSpaceUK/laravel-settings/tree/master">
+        <img src="https://img.shields.io/github/workflow/status/elbowSpaceUK/laravel-settings/build-status/master?label=release%20status&style=plastic" alt="Master branch status">
     </a>
-    <a href="https://github.com/tobytwigger/laravel-settings/tree/develop">
-        <img src="https://img.shields.io/github/workflow/status/tobytwigger/laravel-settings/build-status/develop?label=dev%20status&style=plastic" alt="Develop branch status">
+    <a href="https://github.com/elbowSpaceUK/laravel-settings/tree/develop">
+        <img src="https://img.shields.io/github/workflow/status/elbowSpaceUK/laravel-settings/build-status/develop?label=dev%20status&style=plastic" alt="Develop branch status">
     </a>
 </p>
 
@@ -47,7 +47,7 @@ Laravel Settings provides simple but flexible settings to any Laravel app.
 
 We've taken care over documenting everything you'll need to get started and use Laravel settings fully.
 
-[Check out the docs](https://tobytwigger.github.io/laravel-settings) on our documentation site.
+[Check out the docs](https://elbowSpaceUK.github.io/laravel-settings) on our documentation site.
 
 [comment]: <> (To build them locally, you'll need to have ruby &#40;we'd recommend using rbenv&#41; and the gem bundler &#40;https://bundler.io/&#41; installed. Run `bundle install && bundle exec jekyll serve` in the docs folder.)
 
