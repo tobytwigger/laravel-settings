@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Integrate
-nav_order: 6
+nav_order: 7
 ---
 
 # Integrate
@@ -109,12 +109,6 @@ Content-Type: application/json
 If you use your own API to update settings, or a standard web request, you can use the following validation rule to check all the given settings are valid according to their validation rules
 
 - `settings` - the given attribute must be an array of settings as key value pairs
-
-## Creating a settings page
-
-We've previously covered getting a Form instance from settings/groups of settings. Pass this schema to the frontend and render it using a dynamic form generator. Each setting group will appear in a different form group.
-
-Integrating with Form schema generator
 
 ## Transition from keys to class-based
 

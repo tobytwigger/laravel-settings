@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Set Settings
-nav_order: 5
+nav_order: 6
 ---
 
 # Set Settings
