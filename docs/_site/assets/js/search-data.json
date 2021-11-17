@@ -163,15 +163,15 @@
   },"27": {
     "doc": "Setting Types",
     "title": "Setting Types",
-    "content": ". | Setting Types . | Intro | Creating a Type . | Class-based settings | Anonymous settings | . | . | . ",
+    "content": ". | Setting Types . | What are setting types | Creating a Type . | Class-based settings | Anonymous settings | . | . | . ",
     "url": "/setting-types",
     "relUrl": "/setting-types"
   },"28": {
     "doc": "Setting Types",
-    "title": "Intro",
+    "title": "What are setting types",
     "content": "By default, you have the setting types global and user. The global setting type is set once, and will be the same for everyone. But a user setting will return a different value depending on which user is logged in. For some sites, the settings will depend on the team a user is in, the module you’re operating in, or the country you’re in. When creating a setting, you can assign it to be of one type. Whenever you then get the value of that setting, it will depend on the model logged in. ",
-    "url": "/setting-types#intro",
-    "relUrl": "/setting-types#intro"
+    "url": "/setting-types#what-are-setting-types",
+    "relUrl": "/setting-types#what-are-setting-types"
   },"29": {
     "doc": "Setting Types",
     "title": "Creating a Type",
