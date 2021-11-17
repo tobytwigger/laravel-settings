@@ -19,7 +19,7 @@ nav_order: 3
 
 ---
 
-## Intro
+## What are setting types
 
 By default, you have the setting types global and user. The global setting type is set once, and will be the same for everyone. But a user setting will return a different value depending on which user is logged in.
 
