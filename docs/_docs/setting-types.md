@@ -27,6 +27,14 @@ For some sites, the settings will depend on the team a user is in, the module yo
 
 ## Creating a Type
 
+## Customising auth
+
+By default, the user settings uses the Laravel `Auth` facade to resolve the user ID. If your app gets users a different way, you can override this functionality with a callback in the register function of your service provider.
+
+```php
+    `\Settings\Types\UserSetting::$resolveUserUsing = fn() => \Auth::driver('api')->id();`
+```
+
 ### Class-based settings
 
 To create a new type, create an abstract class that implements `Settings\Contracts\SettingType`. You can then use this setting type by extending the new class in your setting.
