@@ -5,7 +5,6 @@ namespace Settings;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
-use Settings\Anonymous\AnonymousSetting;
 use Settings\Anonymous\AnonymousSettingFactory;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingService as SettingServiceContract;
@@ -19,8 +18,6 @@ use Settings\Decorators\SerializationDecorator;
 use Settings\Decorators\SettingExistsDecorator;
 use Settings\Decorators\ValidationDecorator;
 use Settings\Store\SingletonSettingStore;
-use Settings\Types\GlobalSetting;
-use Settings\Types\UserSetting;
 
 /**
  * The service provider for loading Laravel Setting

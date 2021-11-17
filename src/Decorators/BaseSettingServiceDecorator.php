@@ -2,7 +2,7 @@
 
 namespace Settings\Decorators;
 
-use Illuminate\Support\Traits\ForwardsCalls;
+use FormSchema\Schema\Field;
 use Settings\Contracts\Setting;
 use Settings\Contracts\SettingService;
 use Settings\Contracts\SettingStore;
@@ -92,4 +92,8 @@ class BaseSettingServiceDecorator implements SettingService
         return $this->baseService->getSettingByKey($key);
     }
 
+    public function create(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting
+    {
+        return $this->baseService->create($type,  $key, $defaultValue, $fieldOptions, $groups, $rules, $resolveIdUsing);
+    }
 }

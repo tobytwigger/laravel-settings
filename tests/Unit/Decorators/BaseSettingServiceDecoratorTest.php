@@ -2,6 +2,8 @@
 
 namespace Settings\Tests\Unit\Decorators;
 
+use FormSchema\Generator\Field;
+use Settings\Anonymous\AnonymousSetting;
 use Settings\Contracts\Setting;
 use Settings\Contracts\SettingService;
 use Settings\Contracts\SettingStore;
@@ -147,6 +149,14 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $this->baseService->getSettingByKey('key4')->shouldBeCalled()->willReturn($this->prophesize(Setting::class)->reveal());
         $decorator = new BaseSettingServiceDecorator($this->baseService());
         $decorator->getSettingByKey('key4');
+    }
+
+    /** @test */
+    public function create_proxies_the_underlying_service()
+    {
+        $this->baseService->create('customType', 'key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null)->shouldBeCalled()->willReturn($this->prophesize(AnonymousSetting::class)->reveal());
+        $decorator = new BaseSettingServiceDecorator($this->baseService());
+        $decorator->create('customType', 'key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null);
     }
 
 }
