@@ -57,20 +57,20 @@ class CacheDecorator implements PersistedSettingRepository
     public function setDefaultValue(Setting $setting, mixed $value): void
     {
         $this->baseService->setDefaultValue($setting, $value);
-        $this->cache->set(
+        $this->cache->put(
             $this->getCacheKey($setting),
-            $this->ttl(),
-            $value
+            $value,
+            $this->ttl()
         );
     }
 
     public function setValue(Setting $setting, mixed $value, int $id): void
     {
         $this->baseService->setValue($setting, $value, $id);
-        $this->cache->set(
+        $this->cache->put(
             $this->getCacheKey($setting, $id),
-            $this->ttl(),
-            $value
+            $value,
+            $this->ttl()
         );
     }
 }

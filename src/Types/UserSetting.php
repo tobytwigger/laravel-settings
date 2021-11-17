@@ -5,7 +5,7 @@ namespace Settings\Types;
 use Illuminate\Support\Facades\Auth;
 use Settings\Contracts\Setting;
 
-abstract class UserSettings extends Setting
+abstract class UserSetting extends Setting
 {
     public static ?\Closure $resolveUserUsing = null;
 
@@ -19,7 +19,7 @@ abstract class UserSettings extends Setting
 
     public function type(): string
     {
-        return UserSettings::class;
+        return UserSetting::class;
     }
 
 }

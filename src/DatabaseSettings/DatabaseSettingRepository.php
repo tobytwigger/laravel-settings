@@ -13,7 +13,6 @@ class DatabaseSettingRepository implements PersistedSettingRepository
     public function getValueWithId(Setting $setting, int $id): mixed
     {
         $settingFromDb = SavedSetting::where('key', $setting->key())->where('model_id', $id)->first();
-
         if($settingFromDb !== null) {
             return $settingFromDb->value;
         }

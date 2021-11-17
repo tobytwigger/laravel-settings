@@ -13,12 +13,16 @@ class SingletonSettingStore implements SettingStore
     private array $settings = [];
 
     private array $groups = [];
+    private array $aliases = [];
 
     public function getByKey(string $key): Setting
     {
+
         if($this->has($key)) {
+            $key = array_key_exists($key, $this->aliases) ? $this->aliases[$key] : $key;
             return $this->settings[$key];
         }
+
         throw new SettingNotRegistered($key);
     }
 
@@ -65,11 +69,16 @@ class SingletonSettingStore implements SettingStore
 
     public function has(string $key): bool
     {
-        return array_key_exists($key, $this->settings);
+        return array_key_exists($key, $this->aliases) || array_key_exists($key, $this->settings);
     }
 
     public function all(): SettingCollection
     {
         return new SettingCollection($this->settings);
+    }
+
+    public function alias(string $alias, string $key): void
+    {
+        $this->aliases[$alias] = $key;
     }
 }

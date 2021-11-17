@@ -3,9 +3,9 @@
 namespace Settings\Store;
 
 use Settings\Collection\SettingCollection;
-use Settings\Setting;
+use Settings\Contracts\Setting;
 use Settings\Types\GlobalSetting;
-use Settings\Types\UserSettings;
+use Settings\Types\UserSetting;
 
 class Query
 {
@@ -56,7 +56,7 @@ class Query
 
     public function withUserType(): Query
     {
-        $this->parameters->withType(UserSettings::class);
+        $this->parameters->withType(UserSetting::class);
         return $this;
     }
 

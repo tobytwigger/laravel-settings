@@ -7,6 +7,8 @@ use Illuminate\Validation\ValidationException;
 interface SettingService extends CreatesQuery
 {
 
+    public function alias(string $alias, string $key): void;
+
     public function store(): SettingStore;
 
     /**

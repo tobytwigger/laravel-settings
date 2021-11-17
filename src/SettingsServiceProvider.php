@@ -14,12 +14,13 @@ use Settings\DatabaseSettings\DatabaseSettingRepository;
 use Settings\Decorators\AppNotBootedDecorator;
 use Settings\Decorators\CacheDecorator;
 use Settings\Decorators\EncryptionDecorator;
+use Settings\Decorators\RedirectDynamicCallsDecorator;
 use Settings\Decorators\SerializationDecorator;
 use Settings\Decorators\SettingExistsDecorator;
 use Settings\Decorators\ValidationDecorator;
 use Settings\Store\SingletonSettingStore;
 use Settings\Types\GlobalSetting;
-use Settings\Types\UserSettings;
+use Settings\Types\UserSetting;
 
 /**
  * The service provider for loading Laravel Setting
@@ -85,6 +86,7 @@ class SettingsServiceProvider extends ServiceProvider
         $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(ValidationDecorator::class, ['baseService' => $service]));
         $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(SettingExistsDecorator::class, ['baseService' => $service]));
         $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(AppNotBootedDecorator::class, ['baseService' => $service]));
+        $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(RedirectDynamicCallsDecorator::class, ['baseService' => $service]));
 
         $this->app->extend(PersistedSettingRepository::class, fn(PersistedSettingRepository $service, $app) => $app->make(CacheDecorator::class, ['baseService' => $service]));
         $this->app->extend(PersistedSettingRepository::class, fn(PersistedSettingRepository $service, $app) => $app->make(EncryptionDecorator::class, ['baseService' => $service]));
@@ -95,6 +97,10 @@ class SettingsServiceProvider extends ServiceProvider
     {
         foreach(config('laravel-settings.groups', []) as $group => $data) {
             Setting::registerGroup($group, $data['title'] ?? null, $data['subtitle'] ?? null);
+        }
+
+        foreach(config('laravel-settings.aliases', []) as $alias => $key) {
+            Setting::alias($alias, $key);
         }
     }
 

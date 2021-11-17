@@ -101,10 +101,10 @@ abstract class Setting
 
     public function getGroups(): array
     {
-        return array_merge(
+        return array_unique(array_merge(
             $this->groups(),
             $this->appendedGroups
-        );
+        ));
     }
 
 }

@@ -9,7 +9,11 @@ return [
     ],
 
     'encryption' => [
-        'default' => true
+        'default' => false
+    ],
+
+    'aliases' => [
+        // 'siteName' => \My\Settings\SiteName::class
     ]
 
 ];
