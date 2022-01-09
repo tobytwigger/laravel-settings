@@ -58,10 +58,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Twigger\\Settings\\SettingsServiceProvider"
+                "Settings\\SettingsServiceProvider"
             ],
             "aliases": {
-                "settings": "Twigger\\Settings\\Setting"
+                "settings": "Settings\\Setting"
             }
         }
     },
