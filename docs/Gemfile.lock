@@ -284,7 +284,7 @@ DEPENDENCIES
   minima
 
 RUBY VERSION
-   ruby 2.6.8p205
+   ruby 2.6.9p207
 
 BUNDLED WITH
-   2.2.31
+   2.3.4
