@@ -28,9 +28,9 @@ You can either get a setting value using the facade or the helper function
 - `\Settings\Setting::getValue('siteName'); // My App Name`
 - `settings('siteName'); // My App Name`
 
-If this is a setting specific to a user, such as light/dark mode selection, you may pass an ID through as the second parameter.
+If this is a setting specific to a user, such as light/dark mode selection, you may pass an ID through as the second parameter. If the ID is not given, it will default to `Auth::id()`.
 
-- `settings('darkMode', Auth::id()); // true or false`
+- `settings('darkMode', $user->id); // true or false`
 
 You can also reference every setting directly using the facade without calling `getValue`. 
 
@@ -43,13 +43,11 @@ Setting values is just as easy. These can be done through the facade
 
 `\Settings\Setting::setValue('siteName', 'New site name')`
 
-As with getting values, if your setting is specific to a user, you can pass the user ID in as the third parameter.
-
-`\Settings\Setting::setValue('darkMode', true, Auth::id()); // Enable dark mode for the current user`
-
 ### User/Global Settings
 
 This package supports user and global settings out of the box, along with letting you add your own types. By default, user settings will use the logged in user to retrieve settings for. Pass in an optional ID to `getValue` or `setValue` to override this behavious.
+
+`\Settings\Setting::setValue('darkMode', true, $user->id); // Enable dark mode for a different user`
 
 To set a default setting dynamically, for example if you want to make dark mode enabled by default, you should call `setDefaultValue`. This will set the value for any users who have not overridden it themselves, and will take precedence over the hardcoded default value set when registering the setting.
 
