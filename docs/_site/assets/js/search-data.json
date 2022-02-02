@@ -55,7 +55,7 @@
   },"9": {
     "doc": "Introduction",
     "title": "Installation",
-    "content": "All you need to do to use this project is pull it into an existing Laravel app using composer. composer require twigger/laravel-settings . You can publish the configuration file by running . php artisan vendor:publish --provider=\"Settings\\SettingsServiceProvider\" . ",
+    "content": "All you need to do to use this project is pull it into an existing Laravel app using composer. composer require elbowspaceuk/laravel-settings . You can publish the configuration file by running . php artisan vendor:publish --provider=\"Settings\\SettingsServiceProvider\" . ",
     "url": "/index#installation",
     "relUrl": "/index#installation"
   },"10": {
@@ -145,7 +145,7 @@
   },"24": {
     "doc": "Setting Forms",
     "title": "Query settings",
-    "content": "To display the settings to users, you need to get information about the registered settings. These all use the setting service class, which you can access through the facade or the helper (passing it no parameters). Groups . | Get all settings with a given group: \\Settings\\Setting::withGroup('group-name')-&gt;get() | Get all settings with at least one of the given groups: settings()-&gt;withAnyGroups(['group-name', 'group-name-2'])-&gt;get() | Get all settings that have all the given groups: settings()-&gt;withAllGroups(['group-name', 'group-name-2'])-&gt;get() | . Types . | Get all settings of a certain type: settings()-&gt;withType(\\Acme\\Setting\\TeamSettingType::class)-&gt;get() or settings()-&gt;withType('team')-&gt;get(). | Get all global settings: settings()-&gt;withGlobal()-&gt;get(). This is the same as calling settings()-&gt;withType(\\Settings\\Schema\\GlobalSetting::class). | Get all user settings: settings()-&gt;withUser()-&gt;get(). | . The functions can be chained, so to get all global settings that belong to a group called ‘Blog Module’, you’d use \\Settings\\Setting::withGlobal()-&gt;withGroup('blog-module')-&gt;get(). ",
+    "content": "To display the settings to users, you need to get information about the registered settings. These all use the setting service class, which you can access through the facade or the helper (passing it no parameters). Groups . | Get all settings with a given group: \\Settings\\Setting::withGroup('group-name')-&gt;get() | Get all settings with at least one of the given groups: settings()-&gt;withAnyGroup(['group-name', 'group-name-2'])-&gt;get() | Get all settings that have all the given groups: settings()-&gt;withAllGroups(['group-name', 'group-name-2'])-&gt;get() | . Types . | Get all settings of a certain type: settings()-&gt;withType(\\Acme\\Setting\\TeamSettingType::class)-&gt;get() or settings()-&gt;withType('team')-&gt;get(). | Get all global settings: settings()-&gt;withGlobal()-&gt;get(). This is the same as calling settings()-&gt;withType(\\Settings\\Schema\\GlobalSetting::class). | Get all user settings: settings()-&gt;withUser()-&gt;get(). | . The functions can be chained, so to get all global settings that belong to a group called ‘Blog Module’, you’d use \\Settings\\Setting::withGlobal()-&gt;withGroup('blog-module')-&gt;get(). ",
     "url": "/setting-forms#query-settings",
     "relUrl": "/setting-forms#query-settings"
   },"25": {
