@@ -21,7 +21,7 @@ class QueryParameters
         $this->type = $type;
     }
 
-    public function withAnyGroups(array $groups)
+    public function withAnyGroup(array $groups)
     {
         $this->anyGroups = $groups;
     }

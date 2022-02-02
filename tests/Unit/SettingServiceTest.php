@@ -154,7 +154,7 @@ class SettingServiceTest extends TestCase
     public function with_functions_returns_a_new_query(){
         $setting = new SettingService($this->prophesize(PersistedSettingRepository::class)->reveal(), $this->prophesize(SettingStore::class)->reveal());
         $this->assertInstanceOf(Query::class, $setting->withGroup('GroupName'));
-        $this->assertInstanceOf(Query::class, $setting->withAnyGroups(['GroupName']));
+        $this->assertInstanceOf(Query::class, $setting->withAnyGroup(['GroupName']));
         $this->assertInstanceOf(Query::class, $setting->withAllGroups(['GroupName']));
         $this->assertInstanceOf(Query::class, $setting->withType('GroupName'));
         $this->assertInstanceOf(Query::class, $setting->withGlobalType());

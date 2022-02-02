@@ -42,9 +42,9 @@ class BaseSettingServiceDecoratorTest extends TestCase
     /** @test */
     public function withAnyGroups_proxies_the_underlying_service()
     {
-        $this->baseService->withAnyGroups(['group1', 'group2'])->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
+        $this->baseService->withAnyGroup(['group1', 'group2'])->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
         $decorator = new BaseSettingServiceDecorator($this->baseService());
-        $decorator->withAnyGroups(['group1', 'group2']);
+        $decorator->withAnyGroup(['group1', 'group2']);
     }
 
     /** @test */

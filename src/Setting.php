@@ -18,7 +18,7 @@ use Settings\Store\Query;
  * @method static Query search() Start a query
  * @method static SettingStore store() Access the setting store directly
  * @method static Query withGroup(string $groupName) Only settings with the given group
- * @method static Query withAnyGroups(array $groups) Only settings with at least one of the given groups
+ * @method static Query withAnyGroup(array $groups) Only settings with at least one of the given groups
  * @method static Query withAllGroups(array $groups) Only settings with all the given groups
  * @method static Query withType(string $type) Only settings of the given type
  * @method static Query withGlobalType() Only global settings

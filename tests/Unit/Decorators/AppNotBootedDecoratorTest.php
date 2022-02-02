@@ -95,11 +95,11 @@ class AppNotBootedDecoratorTest extends TestCase
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
         $baseSetting = $this->prophesize(SettingService::class);
-        $baseSetting->withAnyGroups(['groupName'])->shouldBeCalled()->willReturn(Query::newQuery());
+        $baseSetting->withAnyGroup(['groupName'])->shouldBeCalled()->willReturn(Query::newQuery());
 
         $decorator = new AppNotBootedDecorator($baseSetting->reveal());
 
-        $this->assertInstanceOf(Query::class, $decorator->withAnyGroups(['groupName']));
+        $this->assertInstanceOf(Query::class, $decorator->withAnyGroup(['groupName']));
     }
 
     /** @test */
