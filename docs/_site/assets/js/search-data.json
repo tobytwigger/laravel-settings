@@ -97,7 +97,7 @@
   },"16": {
     "doc": "Introduction",
     "title": "Basic Usage",
-    "content": "You can create a new setting in the boot method of any service provider. public function boot() { \\Settings\\Setting::createGlobal( key: 'siteName', defaultValue: 'My App' ); } . This setting can then be accessed anywhere in your Laravel application . echo \\Settings\\Setting::getValue('siteName') // My App . or updated to a new value . \\Settings\\Setting::setDefaultValue('siteName', 'My New App'); . ",
+    "content": "You can create a new setting in the boot method of any service provider. public function boot() { \\Settings\\Setting::createGlobal( key: 'siteName', defaultValue: 'My App' ); } . This setting can then be accessed anywhere in your Laravel application . echo \\Settings\\Setting::getValue('siteName') // My App . or updated to a new value . \\Settings\\Setting::setValue('siteName', 'My New App'); . ",
     "url": "http://localhost:4000/index#basic-usage",
     "relUrl": "/index#basic-usage"
   },"17": {

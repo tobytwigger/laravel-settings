@@ -69,5 +69,5 @@ This setting can then be accessed anywhere in your Laravel application
 or updated to a new value
 
 ```php
-    \Settings\Setting::setDefaultValue('siteName', 'My New App');
+    \Settings\Setting::setValue('siteName', 'My New App');
 ```
