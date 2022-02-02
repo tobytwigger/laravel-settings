@@ -1,16 +1,16 @@
 ---
-layout: docs
-title: Setting Types
-nav_order: 3
+layout: docs 
+title: Advanced
+nav_order: 4
 ---
 
-# Setting Types
+# Laravel Settings
 
 {: .no_toc }
 
 <details open markdown="block">
   <summary>
-    Table of contents
+    Contents
   </summary>
   {: .text-delta }
 1. TOC
@@ -93,3 +93,70 @@ If the setting is a one-off and you don't want to create a type, you can overrid
        )
     }
 ```
+
+
+You can also register settings and groups in the config. You need to make sure these settings can be resolved from the service container - if your setting doesn't rely on any dependencies being passed in then you won't need to worry about this.
+
+```php
+<?php
+
+// config/settings.php
+
+return [
+
+    'settings' => [
+        \Acme\Setting\SiteName::class,
+        \Acme\Setting\SiteTheme::class,
+        [ // An anonymous setting
+            'type' => 'user', // 'user', 'global', or a custom type
+            'key' => 'timezone', // The setting key
+            'defaultValue' => 'Europe/London', // The default value
+            // The field. You must serialize this so your config can still be cached.
+            'fieldOptions' => serialize(\FormSchema\Generator\Field::textInput('timezone')->setValue('Europe/London')),
+            'groups' => ['language', 'content'], // Groups to put the setting in
+            'rules' => ['string|timezone'] // Laravel validation rules to check the setting value       
+        ]
+    ],
+    'groups' => [
+        'branding' [
+            'title' => 'Branding',
+            'subtitle' => 'Settings related to the site brand'
+        ],
+    ]
+];
+```
+
+
+
+
+
+
+
+
+
+## Multi-tenancy
+
+When using multi-tenancy tools to provide settings to multiple tenants, setting the value of a setting as normal will always set it for the current tenant.
+
+You can set the default value for all tenants by using `\Settings\Setting::withoutTenant()->setDefaultValue(\Acme\Setting\SiteName::class, 'Default Site Name')`. Any tenant who has not set the setting will get 'Default Site Name' as a response.
+
+If this is used without `withoutTenant()`, it will set the default value for the current tenant.
+
+
+## Multi-tenancy
+
+To support multi tenancy, you can set a tenant during the boot of your app. This will usually be an ID, but could be any unique string.
+
+When set, each tenant has their own settings and only their settings are queried.
+
+### Setting the tenant
+
+In the boot method of your service provider, you should add
+
+```php
+\Settings\Setting::resolveTenantKeyUsing(function(): ?string {
+    // Get the tenant key
+});
+```
+
+In this closure, you can resolve the tenant from the route/session/anywhere else, and return a string unique to that tenant (such as their ID as a string, or some other unique key). If you return null, the default tenant will be used, which can be useful for public, non-tenanted parts of your site.
