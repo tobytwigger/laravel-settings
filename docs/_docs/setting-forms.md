@@ -25,7 +25,7 @@ To display the settings to users, you need to get information about the register
 
 **Groups**
 - Get all settings with a given group: `\Settings\Setting::withGroup('group-name')->get()`
-- Get all settings with at least one of the given groups: `settings()->withAnyGroups(['group-name', 'group-name-2'])->get()`
+- Get all settings with at least one of the given groups: `settings()->withAnyGroup(['group-name', 'group-name-2'])->get()`
 - Get all settings that have all the given groups: `settings()->withAllGroups(['group-name', 'group-name-2'])->get()`
 
 **Types**

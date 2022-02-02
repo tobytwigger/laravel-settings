@@ -9,7 +9,7 @@ interface CreatesQuery
 
     public function withGroup(string $groupName): Query;
 
-    public function withAnyGroups(array $groups): Query;
+    public function withAnyGroup(array $groups): Query;
 
     public function withAllGroups(array $groups): Query;
 

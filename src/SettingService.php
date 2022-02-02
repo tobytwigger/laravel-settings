@@ -98,9 +98,9 @@ class SettingService implements SettingServiceContract
         return Query::newQuery()->withGroup($groupName);
     }
 
-    public function withAnyGroups(array $groups): Query
+    public function withAnyGroup(array $groups): Query
     {
-        return Query::newQuery()->withAnyGroups($groups);
+        return Query::newQuery()->withAnyGroup($groups);
     }
 
     public function withAllGroups(array $groups): Query

@@ -22,9 +22,9 @@ class BaseSettingServiceDecorator implements SettingService
         return $this->baseService->withGroup($groupName);
     }
 
-    public function withAnyGroups(array $groups): Query
+    public function withAnyGroup(array $groups): Query
     {
-        return $this->baseService->withAnyGroups($groups);
+        return $this->baseService->withAnyGroup($groups);
     }
 
     public function withAllGroups(array $groups): Query

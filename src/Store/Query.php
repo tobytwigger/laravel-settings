@@ -30,9 +30,9 @@ class Query
         return $this;
     }
 
-    public function withAnyGroups(array $groups): Query
+    public function withAnyGroup(array $groups): Query
     {
-        $this->parameters->withAnyGroups($groups);
+        $this->parameters->withAnyGroup($groups);
         return $this;
     }
 

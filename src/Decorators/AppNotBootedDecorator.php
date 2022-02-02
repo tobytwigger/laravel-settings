@@ -40,10 +40,10 @@ class AppNotBootedDecorator extends BaseSettingServiceDecorator
         return parent::withGroup($groupName);
     }
 
-    public function withAnyGroups(array $groups): Query
+    public function withAnyGroup(array $groups): Query
     {
         $this->checkAppBooted();
-        return parent::withAnyGroups($groups);
+        return parent::withAnyGroup($groups);
     }
 
     public function withAllGroups(array $groups): Query

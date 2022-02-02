@@ -62,7 +62,7 @@ class QueryExecutorTest extends TestCase
 
         $this->assertFilters([
             $setting1, $setting2, $setting3
-        ], Query::newQuery()->withAnyGroups(['group2', 'group1'])->get());
+        ], Query::newQuery()->withAnyGroup(['group2', 'group1'])->get());
     }
 
     /** @test */
