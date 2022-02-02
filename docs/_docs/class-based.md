@@ -19,6 +19,22 @@ nav_order: 3
 
 ---
 
+## Class-based
+
+Although the settings we've covered work well for most sites, sometimes you want to make each of your settings a little more explicit to help you keep track of them.
+
+This is where class-based settings come in. Rather than a setting being represented with a key, your setting is instead a class. This not only allows you to benefit from typehinting when getting and setting values, but also gives a few useful features you can make use of.
+
+### Defining a class setting
+
+### Getting/setting values
+
+### Registering settings
+
+### Settings in depth
+
+## Migrating to class-based from anonymous
+
 moving over and using aliases
 
 ### Aliases
@@ -51,46 +67,6 @@ public function boot()
 
 Aliasing in this way also makes your class-based settings accessible through the alias, so site name can now be accessed with `settings(\Acme\Setting\SiteName::class)` or `settings('siteName')`.
 
-
-## Class Based Settings
-
-
-
-## Create a new setting
-
-Any setting must have at least the following information:
-
-- A type (user, global or another custom type)
-- A key
-- A default value
-- The form field for the setting (using
-  the [form schema generator](https://tobytwigger.github.io/form-schema-generator/))
-
-For smaller apps, you can use simple anonymous settings to get going quickly. These require less boilerplate code
-to get running, but it's up to you to keep track of the keys and make sure you don't re-use any.
-
-For larger apps, or as your app grows, you can migrate over to using class-based settings. These give you more control
-over your settings and their appearance and use, whilst also leveraging your IDE to give you typehinting for available
-settings and make setting name clashes impossible.
-
-### Anonymous settings
-
-To create a new anonymous setting, you can define it in the `boot` method of your service provider.
-
-```php
-    public function boot()
-    {
-        \Settings\Setting::createGlobal(
-            'siteName', // The key
-            'My App', // The default value
-            \FormSchema\Generator\Field::textInput($this->key())->setValue($this->defaultValue()), // The form field
-            ['branding', 'appearance'], // The groups the setting is in
-            ['string'], // The laravel validation rules
-       )
-    }
-```
-
-You can use `createGlobal` or `createUser` by default, and if you add a custom type you can reference it with `\Settings\Setting::create('custom-type', 'siteName', ...)`.
 
 ### Class-based settings
 
@@ -278,15 +254,6 @@ return [
     'settings' => [
         \Acme\Setting\SiteName::class,
         \Acme\Setting\SiteTheme::class,
-        [ // An anonymous setting
-            'type' => 'user', // 'user', 'global', or a custom type
-            'key' => 'timezone', // The setting key
-            'defaultValue' => 'Europe/London', // The default value
-            // The field. You must serialize this so your config can still be cached.
-            'fieldOptions' => serialize(\FormSchema\Generator\Field::textInput('timezone')->setValue('Europe/London')),
-            'groups' => ['language', 'content'], // Groups to put the setting in
-            'rules' => ['string|timezone'] // Laravel validation rules to check the setting value       
-        ]
     ],
     'groups' => [
         'branding' [

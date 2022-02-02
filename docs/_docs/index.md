@@ -30,6 +30,8 @@ Laravel Settings provides simple but flexible settings to any Laravel app.
 - User and global settings provided by default.
 - Can add custom types such as a team or organisation.
 
+- JUST REMEMBERED - WHY TO USE THIS PACKAGE OVER ANY OTHER
+
 ## Installation
 
 All you need to do to use this project is pull it into an existing Laravel app using composer.

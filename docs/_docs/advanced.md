@@ -95,6 +95,36 @@ If the setting is a one-off and you don't want to create a type, you can overrid
 ```
 
 
+You can also register settings and groups in the config. You need to make sure these settings can be resolved from the service container - if your setting doesn't rely on any dependencies being passed in then you won't need to worry about this.
+
+```php
+<?php
+
+// config/settings.php
+
+return [
+
+    'settings' => [
+        \Acme\Setting\SiteName::class,
+        \Acme\Setting\SiteTheme::class,
+        [ // An anonymous setting
+            'type' => 'user', // 'user', 'global', or a custom type
+            'key' => 'timezone', // The setting key
+            'defaultValue' => 'Europe/London', // The default value
+            // The field. You must serialize this so your config can still be cached.
+            'fieldOptions' => serialize(\FormSchema\Generator\Field::textInput('timezone')->setValue('Europe/London')),
+            'groups' => ['language', 'content'], // Groups to put the setting in
+            'rules' => ['string|timezone'] // Laravel validation rules to check the setting value       
+        ]
+    ],
+    'groups' => [
+        'branding' [
+            'title' => 'Branding',
+            'subtitle' => 'Settings related to the site brand'
+        ],
+    ]
+];
+```
 
 
 

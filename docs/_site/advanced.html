@@ -39,6 +39,32 @@
             <span class="k">fn</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="err">\</span><span class="nc">App\Team\Resolver</span><span class="o">::</span><span class="nf">hasCurrentTeam</span><span class="p">()</span> <span class="o">?</span> <span class="err">\</span><span class="nc">App\Team\Resolver</span><span class="o">::</span><span class="nf">currentTeam</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">id</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span>
        <span class="p">)</span>
     <span class="p">}</span>
+</code></pre></div></div> <p>You can also register settings and groups in the config. You need to make sure these settings can be resolved from the service container - if your setting doesn’t rely on any dependencies being passed in then you won’t need to worry about this.</p> <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="c1">// config/settings.php</span>
+
+<span class="k">return</span> <span class="p">[</span>
+
+    <span class="s1">'settings'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+        <span class="err">\</span><span class="nc">Acme\Setting\SiteName</span><span class="o">::</span><span class="n">class</span><span class="p">,</span>
+        <span class="err">\</span><span class="nc">Acme\Setting\SiteTheme</span><span class="o">::</span><span class="n">class</span><span class="p">,</span>
+        <span class="p">[</span> <span class="c1">// An anonymous setting</span>
+            <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="s1">'user'</span><span class="p">,</span> <span class="c1">// 'user', 'global', or a custom type</span>
+            <span class="s1">'key'</span> <span class="o">=&gt;</span> <span class="s1">'timezone'</span><span class="p">,</span> <span class="c1">// The setting key</span>
+            <span class="s1">'defaultValue'</span> <span class="o">=&gt;</span> <span class="s1">'Europe/London'</span><span class="p">,</span> <span class="c1">// The default value</span>
+            <span class="c1">// The field. You must serialize this so your config can still be cached.</span>
+            <span class="s1">'fieldOptions'</span> <span class="o">=&gt;</span> <span class="nb">serialize</span><span class="p">(</span><span class="err">\</span><span class="nc">FormSchema\Generator\Field</span><span class="o">::</span><span class="nf">textInput</span><span class="p">(</span><span class="s1">'timezone'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">setValue</span><span class="p">(</span><span class="s1">'Europe/London'</span><span class="p">)),</span>
+            <span class="s1">'groups'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'language'</span><span class="p">,</span> <span class="s1">'content'</span><span class="p">],</span> <span class="c1">// Groups to put the setting in</span>
+            <span class="s1">'rules'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'string|timezone'</span><span class="p">]</span> <span class="c1">// Laravel validation rules to check the setting value       </span>
+        <span class="p">]</span>
+    <span class="p">],</span>
+    <span class="s1">'groups'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+        <span class="s1">'branding'</span> <span class="p">[</span>
+            <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="s1">'Branding'</span><span class="p">,</span>
+            <span class="s1">'subtitle'</span> <span class="o">=&gt;</span> <span class="s1">'Settings related to the site brand'</span>
+        <span class="p">],</span>
+    <span class="p">]</span>
+<span class="p">];</span>
 </code></pre></div></div> <h2 id="multi-tenancy"> <a href="#multi-tenancy" class="anchor-heading" aria-labelledby="multi-tenancy"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Multi-tenancy </h2> <p>When using multi-tenancy tools to provide settings to multiple tenants, setting the value of a setting as normal will always set it for the current tenant.</p> <p>You can set the default value for all tenants by using <code class="language-plaintext highlighter-rouge">\Settings\Setting::withoutTenant()-&gt;setDefaultValue(\Acme\Setting\SiteName::class, 'Default Site Name')</code>. Any tenant who has not set the setting will get ‘Default Site Name’ as a response.</p> <p>If this is used without <code class="language-plaintext highlighter-rouge">withoutTenant()</code>, it will set the default value for the current tenant.</p> <h2 id="multi-tenancy-1"> <a href="#multi-tenancy-1" class="anchor-heading" aria-labelledby="multi-tenancy-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Multi-tenancy </h2> <p>To support multi tenancy, you can set a tenant during the boot of your app. This will usually be an ID, but could be any unique string.</p> <p>When set, each tenant has their own settings and only their settings are queried.</p> <h3 id="setting-the-tenant"> <a href="#setting-the-tenant" class="anchor-heading" aria-labelledby="setting-the-tenant"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Setting the tenant </h3> <p>In the boot method of your service provider, you should add</p> <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">\</span><span class="nc">Settings\Setting</span><span class="o">::</span><span class="nf">resolveTenantKeyUsing</span><span class="p">(</span><span class="k">function</span><span class="p">():</span> <span class="kt">?string</span> <span class="p">{</span>
     <span class="c1">// Get the tenant key</span>
 <span class="p">});</span>
