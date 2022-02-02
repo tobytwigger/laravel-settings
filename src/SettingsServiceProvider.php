@@ -54,7 +54,6 @@ class SettingsServiceProvider extends ServiceProvider
      */
     private function publishAssets()
     {
-
         $this->mergeConfigFrom(
             __DIR__ . '/../config/laravel-settings.php', 'laravel-settings'
         );
