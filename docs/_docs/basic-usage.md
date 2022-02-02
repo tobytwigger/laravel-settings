@@ -25,12 +25,12 @@ nav_order: 2
 
 You can either get a setting value using the facade or the helper function
 
-- `\Settings\Setting::getValue('siteName')`
-- `settings('siteName')`
+- `\Settings\Setting::getValue('siteName'); // My App Name`
+- `settings('siteName'); // My App Name`
 
 If this is a setting specific to a user, such as light/dark mode selection, you may pass an ID through as the second parameter.
 
-- `settings('darkMode', Auth::id())` // true or false
+- `settings('darkMode', Auth::id()); // true or false`
 
 You can also reference every setting directly using the facade without calling `getValue`. 
 
@@ -45,19 +45,13 @@ Setting values is just as easy. These can be done through the facade
 
 As with getting values, if your setting is specific to a user, you can pass the user ID in as the third parameter.
 
-`\Settings\Setting::setValue('siteName', 'New site name', Auth::id())`
+`\Settings\Setting::setValue('darkMode', true, Auth::id()); // Enable dark mode for the current user`
 
 ### User/Global Settings
 
-This package supports user and global settings, along with letting you add your own types. User settings accept an ID parameter to limit the setting value. When checking a setting for a user, we check
+This package supports user and global settings out of the box, along with letting you add your own types. By default, user settings will use the logged in user to retrieve settings for. Pass in an optional ID to `getValue` or `setValue` to override this behavious.
 
-- If the user has set the value of the setting themselves
-- If a default value has been set
-- If a default value has been hardcoded.
-
-Settings can resolve the current user, so you will rarely have to consider whether a setting is global or for a user. 
-
-To set a default setting dynamically, for example if you want to make dark mode enabled by default, you should call `setDefaultValue`. This will set the value for any users who have not overridden it themselves, and will take precedence over the hardcoded default value.
+To set a default setting dynamically, for example if you want to make dark mode enabled by default, you should call `setDefaultValue`. This will set the value for any users who have not overridden it themselves, and will take precedence over the hardcoded default value set when registering the setting.
 
 `\Setting\Setting::setDefaultValue('darkMode', true)`
 
@@ -75,6 +69,6 @@ These take two required arguments, which are the key of the setting and the defa
     rules: ['string', 'max:255']
 );`
 
-In addition, you may pass
+As above, you may also pass
 - An array of groups. These 'categorise' the settings, and are useful when dynamically creating settings pages. We will cover this later.
 - Laravel validation rules. Any time you set a setting value, we will validate the value.
