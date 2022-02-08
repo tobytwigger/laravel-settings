@@ -14,6 +14,7 @@ use Settings\DatabaseSettings\DatabaseSettingRepository;
 use Settings\Decorators\AppNotBootedDecorator;
 use Settings\Decorators\CacheDecorator;
 use Settings\Decorators\EncryptionDecorator;
+use Settings\Decorators\PermissionDecorator;
 use Settings\Decorators\RedirectDynamicCallsDecorator;
 use Settings\Decorators\SerializationDecorator;
 use Settings\Decorators\SettingExistsDecorator;
@@ -81,6 +82,7 @@ class SettingsServiceProvider extends ServiceProvider
         $this->app->alias('laravel-settings.persistence', PersistedSettingRepository::class);
 
         $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(ValidationDecorator::class, ['baseService' => $service]));
+        $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(PermissionDecorator::class, ['baseService' => $service]));
         $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(SettingExistsDecorator::class, ['baseService' => $service]));
         $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(AppNotBootedDecorator::class, ['baseService' => $service]));
         $this->app->extend(SettingServiceContract::class, fn(SettingServiceContract $service, $app) => $app->make(RedirectDynamicCallsDecorator::class, ['baseService' => $service]));

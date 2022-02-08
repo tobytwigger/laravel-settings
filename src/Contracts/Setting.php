@@ -107,4 +107,14 @@ abstract class Setting
         ));
     }
 
+    public function canWrite(): bool
+    {
+        return true;
+    }
+
+    public function canRead(): bool
+    {
+        return true;
+    }
+
 }
