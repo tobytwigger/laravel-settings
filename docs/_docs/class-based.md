@@ -142,6 +142,19 @@ return [
 
 ## Settings in depth
 
+### Permissions
+
+You can control who can update and read certain settings. By default anyone can update or read any settings (depending on how you let people use the settings). If you want to limit this for added protection, you can add a `canWrite` and `canRead` function to class-based settings.
+
+These take no arguments and should return a boolean.
+
+```php
+public function canRead()
+{
+    return Auth::check() && Auth::user()->can('update-this-setting');
+}
+```
+
 ### Form Field
 
 Form fields are defined using the [form schema generator](https://tobytwigger.github.io/form-schema-generator/). You can define any field you need here, including complex fields that return objects.
