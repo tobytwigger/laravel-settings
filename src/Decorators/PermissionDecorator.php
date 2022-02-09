@@ -50,14 +50,14 @@ class PermissionDecorator extends BaseSettingServiceDecorator
     private function checkIsReadable(string $key): void
     {
         if($this->settingStore->getByKey($key)->canRead() !== true) {
-            throw new SettingUnauthorized();
+            throw SettingUnauthorized::fromSetting($this->settingStore->getByKey($key));
         }
     }
 
     private function checkIsWritable(string $key): void
     {
         if($this->settingStore->getByKey($key)->canWrite() !== true) {
-            throw new SettingUnauthorized();
+            throw SettingUnauthorized::fromSetting($this->settingStore->getByKey($key));
         }
     }
 

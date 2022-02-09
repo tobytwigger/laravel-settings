@@ -5,6 +5,8 @@ namespace Settings;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Settings\Anonymous\AnonymousSettingFactory;
 use Settings\Contracts\PersistedSettingRepository;
@@ -19,6 +21,7 @@ use Settings\Decorators\RedirectDynamicCallsDecorator;
 use Settings\Decorators\SerializationDecorator;
 use Settings\Decorators\SettingExistsDecorator;
 use Settings\Decorators\ValidationDecorator;
+use Settings\Rules\SettingsRule;
 use Settings\Store\SingletonSettingStore;
 
 /**
@@ -46,6 +49,7 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->mapRoutes();
         $this->publishAssets();
         $this->registerConfigBindings();
     }
@@ -125,6 +129,15 @@ class SettingsServiceProvider extends ServiceProvider
     {
         AnonymousSettingFactory::mapType('global', fn() => null);
         AnonymousSettingFactory::mapType('user', fn() => Auth::id());
+    }
+
+    private function mapRoutes()
+    {
+        if(config('laravel-settings.routes.enabled', true)) {
+            Route::prefix('api/' . config('laravel-settings.routes.prefix'))
+                ->middleware(config('laravel-settings.routes.middleware', []))
+                ->group(__DIR__ . '/../routes/api.php');
+        }
     }
 
 }

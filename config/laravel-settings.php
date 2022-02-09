@@ -18,6 +18,12 @@ return [
 
     'aliases' => [
         // 'siteName' => \My\Settings\SiteName::class
+    ],
+
+    'routes' => [
+        'enabled' => true,
+        'prefix' => 'settings',
+        'middleware' => []
     ]
 
 ];
