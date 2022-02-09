@@ -8,6 +8,7 @@ use Settings\Anonymous\AnonymousSetting;
 use Settings\Anonymous\AnonymousSettingFactory;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingStore;
+use Settings\Loading\LoadedSettings;
 use Settings\Setting;
 use Settings\SettingService;
 use Settings\Store\Query;
@@ -28,7 +29,7 @@ class SettingServiceTest extends TestCase
         $store->register([$setting], ['group1'])->shouldBeCalled();
         $this->instance(SettingStore::class, $store->reveal());
 
-        $service = new SettingService(app(PersistedSettingRepository::class), $store->reveal());
+        $service = new SettingService(app(PersistedSettingRepository::class), $store->reveal(), $this->prophesize(LoadedSettings::class)->reveal());
         $service->register($setting, ['group1']);
     }
 
@@ -40,7 +41,7 @@ class SettingServiceTest extends TestCase
         $store->registerGroup('group1', 'Group 1', 'Grp 1 Subtitle')->shouldBeCalled();
         $this->instance(SettingStore::class, $store->reveal());
 
-        $service = new SettingService(app(PersistedSettingRepository::class), $store->reveal());
+        $service = new SettingService(app(PersistedSettingRepository::class), $store->reveal(), $this->prophesize(LoadedSettings::class)->reveal());
         $service->registerGroup('group1', 'Group 1', 'Grp 1 Subtitle');
     }
 
@@ -52,7 +53,7 @@ class SettingServiceTest extends TestCase
         $store->alias('alias', 'key')->shouldBeCalled();
         $this->instance(SettingStore::class, $store->reveal());
 
-        $service = new SettingService(app(PersistedSettingRepository::class), $store->reveal());
+        $service = new SettingService(app(PersistedSettingRepository::class), $store->reveal(), $this->prophesize(LoadedSettings::class)->reveal());
         $service->alias('alias', 'key');
     }
 
@@ -61,7 +62,7 @@ class SettingServiceTest extends TestCase
     public function search_returns_a_new_query(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
-        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class));
+        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class), $this->prophesize(LoadedSettings::class)->reveal());
         $this->assertInstanceOf(Query::class, $service->search());
     }
 
@@ -71,7 +72,7 @@ class SettingServiceTest extends TestCase
 
         $store = $this->prophesize(SettingStore::class);
 
-        $service = new SettingService(app(PersistedSettingRepository::class), $store->reveal());
+        $service = new SettingService(app(PersistedSettingRepository::class), $store->reveal(), $this->prophesize(LoadedSettings::class)->reveal());
         $this->assertEquals($store->reveal(), $service->store());
     }
 
@@ -79,13 +80,13 @@ class SettingServiceTest extends TestCase
     public function getSettingByKey_returns_a_setting_class_by_key(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
-        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class));
+        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class), $this->prophesize(LoadedSettings::class)->reveal());
         $this->assertEquals($setting, $service->getSettingByKey('siteName'));
     }
 
     /** @test */
     public function create_returns_a_new_registered_setting(){
-        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class));
+        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class), $this->prophesize(LoadedSettings::class)->reveal());
 
         $setting = $service->create(
             'customType',
@@ -114,7 +115,7 @@ class SettingServiceTest extends TestCase
 
     /** @test */
     public function createUser_returns_a_new_registered_user_setting(){
-        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class));
+        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class), $this->prophesize(LoadedSettings::class)->reveal());
 
         $guard = $this->prophesize(\Illuminate\Contracts\Auth\Guard::class);
         $guard->id()->shouldBeCalled()->willReturn(4);
@@ -135,7 +136,7 @@ class SettingServiceTest extends TestCase
 
     /** @test */
     public function createGlobal_returns_a_new_registered_global_setting(){
-        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class));
+        $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class), $this->prophesize(LoadedSettings::class)->reveal());
 
         $setting = $service->createGlobal(
             'key1',
@@ -152,13 +153,41 @@ class SettingServiceTest extends TestCase
 
     /** @test */
     public function with_functions_returns_a_new_query(){
-        $setting = new SettingService($this->prophesize(PersistedSettingRepository::class)->reveal(), $this->prophesize(SettingStore::class)->reveal());
+        $setting = new SettingService($this->prophesize(PersistedSettingRepository::class)->reveal(), $this->prophesize(SettingStore::class)->reveal(), $this->prophesize(LoadedSettings::class)->reveal());
         $this->assertInstanceOf(Query::class, $setting->withGroup('GroupName'));
         $this->assertInstanceOf(Query::class, $setting->withAnyGroup(['GroupName']));
         $this->assertInstanceOf(Query::class, $setting->withAllGroups(['GroupName']));
         $this->assertInstanceOf(Query::class, $setting->withType('GroupName'));
         $this->assertInstanceOf(Query::class, $setting->withGlobalType());
         $this->assertInstanceOf(Query::class, $setting->withUserType());
+    }
+
+    /** @test */
+    public function loadSettings_loads_settings(){
+        $loadSettings = $this->prophesize(LoadedSettings::class);
+        $loadSettings->load('setting1')->shouldBeCalled();
+
+        $setting = new SettingService(
+            $this->prophesize(PersistedSettingRepository::class)->reveal(),
+            $this->prophesize(SettingStore::class)->reveal(),
+            $loadSettings->reveal()
+        );
+
+        $setting->loadSetting('setting1');
+    }
+
+    /** @test */
+    public function loadManySettings_loads_many_settings(){
+        $loadSettings = $this->prophesize(LoadedSettings::class);
+        $loadSettings->loadMany(['setting1', 'setting2'])->shouldBeCalled();
+
+        $setting = new SettingService(
+            $this->prophesize(PersistedSettingRepository::class)->reveal(),
+            $this->prophesize(SettingStore::class)->reveal(),
+            $loadSettings->reveal()
+        );
+
+        $setting->loadManySettings(['setting1', 'setting2']);
     }
 
 }

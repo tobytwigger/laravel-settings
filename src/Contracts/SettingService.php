@@ -73,4 +73,8 @@ interface SettingService extends CreatesQuery
 
     public function createGlobal(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting;
 
+    public function loadSetting(string $key): void;
+
+    public function loadManySettings(array $keys): void;
+
 }

@@ -11,6 +11,7 @@ use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingService as SettingServiceContract;
 use Settings\Exceptions\PersistedSettingNotFound;
 use Settings\Exceptions\SettingNotRegistered;
+use Settings\Loading\LoadedSettings;
 use Settings\Store\Query;
 
 class SettingService implements SettingServiceContract
@@ -20,10 +21,13 @@ class SettingService implements SettingServiceContract
 
     private SettingStore $settingStore;
 
-    public function __construct(PersistedSettingRepository $persistedSettings, SettingStore $settingStore)
+    private LoadedSettings $loadedSettings;
+
+    public function __construct(PersistedSettingRepository $persistedSettings, SettingStore $settingStore, LoadedSettings $loadedSettings)
     {
         $this->persistedSettings = $persistedSettings;
         $this->settingStore = $settingStore;
+        $this->loadedSettings = $loadedSettings;
     }
 
     public function register(Setting|array $settings, array $extraGroups = []): void
@@ -146,5 +150,15 @@ class SettingService implements SettingServiceContract
     public function createGlobal(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting
     {
         return AnonymousSettingFactory::anonymous('global', $key, $defaultValue, $fieldOptions, $groups, $rules, $resolveIdUsing);
+    }
+
+    public function loadSetting(string $key): void
+    {
+        $this->loadedSettings->load($key);
+    }
+
+    public function loadManySettings(array $keys): void
+    {
+        $this->loadedSettings->loadMany($keys);
     }
 }
