@@ -27,6 +27,8 @@ use Settings\Store\Query;
  * @method static \Settings\Contracts\Setting create(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null) Create and register a new setting
  * @method static \Settings\Contracts\Setting createUser(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null) Create and register a user setting
  * @method static \Settings\Contracts\Setting createGlobal(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null) Create and register a global setting
+ * @method static void loadSetting(string $key) Share a setting value with the frontend
+ * @method static void loadManySettings(array $keys) Share many setting values with the frontend
  *
  * @see \Settings\Contracts\SettingService
  */

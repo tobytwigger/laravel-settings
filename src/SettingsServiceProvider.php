@@ -5,6 +5,7 @@ namespace Settings;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +22,8 @@ use Settings\Decorators\RedirectDynamicCallsDecorator;
 use Settings\Decorators\SerializationDecorator;
 use Settings\Decorators\SettingExistsDecorator;
 use Settings\Decorators\ValidationDecorator;
+use Settings\Loading\DisplayLoadedSettings;
+use Settings\Loading\LoadedSettings;
 use Settings\Rules\SettingsRule;
 use Settings\Store\SingletonSettingStore;
 
@@ -35,6 +38,7 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(LoadedSettings::class);
         $this->registerBindings();
         $this->setupTypes();
         App::booted(fn($app) => AppNotBootedDecorator::$booted = true);
@@ -49,6 +53,7 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->defineBladeDirective();
         $this->mapRoutes();
         $this->publishAssets();
         $this->registerConfigBindings();
@@ -138,6 +143,13 @@ class SettingsServiceProvider extends ServiceProvider
                 ->middleware(config('laravel-settings.routes.middleware', []))
                 ->group(__DIR__ . '/../routes/api.php');
         }
+    }
+
+    private function defineBladeDirective()
+    {
+        Blade::directive('settings', function() {
+            return sprintf('<script>%s</script>', app(DisplayLoadedSettings::class)->toString());
+        });
     }
 
 }

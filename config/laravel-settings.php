@@ -24,6 +24,12 @@ return [
         'enabled' => true,
         'prefix' => 'settings',
         'middleware' => []
+    ],
+
+    'js' => [
+        'autoload' => [
+            // Settings to always load
+        ]
     ]
 
 ];

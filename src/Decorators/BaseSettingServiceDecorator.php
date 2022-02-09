@@ -106,4 +106,14 @@ class BaseSettingServiceDecorator implements SettingService
     {
         return $this->baseService->createGlobal($key, $defaultValue, $fieldOptions, $groups, $rules, $resolveIdUsing);
     }
+
+    public function loadSetting(string $key): void
+    {
+        $this->baseService->loadSetting($key);
+    }
+
+    public function loadManySettings(array $keys): void
+    {
+        $this->baseService->loadManySettings($keys);
+    }
 }
