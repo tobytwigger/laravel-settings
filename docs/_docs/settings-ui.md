@@ -1,10 +1,10 @@
 ---
 layout: docs
-title: Setting Forms
-nav_order: 5
+title: Settings UI
+nav_order: 8
 ---
 
-# Setting Forms
+# Settings UI
 
 {: .no_toc }
 

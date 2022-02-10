@@ -171,7 +171,7 @@ When using anonymous settings, hardcode the key and value and just pass the resu
 
 ```
 
-Fields are currently a required property of any setting, to allow you to dynamically create setting pages. You can learn more about how to integrate your frontend with the form schema in the [integrate documentation](integrating.md).
+Fields are currently a required property of any setting, to allow you to dynamically create setting pages.
 
 ### Validation
 

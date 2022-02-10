@@ -1,7 +1,7 @@
 ---
 layout: docs
-title: JS
-nav_order: 7
+title: JavaScript
+nav_order: 8
 ---
 
 # JavaScript
