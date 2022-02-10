@@ -141,7 +141,7 @@ class SettingsServiceProvider extends ServiceProvider
     private function mapRoutes()
     {
         if(config('laravel-settings.routes.enabled', true)) {
-            Route::prefix('api/' . config('laravel-settings.routes.prefix'))
+            Route::prefix(config('laravel-settings.routes.prefix'))
                 ->middleware(config('laravel-settings.routes.middleware', []))
                 ->group(__DIR__ . '/../routes/api.php');
         }

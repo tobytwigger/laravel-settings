@@ -22,7 +22,7 @@ return [
 
     'routes' => [
         'enabled' => true,
-        'prefix' => 'settings',
+        'prefix' => 'api/settings',
         'middleware' => []
     ],
 
