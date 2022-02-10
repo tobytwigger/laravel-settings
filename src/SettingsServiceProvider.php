@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\Compilers\BladeCompiler;
 use Settings\Anonymous\AnonymousSettingFactory;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingService as SettingServiceContract;
@@ -148,7 +149,18 @@ class SettingsServiceProvider extends ServiceProvider
 
     private function defineBladeDirective()
     {
-        Blade::directive('settings', function() {
+        if ($this->app->resolved('blade.compiler')) {
+            $this->defineSettingsBladeDirective($this->app['blade.compiler']);
+        } else {
+            $this->app->afterResolving('blade.compiler', function (BladeCompiler $bladeCompiler) {
+                $this->defineSettingsBladeDirective($bladeCompiler);
+            });
+        }
+    }
+
+    private function defineSettingsBladeDirective(BladeCompiler $compiler)
+    {
+        $compiler->directive('settings', function() {
             return sprintf('<script>%s</script>', app(DisplayLoadedSettings::class)->toString());
         });
     }
