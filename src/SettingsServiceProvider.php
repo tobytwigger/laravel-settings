@@ -144,8 +144,6 @@ class SettingsServiceProvider extends ServiceProvider
                 ->middleware(config('laravel-settings.routes.middleware', []))
                 ->group(__DIR__ . '/../routes/api.php');
         }
-
-        app('router')->pushMiddlewareToGroup('web', ShareSettingsWithJs::class);
     }
 
     private function defineBladeDirective()
