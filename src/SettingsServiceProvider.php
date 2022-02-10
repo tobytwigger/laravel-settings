@@ -161,7 +161,7 @@ class SettingsServiceProvider extends ServiceProvider
     private function defineSettingsBladeDirective(BladeCompiler $compiler)
     {
         $compiler->directive('settings', function() {
-            return sprintf('<script>%s</script>', app(DisplayLoadedSettings::class)->toString());
+            return '<?php echo sprintf("<script>%s</script>", app(\Settings\Loading\DisplayLoadedSettings::class)->toString()); ?>';
         });
     }
 
