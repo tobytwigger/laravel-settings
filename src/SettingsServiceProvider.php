@@ -22,6 +22,7 @@ use Settings\Decorators\RedirectDynamicCallsDecorator;
 use Settings\Decorators\SerializationDecorator;
 use Settings\Decorators\SettingExistsDecorator;
 use Settings\Decorators\ValidationDecorator;
+use Settings\Http\Middleware\ShareSettingsWithJs;
 use Settings\Loading\DisplayLoadedSettings;
 use Settings\Loading\LoadedSettings;
 use Settings\Rules\SettingsRule;
@@ -143,6 +144,8 @@ class SettingsServiceProvider extends ServiceProvider
                 ->middleware(config('laravel-settings.routes.middleware', []))
                 ->group(__DIR__ . '/../routes/api.php');
         }
+
+        app('router')->pushMiddlewareToGroup('web', ShareSettingsWithJs::class);
     }
 
     private function defineBladeDirective()
