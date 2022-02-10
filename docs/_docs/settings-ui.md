@@ -61,8 +61,4 @@ public function register()
 {: .label .label-yellow }
 This section is incomplete
 
-
-
 Pass this schema to the frontend and render it using a dynamic form generator. Each setting group will appear in a different form group.
-
-Integrating with Form schema generator

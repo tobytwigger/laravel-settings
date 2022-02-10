@@ -44,4 +44,10 @@ class LoadedSettings
         return $this->loadingKeys;
     }
 
+    public static function eagerLoad(string $key): void
+    {
+        $instance = app(static::class);
+        $instance->load($key);
+    }
+
 }

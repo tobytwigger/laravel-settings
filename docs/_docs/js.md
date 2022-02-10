@@ -18,72 +18,101 @@ nav_order: 8
 
 ---
 
-{: .label .label-red }
-This page currently documents features that haven't yet been created.
+Settings can easily be retrieved in blade templates as normal. If you're using a frontend framework like Vue, you can pass through settings to your root Vue component from your blade template.
+
+If you use Vue, we've put together a package to make this easier. This allows you to get and set any setting from any Vue component without having to pass it through from parent components.
+
+We currently only support Vue, but let us know if you're interested in using this package with a different framework.
 
 ## Vue
 
-Since the frontend makes use of the settings too, it's easy to use this package directly from your js.
+### Setup
 
-You will need to install the js package. If using Vue, add the following to your app.js file. Here we use 1 as the model ID, replace with whatever the actual model ID is.
+First you'll need to install the package using npm or yarn.
 
-```js
-import Settings from '@twigger/settings';
-
-Vue.use(Settings);
-
+```shell
+npm install --save @elbowspaceuk/laravel-settings-vue
 ```
 
-Then in your Vue app
+In your `app.js` file, where you create your Vue instance, add the following to initialise the plugin.
+
+```js
+// app.js
+import Settings from '@elbowspaceuk/laravel-settings-vue';
+
+Vue.use(Settings, {
+    axios: axios
+});
+```
+Note you must pass an axios instance to the Settings plugin. This must be ready to make api calls - if you are using the standard Laravel template this is set up for you and bound to `window.axios`, so the above snippet will work.
+
+You should also add the `\Settings\Http\Middleware\ShareSettingsWithJs` middleware to your `web` group in `app/Http/Kernel.php`, and add `@settings` to the head of your base blade template.
+
+```blade
+// layout.blade.php
+<head>
+    <title>...</title>
+    @settings
+</head>
+```
+
+### Getting
+
+From any Vue component, in the template or a method/computed property/watcher, you have access to a `$setting` property and a `$settings` property.
+
+The `$setting` property contains a key-value pair object with all the available settings and their values. This is reactive, so you can use it anywhere in your component.
+
+The `$settings` property contains a set of functions to help you work with settings in js.
 
 ```vue
 <template>
-    Setting value: <span v-text="$setting.get('key', 1)"></span>
+    <div>Your theme is { { $setting.theme } }</div>
+    <div>THrough a computed property it's the same: {{currentTheme}}</div>
 </template>
-<!--...-->
-computed: {
-    description() {
-        return this.$setting.get('key', 1)
-    }
-}
-```
-
-
-
-## Setting Keys
-
-On the PHP side, since all settings are class-based it's impossible to use the incorrect setting key. To keep this consistency in js, the keys can be retrieved from a json object. This is automatically generated for you. For our site name example (`\Acme\Settings\SiteName`), this looks like
-
-```
-    {
-        acme: {
-            settings: {
-                siteName: SettingObject
+<script>
+    export default {
+        computed: {
+            currentTheme() {
+                return this.$setting.theme;
             }
         }
     }
+</script>
 ```
 
-You can access this object with `this.$setting.keys`. If you don't dig into the object you'll have a list of all settings. If you dig through the namespaces to get a setting object, you can then call the following functions
+### Setting
 
-- `this.$setting.keys.acme.settings.siteName.get(1)` - Get the value for the model with an ID 1
-- `this.$setting.keys.acme.settings.siteName.get()` - Get the default value/global setting value
-- `this.$setting.keys.acme.settings.siteName.set('value', 1)` - Set the value for the model 1
-- `this.$setting.keys.acme.settings.siteName.set('value')` - Set the default/global value
+To set a setting value you should call `this.$settings.setValue('site_name', 'My new site name')` in your Vue component. You can set multiple at a time by passing through an object of key-value pairs of settings to `this.$settings.setValues()`.
 
-### Aliases
+### Loading
 
-To make accessing these settings easier, the aliases referenced in the configuration will also be applied to these keys. If `\Acme\Settings\SiteName` is aliases to `SiteName`, then you can access the JS key with `this.$settings.aliases.siteName`, where you can then call `.get()` or `.set()` as necessary.
+In order to make your settings available to the frontend, you need to tell laravel settings you want to make use of the setting. This prevents us loading every setting every time which could be slow. There are two ways to share your settings with your Vue component. You can either do it from your component directly, or eager load them by specifying which settings to load in your Laravel app.
 
-You can also just use `this.$settings.siteName` and omit `aliases`, but please note this may cause issues if your setting name is `aliases` or `keys`, or any other property of `$settings`, so it's usually best to use the `this.$settings.aliases` key directly.
+#### Loading through JS
 
-## JS
+Before you can make use of a setting, call `this.$settings.loadSetting('theme')` and pass it the setting key or alias to load. This will be loaded in the background. During loading `this.$setting.theme` will be undefined, but once the setting is ready it will reactively update to the value.
 
-Using functions directly
+You can load many settings at the same time with `this.$settings.loadSettings(['theme', 'site_name'])`.
 
-```js
-import {getSetting, keys} from '@twigger/settings'
+#### Eager Loading
 
-getSetting('key', 1)
-// keys is an object of keys as above
+To avoid the overhead of loading settings from your javascript, you should try and mark settings to share in your laravel app. Any settings loaded this way will be instantly available without having to load them with `loadSettings()`
+
+For settings that should be loaded on every request, such as a site name, you can put them into the config
+
+```php
+[
+    ...,
+    'js' => [
+        'autoload' => [
+            'site_name'
+        ]
+    ]
+]
+```
+
+For settings that should only be loaded on some requests, add this to your controller or middleware.
+
+```php
+\Settings\Loading\LoadedSettings::eagerLoad('site_name');
 ```

@@ -23,14 +23,11 @@ nav_order: 1
 
 Laravel Settings provides simple but flexible settings to any Laravel app.
 
-- Quick to set up and use
+- Quick to set up and use.
+- Native support for using settings in Vue.
 - Built to scale alongside your application.
-- Supports anonymous and class-based keys.
 - Supports encryption of values and storing non-primitive values.
-- User and global settings provided by default.
-- Can add custom types such as a team or organisation.
-
-- JUST REMEMBERED - WHY TO USE THIS PACKAGE OVER ANY OTHER
+- User and global settings supported by default.
 
 ## Installation
 
