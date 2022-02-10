@@ -7,19 +7,20 @@ use Illuminate\Foundation\Http\FormRequest;
 use Settings\Contracts\SettingStore;
 use Settings\Exceptions\SettingNotRegistered;
 use Settings\Rules\ArrayKeyIsValidSettingKeyRule;
+use Settings\Rules\SettingKeyIsValidRule;
 use Settings\Rules\SettingValueIsValidRule;
 
-class UpdateSettingRequest extends FormRequest
+class GetSettingRequest extends FormRequest
 {
 
     public function authorize(SettingStore $settingStore)
     {
-        if(is_array($this->input('settings', []))) {
-            foreach($this->input('settings', []) as $key => $value) {
+        if(is_array($this->query('settings', []))) {
+            foreach($this->query('settings', []) as $key) {
                 try {
                     $setting = $settingStore->getByKey($key);
-                    if(!$setting->canWrite()) {
-                        return Response::deny(sprintf('You do not have permission to update the [%s] setting.', $key));
+                    if(!$setting->canRead()) {
+                        return Response::deny(sprintf('You do not have permission to read the [%s] setting.', $key));
                     }
                 } catch (SettingNotRegistered) {}
             }
@@ -32,8 +33,7 @@ class UpdateSettingRequest extends FormRequest
         return [
             'settings' => ['required', 'array', 'min:1'],
             'settings.*' => [
-                app(ArrayKeyIsValidSettingKeyRule::class),
-                app(SettingValueIsValidRule::class)
+                app(SettingKeyIsValidRule::class)
             ]
         ];
     }
