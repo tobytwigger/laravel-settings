@@ -10,11 +10,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class SettingUnauthorized extends HttpException
 {
 
-    public static function fromSetting(Setting $setting)
+    public static function fromSetting(Setting $setting, string $action = 'update')
     {
         return new static(
             403,
-            sprintf('You do not have permission to update the [%s] setting.', $setting->key())
+            sprintf('You do not have permission to %s the [%s] setting.', $action, $setting->key())
         );
     }
 }

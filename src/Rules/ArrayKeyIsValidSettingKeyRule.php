@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Settings\Contracts\SettingStore;
 
-class SettingKeyIsValidRule implements Rule
+class ArrayKeyIsValidSettingKeyRule implements Rule
 {
 
     private SettingStore $settingStore;
@@ -21,7 +21,7 @@ class SettingKeyIsValidRule implements Rule
 
     public function passes($attribute, $value): bool
     {
-        if(!$this->settingStore->has($value)) {
+        if(!$this->settingStore->has(Str::after($attribute, 'settings.'))) {
             return false;
         }
         return true;
@@ -29,6 +29,6 @@ class SettingKeyIsValidRule implements Rule
 
     public function message(): string
     {
-        return 'The :input setting key does not exist.';
+        return 'The :attribute setting key does not exist.';
     }
 }
