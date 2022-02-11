@@ -1,194 +1,164 @@
 {"0": {
     "doc": "Advanced",
     "title": "Laravel Settings",
-    "content": "Contents . | Laravel Settings . | What are setting types | Creating a Type . | Customising auth | Class-based settings | Anonymous settings | . | Multi-tenancy | Multi-tenancy . | Setting the tenant | . | . | . ",
-    "url": "/advanced#laravel-settings",
-    "relUrl": "/advanced#laravel-settings"
+    "content": "Contents . | Laravel Settings . | Using settings in service providers | Setting Types | . | . ",
+    "url": "/advanced/advanced#laravel-settings",
+    "relUrl": "/advanced/advanced#laravel-settings"
   },"1": {
     "doc": "Advanced",
-    "title": "What are setting types",
-    "content": "By default, you have the setting types global and user. The global setting type is set once, and will be the same for everyone. But a user setting will return a different value depending on which user is logged in. For some sites, the settings will depend on the team a user is in, the module you’re operating in, or the country you’re in. When creating a setting, you can assign it to be of one type. Whenever you then get the value of that setting, it will depend on the model logged in. ",
-    "url": "/advanced#what-are-setting-types",
-    "relUrl": "/advanced#what-are-setting-types"
+    "title": "Using settings in service providers",
+    "content": "It can be tempting to use a setting in your service provider, to store things like service credentials that are needed to set it up. However, the settings package isn’t ready to use until the application is fully booted, since it depends on things like cache, encryption and its own bindings to function. If you try to use it before the application is booted, you’ll get an exception. To work around this, so you can use settings to set up services needed by the rest of your app, you can use the booted callback on the application. In the register function of your service provider, define a callback which should be called after the application is booted. This will be called as soon as the application is booted, meaning you can do any service setup here and make use of the settings. The easier option is to register your bindings as a callback, which should only be called once the service is actually requested. But either option is equally fine and you can use whichever suits the situation best! . ",
+    "url": "/advanced/advanced#using-settings-in-service-providers",
+    "relUrl": "/advanced/advanced#using-settings-in-service-providers"
   },"2": {
     "doc": "Advanced",
-    "title": "Creating a Type",
-    "content": "Customising auth . By default, the user settings uses the Laravel Auth facade to resolve the user ID. If your app gets users a different way, you can override this functionality with a callback in the register function of your service provider. `\\Settings\\Types\\UserSetting::$resolveUserUsing = fn() =&gt; \\Auth::driver('api')-&gt;id();` . Class-based settings . To create a new type, create an abstract class that implements Settings\\Contracts\\SettingType. You can then use this setting type by extending the new class in your setting. abstract class TeamSettingType implements \\Settings\\Contracts\\SettingType { /** * Get the ID of the currently logged in model (in this case, the team id) * * Returning null will just return the setting value as the default value. * * @return int|null */ public function resolveId(): ?int { if(\\App\\Team\\Resolver::hasCurrentTeam()) { return \\App\\Team\\Resolver::currentTeam()-&gt;id(); } return null; } } . Anonymous settings . For anonymous classes which don’t extend a type, you can define an alias instead. To define a team type to use in your anonymous settings, that can be used in place of ‘global’ and ‘user’, call this in your boot() method in the service provider. public function boot() { \\Settings\\Anonymous\\AnonymousSettingFactory::mapType( // The key to refer to the type as 'team', // Return the current team ID, or null if there is no team. This will be used to filter the settings. fn() =&gt; \\App\\Team\\Resolver::hasCurrentTeam() ? \\App\\Team\\Resolver::currentTeam()-&gt;id() : null ); } . If the setting is a one-off and you don’t want to create a type, you can override the function used to resolve the ID by passing in a final parameter when creating the anonymous setting. public function boot() { \\Settings\\Setting::create( 'team', // Although you still have to define a type, it doesn't mean any thing and doesn't have to exist. This can be useful for retrieving settings though. 'siteName', // The key 'My App', // The default value \\FormSchema\\Generator\\Field::textInput($this-&gt;key())-&gt;setValue($this-&gt;defaultValue()), // The form field ['branding', 'appearance'], // The groups the setting is in ['string'], // The laravel validation rules, fn() =&gt; \\App\\Team\\Resolver::hasCurrentTeam() ? \\App\\Team\\Resolver::currentTeam()-&gt;id() : null ) } . You can also register settings and groups in the config. You need to make sure these settings can be resolved from the service container - if your setting doesn’t rely on any dependencies being passed in then you won’t need to worry about this. &lt;?php // config/settings.php return [ 'settings' =&gt; [ \\Acme\\Setting\\SiteName::class, \\Acme\\Setting\\SiteTheme::class, [ // An anonymous setting 'type' =&gt; 'user', // 'user', 'global', or a custom type 'key' =&gt; 'timezone', // The setting key 'defaultValue' =&gt; 'Europe/London', // The default value // The field. You must serialize this so your config can still be cached. 'fieldOptions' =&gt; serialize(\\FormSchema\\Generator\\Field::textInput('timezone')-&gt;setValue('Europe/London')), 'groups' =&gt; ['language', 'content'], // Groups to put the setting in 'rules' =&gt; ['string|timezone'] // Laravel validation rules to check the setting value ] ], 'groups' =&gt; [ 'branding' [ 'title' =&gt; 'Branding', 'subtitle' =&gt; 'Settings related to the site brand' ], ] ]; . ",
-    "url": "/advanced#creating-a-type",
-    "relUrl": "/advanced#creating-a-type"
+    "title": "Setting Types",
+    "content": "Learn how to create a custom setting type in the setting type documentation. ",
+    "url": "/advanced/advanced#setting-types",
+    "relUrl": "/advanced/advanced#setting-types"
   },"3": {
-    "doc": "Advanced",
-    "title": "Multi-tenancy",
-    "content": "When using multi-tenancy tools to provide settings to multiple tenants, setting the value of a setting as normal will always set it for the current tenant. You can set the default value for all tenants by using \\Settings\\Setting::withoutTenant()-&gt;setDefaultValue(\\Acme\\Setting\\SiteName::class, 'Default Site Name'). Any tenant who has not set the setting will get ‘Default Site Name’ as a response. If this is used without withoutTenant(), it will set the default value for the current tenant. ",
-    "url": "/advanced#multi-tenancy",
-    "relUrl": "/advanced#multi-tenancy"
-  },"4": {
-    "doc": "Advanced",
-    "title": "Multi-tenancy",
-    "content": "To support multi tenancy, you can set a tenant during the boot of your app. This will usually be an ID, but could be any unique string. When set, each tenant has their own settings and only their settings are queried. Setting the tenant . In the boot method of your service provider, you should add . \\Settings\\Setting::resolveTenantKeyUsing(function(): ?string { // Get the tenant key }); . In this closure, you can resolve the tenant from the route/session/anywhere else, and return a string unique to that tenant (such as their ID as a string, or some other unique key). If you return null, the default tenant will be used, which can be useful for public, non-tenanted parts of your site. ",
-    "url": "/advanced#multi-tenancy-1",
-    "relUrl": "/advanced#multi-tenancy-1"
-  },"5": {
     "doc": "Advanced",
     "title": "Advanced",
     "content": " ",
-    "url": "/advanced",
-    "relUrl": "/advanced"
+    "url": "/advanced/advanced",
+    "relUrl": "/advanced/advanced"
+  },"4": {
+    "doc": "Setting Types",
+    "title": "Setting Types",
+    "content": "Contents . | What are setting types | Configure user settings | Creating a custom type | . ",
+    "url": "/advanced/setting-types",
+    "relUrl": "/advanced/setting-types"
+  },"5": {
+    "doc": "Setting Types",
+    "title": "What are setting types",
+    "content": "By default, we provide a user setting type and a global setting type. The global setting type is set once within your application, and will be the same for all authenticated users. But a user setting will return a different value depending on which user is logged in, meaning a user can control the setting themselves. For some sites, the settings will depend on the team a user is in, the module you’re operating in, or the country you’re in. When creating a setting, you can assign it to be of one type. Whenever you then get the value of that setting, it will depend on the model logged in. ",
+    "url": "/advanced/setting-types#what-are-setting-types",
+    "relUrl": "/advanced/setting-types#what-are-setting-types"
   },"6": {
+    "doc": "Setting Types",
+    "title": "Configure user settings",
+    "content": "By default, the user settings uses the Laravel Auth facade to resolve the user ID. If your app gets users a different way, you can override this functionality with a callback in the register function of your service provider. `\\Settings\\Types\\UserSetting::$resolveUserUsing = fn() =&gt; \\Auth::driver('api')-&gt;id();` . ",
+    "url": "/advanced/setting-types#configure-user-settings",
+    "relUrl": "/advanced/setting-types#configure-user-settings"
+  },"7": {
+    "doc": "Setting Types",
+    "title": "Creating a custom type",
+    "content": "To create a new type, create an abstract class that implements Settings\\Contracts\\SettingType. This should implement at least the resolveId function. This function takes no arguments, and should return the ID of the currently logged in user/team etc, or null if not logged in. abstract class TeamSettingType implements \\Settings\\Contracts\\SettingType { /** * Get the ID of the currently logged in model (in this case, the team id) * * Returning null will just return the setting value as the default value. * * @return int|null */ public function resolveId(): ?int { if(\\App\\Team\\Resolver::hasCurrentTeam()) { return \\App\\Team\\Resolver::currentTeam()-&gt;id(); } return null; } } . To use your custom type, simply create a new setting class that extends your type. This replaces the user or global setting class you usually extend. If you use anonymous settings you can’t extend this class. Instead, you should create the type in your service provider as follows. public function boot() { \\Settings\\Anonymous\\AnonymousSettingFactory::mapType( // The key to refer to the type as 'team', // Return the current team ID, or null if there is no team. This will be used to filter the settings. fn() =&gt; \\App\\Team\\Resolver::hasCurrentTeam() ? \\App\\Team\\Resolver::currentTeam()-&gt;id() : null ); } . This can then be used when registering the anonymous setting. Instead of \\Setting\\Setting::createGlobal or createUser, simply call \\Setting\\Setting::create(team: 'team', ...); and pass through the type key as the first argument. If the setting type is only going to be used in one setting and you don’t want to create a type, you can just implement the resolveId function directly in your setting, or pass it into the create function as the resolveIdUsing function. The type can be anything you want and won’t be used. public function boot() { \\Settings\\Setting::create( 'team', // Although you still have to define a type, it doesn't mean any thing and doesn't have to exist. This can be useful for retrieving settings though. 'siteName', // The key 'My App', // The default value \\FormSchema\\Generator\\Field::textInput($this-&gt;key())-&gt;setValue($this-&gt;defaultValue()), // The form field ['branding', 'appearance'], // The groups the setting is in ['string'], // The laravel validation rules, fn() =&gt; \\App\\Team\\Resolver::hasCurrentTeam() ? \\App\\Team\\Resolver::currentTeam()-&gt;id() : null ) } . ",
+    "url": "/advanced/setting-types#creating-a-custom-type",
+    "relUrl": "/advanced/setting-types#creating-a-custom-type"
+  },"8": {
     "doc": "Basic Usage",
     "title": "Laravel Settings",
     "content": "Contents . | Laravel Settings . | Basic Usage . | Getting Values | Setting Values | User/Global Settings | Registering settings | . | . | . ",
     "url": "/basic-usage#laravel-settings",
     "relUrl": "/basic-usage#laravel-settings"
-  },"7": {
+  },"9": {
     "doc": "Basic Usage",
     "title": "Basic Usage",
     "content": "Getting Values . You can either get a setting value using the facade or the helper function . | \\Settings\\Setting::getValue('siteName'); // My App Name | settings('siteName'); // My App Name | . If this is a setting specific to a user, such as light/dark mode selection, you may pass an ID through as the second parameter. If the ID is not given, it will default to Auth::id(). | settings('darkMode', $user-&gt;id); // true or false | . You can also reference every setting directly using the facade without calling getValue. | \\Settings\\Setting::getSiteName() | . Setting Values . Setting values is just as easy. These can be done through the facade . \\Settings\\Setting::setValue('siteName', 'New site name') . User/Global Settings . This package supports user and global settings out of the box, along with letting you add your own types. By default, user settings will use the logged in user to retrieve settings for. Pass in an optional ID to getValue or setValue to override this behavious. \\Settings\\Setting::setValue('darkMode', true, $user-&gt;id); // Enable dark mode for a different user . To set a default setting dynamically, for example if you want to make dark mode enabled by default, you should call setDefaultValue. This will set the value for any users who have not overridden it themselves, and will take precedence over the hardcoded default value set when registering the setting. \\Setting\\Setting::setDefaultValue('darkMode', true) . Registering settings . All settings must be registered before you can use them. The setting facade gives you a createUser and createGlobal function to create a user or a global function. These take two required arguments, which are the key of the setting and the default value of the setting. \\Setting\\Setting::createGlobal( key: 'siteName', defaultValue: 'My Site Name', fieldOptions: null, groups: ['branding', 'appearance'], rules: ['string', 'max:255'] ); . As above, you may also pass . | An array of groups. These ‘categorise’ the settings, and are useful when dynamically creating settings pages. We will cover this later. | Laravel validation rules. Any time you set a setting value, we will validate the value. | . ",
     "url": "/basic-usage",
     "relUrl": "/basic-usage"
-  },"8": {
+  },"10": {
     "doc": "Class-based Settings",
     "title": "Class-based Settings",
     "content": "Contents . | Class-based Settings . | Introduction | Defining a class setting | Getting/setting values | Registering settings | Settings in depth . | Permissions | Form Field | Validation | Groups | Encryption | Complex data types | . | Migrating to class-based from anonymous | . | . ",
     "url": "/class-based",
     "relUrl": "/class-based"
-  },"9": {
+  },"11": {
     "doc": "Class-based Settings",
     "title": "Introduction",
     "content": "Although the settings we’ve covered work well for most sites, sometimes you want to make each of your settings a little more explicit to help you keep track of them. This is where class-based settings come in. Rather than a setting being represented with a key, your setting is instead a class. This not only allows you to benefit from typehinting when getting and setting values, but also gives a few useful features you can make use of. ",
     "url": "/class-based#introduction",
     "relUrl": "/class-based#introduction"
-  },"10": {
+  },"12": {
     "doc": "Class-based Settings",
     "title": "Defining a class setting",
-    "content": "&lt;?php use Settings\\Schema\\UserSetting; use Settings\\Schema\\GlobalSetting; class SiteName extends GlobalSetting { /** * The default value of the setting. * * @return mixed */ public function defaultValue() { return 'My Site Name'; } /** * The field schema to show the user when editing the value. * * @throws \\Exception * @return Field */ public function fieldOptions(): \\FormSchema\\Schema\\Field { return \\FormSchema\\Generator\\Field::textInput($this-&gt;key())-&gt;setValue($this-&gt;defaultValue()); } /** * Return the validation rules for the setting. * * The key to use for the rules is data. You may also override the validator method to customise the validator further * * @return array */ public function rules(): array|string { return 'string|min:2|max:20'; } /** * @return array */ public static function group(): array { return ['branding', 'appearance']; } } . ",
+    "content": "We recommend keeping all your settings in an app/Settings directory. Using classes, each setting is just a class that contains all the information we need. &lt;?php use Settings\\Schema\\UserSetting; use Settings\\Schema\\GlobalSetting; class SiteName extends GlobalSetting { /** * The default value of the setting. * * @return mixed */ public function defaultValue() { return 'My Site Name'; } /** * The field schema to show the user when editing the value. * * @throws \\Exception * @return Field */ public function fieldOptions(): \\FormSchema\\Schema\\Field { return \\FormSchema\\Generator\\Field::textInput($this-&gt;key())-&gt;setValue($this-&gt;defaultValue()); } /** * Return the validation rules for the setting. * * The key to use for the rules is data. You may also override the validator method to customise the validator further * * @return array */ public function rules(): array|string { return 'string|min:2|max:20'; } /** * @return array */ public static function group(): array { return ['branding', 'appearance']; } } . ",
     "url": "/class-based#defining-a-class-setting",
     "relUrl": "/class-based#defining-a-class-setting"
-  },"11": {
+  },"13": {
     "doc": "Class-based Settings",
     "title": "Getting/setting values",
     "content": "You can use class-based settings exactly the same as anonymous settings. Instead of a key such as siteName, you can use the class name instead. \\Settings\\Setting::getValue(\\App\\Settings\\SiteName::class) . You can also use the class directly to avoid needing the key . \\App\\Settings\\SiteName::getValue(). ",
     "url": "/class-based#gettingsetting-values",
     "relUrl": "/class-based#gettingsetting-values"
-  },"12": {
+  },"14": {
     "doc": "Class-based Settings",
     "title": "Registering settings",
-    "content": "You can then register settings in the boot function of a service provider using the facade or helper function. You can also register information about groups, which will be automatically pulled into any form schemas you extract from settings. public function boot() { \\Settings\\Setting::register(new \\App\\Setting\\SiteName()); \\Settings\\Setting::register([ // Create a new class instance manually new \\App\\Setting\\SiteName(), // Letting the service container build the setting means you can inject dependencies into the setting construct. $this-&gt;app-&gt;make(\\App\\Setting\\SiteTheme::class) ]); \\Settings\\Setting::register(new \\App\\Setting\\SiteName(), ['extra', 'groups', 'for', 'the', 'setting']); \\Settings\\Setting::registerGroup( 'branding', // Group Key 'Branding', // Title for the group 'Settings related to the site brand' // Description for the group ); } . You can also register settings and groups in the config. You need to make sure these settings can be resolved from the service container - if your setting doesn’t rely on any dependencies being passed in then you won’t need to worry about this. &lt;?php // config/settings.php return [ 'settings' =&gt; [ \\App\\Setting\\SiteName::class, \\App\\Setting\\SiteTheme::class, ], 'groups' =&gt; [ 'branding' [ 'title' =&gt; 'Branding', 'subtitle' =&gt; 'Settings related to the site brand' ], ] ]; . ",
+    "content": "You can then register settings in the boot function of a service provider using the facade or helper function. You can also register information about groups, which will be automatically pulled into any form schemas you extract from settings. public function boot() { \\Settings\\Setting::register(new \\App\\Setting\\SiteName()); \\Settings\\Setting::register([ // Create a new class instance manually new \\App\\Setting\\SiteName(), // Letting the service container build the setting means you can inject dependencies into the setting construct. $this-&gt;app-&gt;make(\\App\\Setting\\SiteTheme::class) ]); \\Settings\\Setting::register(new \\App\\Setting\\SiteName(), ['extra', 'groups', 'for', 'the', 'setting']); \\Settings\\Setting::registerGroup( 'branding', // Group Key 'Branding', // Title for the group 'Settings related to the site brand' // Description for the group ); } . You can also register settings and groups in the config. You need to make sure these settings can be resolved from the service container - if your setting doesn’t rely on any dependencies being passed in then you won’t need to worry about this. &lt;?php // config/settings.php return [ 'settings' =&gt; [ \\App\\Setting\\SiteName::class, \\App\\Setting\\SiteTheme::class, [ // An anonymous setting 'type' =&gt; 'user', // 'user', 'global', or a custom type 'key' =&gt; 'timezone', // The setting key 'defaultValue' =&gt; 'Europe/London', // The default value // The field. You must serialize this so your config can still be cached. 'fieldOptions' =&gt; serialize(\\FormSchema\\Generator\\Field::textInput('timezone')-&gt;setValue('Europe/London')), 'groups' =&gt; ['language', 'content'], // Groups to put the setting in 'rules' =&gt; ['string|timezone'] // Laravel validation rules to check the setting value ] ], 'groups' =&gt; [ 'branding' [ 'title' =&gt; 'Branding', 'subtitle' =&gt; 'Settings related to the site brand' ], ] ]; . ",
     "url": "/class-based#registering-settings",
     "relUrl": "/class-based#registering-settings"
-  },"13": {
+  },"15": {
     "doc": "Class-based Settings",
     "title": "Settings in depth",
-    "content": "Permissions . You can control who can update and read certain settings. By default anyone can update or read any settings (depending on how you let people use the settings). If you want to limit this for added protection, you can add a canWrite and canRead function to class-based settings. These take no arguments and should return a boolean. public function canRead() { return Auth::check() &amp;&amp; Auth::user()-&gt;can('update-this-setting'); } . Form Field . Form fields are defined using the form schema generator. You can define any field you need here, including complex fields that return objects. The input name for the field is defined in $this-&gt;key(), and the default value in $this-&gt;defaultValue() so to define a simple text field you’d use this plus a label/hint/other fields. When using anonymous settings, hardcode the key and value and just pass the result of the field generator directly to ::create. public function fieldOptions(): \\FormSchema\\Schema\\Field { return \\FormSchema\\Generator\\Field::textInput($this-&gt;key())-&gt;setValue($this-&gt;defaultValue()); } . Fields are currently a required property of any setting, to allow you to dynamically create setting pages. You can learn more about how to integrate your frontend with the form schema in the integrate documentation. Validation . To ensure the settings entered into the database are valid, you can define rules in the rules array. This can be an array or string of rules, that will validate a valid value. There’s no need to put required/optional rules in, but do include nullable if the option can be null. public function rules(): array|string { return 'string|min:2|max:20'; } . Groups . Groups are a way to order settings to the user. By grouping together similar settings (such as those related to the site theme, authentication, emails etc), it helps users quickly find what they’re looking for. To define a group, define a group function. This should return an array of groups the setting is in. When retrieving a form schema to represent settings, the first group will be taken as the group, and therefore the first group should be the ‘main’ group. public function group(): array { return ['branding', 'appearance']; } . See the integrate section for information about how to add metadata to these. Encryption . The value of all settings are encrypted automatically, since it adds very little overhead. If the data in the setting is not sensitive and you’d rather not encrypt it, set a public $shouldEncrypt property to false in your setting. protected boolean $shouldEncrypt = false; . You can also make the default behaviour be that encryption is not automatic, but can be turned on with $shouldEncrypt = true. To do this, set encryption to false in the config file. Anonymous settings use this default behaviour to determine if settings should be encrypted. Complex data types . All values in the database are automatically serialised to preserve type. This means that arrays and objects will all be saved and retrieved in the correct format, so you don’t have to worry about how your setting is saved. If you want to control how the setting is saved in the database, implement the \\Settings\\Contract\\CastsSettingValue interface on your setting. You will need to define a castToString and castToValue functions on the setting which will convert your validated setting value to a database-friendly string and back. This example would handle a complex data object, such as something returned from an API client. public function castToString(\\My\\Api\\Result $value): string { return json_encode([ 'id' =&gt; $value-&gt;getId(), 'result' =&gt; $value-&gt;getResult() ]); } public function castToValue(string $value): \\My\\Api\\Result { $value = json_decode($value, true); return new \\My\\Api\\Result($value['id']) -&gt;getResult($value['result']); } . ",
+    "content": "Permissions . You can control who can update and read certain settings. By default anyone can update or read any settings (depending on how you let people use the settings). If you want to limit this for added protection, you can add a canWrite and canRead function to class-based settings. These take no arguments and should return a boolean. public function canRead() { return Auth::check() &amp;&amp; Auth::user()-&gt;can('update-this-setting'); } . Form Field . Form fields are defined using the form schema generator. You can define any field you need here, including complex fields that return objects. The input name for the field is defined in $this-&gt;key(), and the default value in $this-&gt;defaultValue() so to define a simple text field you’d use this plus a label/hint/other fields. When using anonymous settings, hardcode the key and value and just pass the result of the field generator directly to ::create. public function fieldOptions(): \\FormSchema\\Schema\\Field { return \\FormSchema\\Generator\\Field::textInput($this-&gt;key())-&gt;setValue($this-&gt;defaultValue()); } . Fields are currently a required property of any setting, to allow you to dynamically create setting pages. Validation . To ensure the settings entered into the database are valid, you can define rules in the rules array. This can be an array or string of rules, that will validate a valid value. There’s no need to put required/optional rules in, but do include nullable if the option can be null. public function rules(): array|string { return 'string|min:2|max:20'; } . Groups . Groups are a way to order settings to the user. By grouping together similar settings (such as those related to the site theme, authentication, emails etc), it helps users quickly find what they’re looking for. To define a group, define a group function. This should return an array of groups the setting is in. When retrieving a form schema to represent settings, the first group will be taken as the group, and therefore the first group should be the ‘main’ group. public function group(): array { return ['branding', 'appearance']; } . See the integrate section for information about how to add metadata to these. Encryption . The value of all settings are encrypted automatically, since it adds very little overhead. If the data in the setting is not sensitive and you’d rather not encrypt it, set a public $shouldEncrypt property to false in your setting. protected boolean $shouldEncrypt = false; . You can also make the default behaviour be that encryption is not automatic, but can be turned on with $shouldEncrypt = true. To do this, set encryption to false in the config file. Anonymous settings use this default behaviour to determine if settings should be encrypted. Complex data types . All values in the database are automatically serialised to preserve type. This means that arrays and objects will all be saved and retrieved in the correct format, so you don’t have to worry about how your setting is saved. If you want to control how the setting is saved in the database, implement the \\Settings\\Contract\\CastsSettingValue interface on your setting. You will need to define a castToString and castToValue functions on the setting which will convert your validated setting value to a database-friendly string and back. This example would handle a complex data object, such as something returned from an API client. public function castToString(\\My\\Api\\Result $value): string { return json_encode([ 'id' =&gt; $value-&gt;getId(), 'result' =&gt; $value-&gt;getResult() ]); } public function castToValue(string $value): \\My\\Api\\Result { $value = json_decode($value, true); return new \\My\\Api\\Result($value['id']) -&gt;getResult($value['result']); } . ",
     "url": "/class-based#settings-in-depth",
     "relUrl": "/class-based#settings-in-depth"
-  },"14": {
+  },"16": {
     "doc": "Class-based Settings",
     "title": "Migrating to class-based from anonymous",
     "content": "Often you will start using anonymous settings and move to class-based settings as your application grows. To make this as simple as possible, you can alias a class-based setting and use it as though it was an anonymous setting. You can alias a setting through config or the service provider . &lt;?php // config/settings.php return [ 'aliases' =&gt; [ 'siteName' =&gt; \\App\\Setting\\SiteName::class, ... ] ]; // app/Providers/AppServiceProvider.php public function boot() { settings()-&gt;alias('siteName', \\App\\Setting\\SiteName::class); \\Settings\\Setting::alias('siteName', \\App\\Setting\\SiteName::class); } . You can now use the site name setting as though it had a key siteName. You can now access it in the following ways . | settings('siteName') | \\Settings\\Setting::getValue('siteName') | \\Settings\\Setting::getSiteName() | settings()-&gt;getValue('siteName') | settings()-&gt;getSiteName() | \\App\\Settings\\SiteName::getValue() | \\Settings\\Setting::getValue(\\App\\Settings\\SiteName::class) | . ",
     "url": "/class-based#migrating-to-class-based-from-anonymous",
     "relUrl": "/class-based#migrating-to-class-based-from-anonymous"
-  },"15": {
+  },"17": {
     "doc": "Introduction",
     "title": "Laravel Settings",
     "content": "Contents . | Laravel Settings . | Introduction | Installation | Basic Usage | . | . ",
     "url": "/index#laravel-settings",
     "relUrl": "/index#laravel-settings"
-  },"16": {
+  },"18": {
     "doc": "Introduction",
     "title": "Introduction",
-    "content": "Laravel Settings provides simple but flexible settings to any Laravel app. | Quick to set up and use | Built to scale alongside your application. | Supports anonymous and class-based keys. | Supports encryption of values and storing non-primitive values. | User and global settings provided by default. | Can add custom types such as a team or organisation. | JUST REMEMBERED - WHY TO USE THIS PACKAGE OVER ANY OTHER | . ",
+    "content": "Laravel Settings provides simple but flexible settings to any Laravel app. | Quick to set up and use. | Native support for using settings in Vue. | Built to scale alongside your application. | Supports encryption of values and storing non-primitive values. | User and global settings supported by default. | . ",
     "url": "/index",
     "relUrl": "/index"
-  },"17": {
+  },"19": {
     "doc": "Introduction",
     "title": "Installation",
     "content": "All you need to do to use this project is pull it into an existing Laravel app using composer. composer require elbowspaceuk/laravel-settings . You can publish the configuration file by running . php artisan vendor:publish --provider=\"Settings\\SettingsServiceProvider\" . This will publish the configuration file and migrations. ",
     "url": "/index#installation",
     "relUrl": "/index#installation"
-  },"18": {
+  },"20": {
     "doc": "Introduction",
     "title": "Basic Usage",
     "content": "You can create a new setting in the boot method of any service provider. public function boot() { \\Settings\\Setting::createGlobal( key: 'siteName', defaultValue: 'My App' ); } . This setting can then be accessed anywhere in your Laravel application . echo \\Settings\\Setting::getValue('siteName') // My App . or updated to a new value . \\Settings\\Setting::setValue('siteName', 'My New App'); . ",
     "url": "/index#basic-usage",
     "relUrl": "/index#basic-usage"
-  },"19": {
-    "doc": "Integrate",
-    "title": "Integrate",
-    "content": ". | API . | Get a setting value . | Request | Response | . | Set a setting value(s) . | Request | Response | . | Get all setting values . | Request | Response | . | . | Validation | Transition from keys to class-based . | Removing the anonymous setting | . | Using settings in service providers | . This page currently documents features that haven’t yet been created. ",
-    "url": "/integrating",
-    "relUrl": "/integrating"
-  },"20": {
-    "doc": "Integrate",
-    "title": "API",
-    "content": "This package comes with an API for updating the settings. Get a setting value . Request . GET /_setting/{key} HTTP/1.1 Accept: application/json Content-Type: application/json . Response . HTTP/1.1 200 OK Content-Type: application/json { \"setting\": { key: '', value: '', updated_at: '' } } . Set a setting value(s) . POST /setting [ {“value”: “setting-value”} ] . Request . POST /_setting HTTP/1.1 Accept: application/json Content-Type: application/json { \"settings\": { \"key1\": \"First setting\", \"key2\": \"Second setting\" ] } . Response . HTTP/1.1 204 No Content Content-Type: application/json . Get all setting values . Request . GET /_setting HTTP/1.1 Accept: application/json Content-Type: application/json . Response . HTTP/1.1 200 OK Content-Type: application/json { \"settings\": [ { key: '', value: '', updated_at: '' }, {...}, ] } . ",
-    "url": "/integrating#api",
-    "relUrl": "/integrating#api"
   },"21": {
-    "doc": "Integrate",
-    "title": "Validation",
-    "content": "If you use your own API to update settings, or a standard web request, you can use the following validation rule to check all the given settings are valid according to their validation rules . | settings - the given attribute must be an array of settings as key value pairs | . ",
-    "url": "/integrating#validation",
-    "relUrl": "/integrating#validation"
-  },"22": {
-    "doc": "Integrate",
-    "title": "Transition from keys to class-based",
-    "content": "You can alias the old anonymous setting key to the new class-based name . \\Settings\\Setting::alias(\\Acme\\Settings\\SiteName::class, 'siteName'); . Now, when you call \\Acme\\Settings\\SiteName::getValue(), the class will automatically be replaced with the alias. This means there should be no friction when changing over to class-based settings, since both options are viable. Removing the anonymous setting . How to then fully move over . ",
-    "url": "/integrating#transition-from-keys-to-class-based",
-    "relUrl": "/integrating#transition-from-keys-to-class-based"
-  },"23": {
-    "doc": "Integrate",
-    "title": "Using settings in service providers",
-    "content": "It can be tempting to use a setting in your service provider, to store things like service credentials that are needed to set it up. However, the settings package isn’t ready to use until the application is fully booted, since it depends on things like cache, encryption and its own bindings to function. If you try to use it before the application is booted, you’ll get an exception. To work around this, so you can use settings to set up services needed by the rest of your app, you can use the booted callback on the application. In the register function of your service provider, define a callback which should be called after the application is booted. This will be called as soon as the application is booted, meaning you can do any service setup here and make use of the settings. The easier option is to register your bindings as a callback, which should only be called once the service is actually requested. But either option is equally fine and you can use whichever suits the situation best! . ",
-    "url": "/integrating#using-settings-in-service-providers",
-    "relUrl": "/integrating#using-settings-in-service-providers"
-  },"24": {
-    "doc": "JS",
+    "doc": "JavaScript",
     "title": "JavaScript",
-    "content": ". | Vue | Setting Keys . | Aliases | . | JS | . This page currently documents features that haven’t yet been created. ",
-    "url": "/js#javascript",
-    "relUrl": "/js#javascript"
-  },"25": {
-    "doc": "JS",
-    "title": "Vue",
-    "content": "Since the frontend makes use of the settings too, it’s easy to use this package directly from your js. You will need to install the js package. If using Vue, add the following to your app.js file. Here we use 1 as the model ID, replace with whatever the actual model ID is. import Settings from '@twigger/settings'; Vue.use(Settings); . Then in your Vue app . &lt;template&gt; Setting value: &lt;span v-text=\"$setting.get('key', 1)\"&gt;&lt;/span&gt; &lt;/template&gt; &lt;!--...--&gt; computed: { description() { return this.$setting.get('key', 1) } } . ",
-    "url": "/js#vue",
-    "relUrl": "/js#vue"
-  },"26": {
-    "doc": "JS",
-    "title": "Setting Keys",
-    "content": "On the PHP side, since all settings are class-based it’s impossible to use the incorrect setting key. To keep this consistency in js, the keys can be retrieved from a json object. This is automatically generated for you. For our site name example (\\Acme\\Settings\\SiteName), this looks like . { acme: { settings: { siteName: SettingObject } } } . You can access this object with this.$setting.keys. If you don’t dig into the object you’ll have a list of all settings. If you dig through the namespaces to get a setting object, you can then call the following functions . | this.$setting.keys.acme.settings.siteName.get(1) - Get the value for the model with an ID 1 | this.$setting.keys.acme.settings.siteName.get() - Get the default value/global setting value | this.$setting.keys.acme.settings.siteName.set('value', 1) - Set the value for the model 1 | this.$setting.keys.acme.settings.siteName.set('value') - Set the default/global value | . Aliases . To make accessing these settings easier, the aliases referenced in the configuration will also be applied to these keys. If \\Acme\\Settings\\SiteName is aliases to SiteName, then you can access the JS key with this.$settings.aliases.siteName, where you can then call .get() or .set() as necessary. You can also just use this.$settings.siteName and omit aliases, but please note this may cause issues if your setting name is aliases or keys, or any other property of $settings, so it’s usually best to use the this.$settings.aliases key directly. ",
-    "url": "/js#setting-keys",
-    "relUrl": "/js#setting-keys"
-  },"27": {
-    "doc": "JS",
-    "title": "JS",
-    "content": "Using functions directly . import {getSetting, keys} from '@twigger/settings' getSetting('key', 1) // keys is an object of keys as above . ",
+    "content": ". | Vue . | Setup | Getting | Setting | Loading . | Loading through JS | Eager Loading | . | . | . Settings can easily be retrieved in blade templates as normal. If you’re using a frontend framework like Vue, you can pass through settings to your root Vue component from your blade template. If you use Vue, we’ve put together a package to make this easier. This allows you to get and set any setting from any Vue component without having to pass it through from parent components. We currently only support Vue, but let us know if you’re interested in using this package with a different framework. ",
     "url": "/js",
     "relUrl": "/js"
-  },"28": {
-    "doc": "Setting Forms",
-    "title": "Setting Forms",
-    "content": ". | Setting Forms . | Query settings | Create a form instance . | Custom form creator | . | Using the Form | . | . ",
-    "url": "/setting-forms",
-    "relUrl": "/setting-forms"
-  },"29": {
-    "doc": "Setting Forms",
+  },"22": {
+    "doc": "JavaScript",
+    "title": "Vue",
+    "content": "Setup . First you’ll need to install the package using npm or yarn. npm install --save @elbowspaceuk/laravel-settings-vue . In your app.js file, where you create your Vue instance, add the following to initialise the plugin. // app.js import Settings from '@elbowspaceuk/laravel-settings-vue'; Vue.use(Settings, { axios: axios }); . Note you must pass an axios instance to the Settings plugin. This must be ready to make api calls - if you are using the standard Laravel template this is set up for you and bound to window.axios, so the above snippet will work. You should also add the \\Settings\\Http\\Middleware\\ShareSettingsWithJs middleware to your web group in app/Http/Kernel.php, and add @settings to the head of your base blade template. // layout.blade.php &lt;head&gt; &lt;title&gt;...&lt;/title&gt; @settings &lt;/head&gt; . Getting . From any Vue component, in the template or a method/computed property/watcher, you have access to a $setting property and a $settings property. The $setting property contains a key-value pair object with all the available settings and their values. This is reactive, so you can use it anywhere in your component. The $settings property contains a set of functions to help you work with settings in js. &lt;template&gt; &lt;div&gt;Your theme is { { $setting.theme } }&lt;/div&gt; &lt;div&gt;THrough a computed property it's the same: &lt;/div&gt; &lt;/template&gt; &lt;script&gt; export default { computed: { currentTheme() { return this.$setting.theme; } } } &lt;/script&gt; . Setting . To set a setting value you should call this.$settings.setValue('site_name', 'My new site name') in your Vue component. You can set multiple at a time by passing through an object of key-value pairs of settings to this.$settings.setValues(). Loading . In order to make your settings available to the frontend, you need to tell laravel settings you want to make use of the setting. This prevents us loading every setting every time which could be slow. There are two ways to share your settings with your Vue component. You can either do it from your component directly, or eager load them by specifying which settings to load in your Laravel app. Loading through JS . Before you can make use of a setting, call this.$settings.loadSetting('theme') and pass it the setting key or alias to load. This will be loaded in the background. During loading this.$setting.theme will be undefined, but once the setting is ready it will reactively update to the value. You can load many settings at the same time with this.$settings.loadSettings(['theme', 'site_name']). Eager Loading . To avoid the overhead of loading settings from your javascript, you should try and mark settings to share in your laravel app. Any settings loaded this way will be instantly available without having to load them with loadSettings() . For settings that should be loaded on every request, such as a site name, you can put them into the config . [ ..., 'js' =&gt; [ 'autoload' =&gt; [ 'site_name' ] ] ] . For settings that should only be loaded on some requests, add this to your controller or middleware. \\Settings\\Loading\\LoadedSettings::eagerLoad('site_name'); . ",
+    "url": "/js#vue",
+    "relUrl": "/js#vue"
+  },"23": {
+    "doc": "Settings UI",
+    "title": "Settings UI",
+    "content": ". | Settings UI . | Query settings | Create a form instance . | Custom form creator | . | Using the Form | . | . ",
+    "url": "/settings-ui",
+    "relUrl": "/settings-ui"
+  },"24": {
+    "doc": "Settings UI",
     "title": "Query settings",
     "content": "To display the settings to users, you need to get information about the registered settings. These all use the setting service class, which you can access through the facade or the helper (passing it no parameters). Groups . | Get all settings with a given group: \\Settings\\Setting::withGroup('group-name')-&gt;get() | Get all settings with at least one of the given groups: settings()-&gt;withAnyGroup(['group-name', 'group-name-2'])-&gt;get() | Get all settings that have all the given groups: settings()-&gt;withAllGroups(['group-name', 'group-name-2'])-&gt;get() | . Types . | Get all settings of a certain type: settings()-&gt;withType(\\Acme\\Setting\\TeamSettingType::class)-&gt;get() or settings()-&gt;withType('team')-&gt;get(). | Get all global settings: settings()-&gt;withGlobal()-&gt;get(). This is the same as calling settings()-&gt;withType(\\Settings\\Schema\\GlobalSetting::class). | Get all user settings: settings()-&gt;withUser()-&gt;get(). | . The functions can be chained, so to get all global settings that belong to a group called ‘Blog Module’, you’d use \\Settings\\Setting::withGlobal()-&gt;withGroup('blog-module')-&gt;get(). ",
-    "url": "/setting-forms#query-settings",
-    "relUrl": "/setting-forms#query-settings"
-  },"30": {
-    "doc": "Setting Forms",
+    "url": "/settings-ui#query-settings",
+    "relUrl": "/settings-ui#query-settings"
+  },"25": {
+    "doc": "Settings UI",
     "title": "Create a form instance",
     "content": "get() will always return a Settings\\Support\\SettingCollection instance. You can use this like a normal Laravel collection, but you will also have access to the following functions. | toForm() - turn the settings into a \\FormSchema\\Schema\\Form. | toKeyValuePair() - get all settings and their values as key value pairs. | . Custom form creator . When using toForm, you can change how a collection casts settings to a form. Define a callback in the register function of your service provider, which accepts a collection of settings and returns a Form Schema instance. public function register() { \\Settings\\Collection\\SettingCollection::$convertToFormUsing = function(\\Settings\\Collection\\SettingCollection $settings) { return \\FormSchema\\Generator\\Form::make()-&gt;withGroup(&lt;...&gt;)-&gt;form(); } } . ",
-    "url": "/setting-forms#create-a-form-instance",
-    "relUrl": "/setting-forms#create-a-form-instance"
-  },"31": {
-    "doc": "Setting Forms",
+    "url": "/settings-ui#create-a-form-instance",
+    "relUrl": "/settings-ui#create-a-form-instance"
+  },"26": {
+    "doc": "Settings UI",
     "title": "Using the Form",
-    "content": "This section is incomplete . Pass this schema to the frontend and render it using a dynamic form generator. Each setting group will appear in a different form group. Integrating with Form schema generator . ",
-    "url": "/setting-forms#using-the-form",
-    "relUrl": "/setting-forms#using-the-form"
+    "content": "This section is incomplete . Pass this schema to the frontend and render it using a dynamic form generator. Each setting group will appear in a different form group. ",
+    "url": "/settings-ui#using-the-form",
+    "relUrl": "/settings-ui#using-the-form"
   }
 }
