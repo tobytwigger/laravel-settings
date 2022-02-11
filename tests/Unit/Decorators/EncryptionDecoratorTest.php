@@ -23,7 +23,7 @@ class EncryptionDecoratorTest extends TestCase
         $baseService = $this->prophesize(PersistedSettingRepository::class);
         $baseService->getValueWithId($setting, 5)->shouldBeCalledTimes(1)->willReturn(Crypt::encrypt('test-value', false));
 
-        $decorator = new EncryptionDecorator($baseService->reveal(), Crypt::getFacadeRoot());
+        $decorator = new EncryptionDecorator($baseService->reveal());
 
         $this->assertEquals('test-value', $decorator->getValueWithId($setting, 5));
     }
@@ -35,7 +35,7 @@ class EncryptionDecoratorTest extends TestCase
         $baseService = $this->prophesize(PersistedSettingRepository::class);
         $baseService->getDefaultValue($setting)->shouldBeCalledTimes(1)->willReturn(Crypt::encrypt('test-value', false));
 
-        $decorator = new EncryptionDecorator($baseService->reveal(), Crypt::getFacadeRoot());
+        $decorator = new EncryptionDecorator($baseService->reveal());
 
         $this->assertEquals('test-value', $decorator->getDefaultValue($setting));
     }
@@ -47,7 +47,7 @@ class EncryptionDecoratorTest extends TestCase
         $baseService = $this->prophesize(PersistedSettingRepository::class);
         $baseService->setValue($setting, Argument::that(fn($arg) => Crypt::decrypt($arg, false) === 'new-value'), 5)->shouldBeCalled();
 
-        $decorator = new EncryptionDecorator($baseService->reveal(), Crypt::getFacadeRoot());
+        $decorator = new EncryptionDecorator($baseService->reveal());
 
         $decorator->setValue($setting, 'new-value', 5);
     }
@@ -59,7 +59,7 @@ class EncryptionDecoratorTest extends TestCase
         $baseService = $this->prophesize(PersistedSettingRepository::class);
         $baseService->setDefaultValue($setting, Argument::that(fn($arg) => Crypt::decrypt($arg, false) === 'new-value'))->shouldBeCalled();
 
-        $decorator = new EncryptionDecorator($baseService->reveal(), Crypt::getFacadeRoot());
+        $decorator = new EncryptionDecorator($baseService->reveal());
 
         $decorator->setDefaultValue($setting, 'new-value');
     }
