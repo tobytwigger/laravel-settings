@@ -142,7 +142,7 @@ return [
         ]
     ],
     'groups' => [
-        'branding' [
+        'branding' => [
             'title' => 'Branding',
             'subtitle' => 'Settings related to the site brand'
         ],
