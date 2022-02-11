@@ -83,8 +83,8 @@ class SettingsServiceProvider extends ServiceProvider
 
     private function registerBindings()
     {
-        $this->app->singleton('laravel-settings', fn($app) => $app->make(SettingService::class));
-        $this->app->alias('laravel-settings', SettingServiceContract::class);
+        $this->app->bind(SettingServiceContract::class, SettingService::class);
+        $this->app->bind('laravel-settings', SettingServiceContract::class);
 
         $this->app->singleton('laravel-settings.store', fn($app) => $app->make(SingletonSettingStore::class));
         $this->app->alias('laravel-settings.store', SettingStoreContract::class);
