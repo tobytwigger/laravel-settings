@@ -27,6 +27,8 @@ This is where class-based settings come in. Rather than a setting being represen
 
 ## Defining a class setting
 
+We recommend keeping all your settings in an `app/Settings` directory. Using classes, each setting is just a class that contains all the information we need.
+
 ```php
 <?php
 
@@ -129,6 +131,15 @@ return [
     'settings' => [
         \App\Setting\SiteName::class,
         \App\Setting\SiteTheme::class,
+        [ // An anonymous setting
+            'type' => 'user', // 'user', 'global', or a custom type
+            'key' => 'timezone', // The setting key
+            'defaultValue' => 'Europe/London', // The default value
+            // The field. You must serialize this so your config can still be cached.
+            'fieldOptions' => serialize(\FormSchema\Generator\Field::textInput('timezone')->setValue('Europe/London')),
+            'groups' => ['language', 'content'], // Groups to put the setting in
+            'rules' => ['string|timezone'] // Laravel validation rules to check the setting value       
+        ]
     ],
     'groups' => [
         'branding' [
@@ -171,7 +182,7 @@ When using anonymous settings, hardcode the key and value and just pass the resu
 
 ```
 
-Fields are currently a required property of any setting, to allow you to dynamically create setting pages. You can learn more about how to integrate your frontend with the form schema in the [integrate documentation](integrating.md).
+Fields are currently a required property of any setting, to allow you to dynamically create setting pages.
 
 ### Validation
 

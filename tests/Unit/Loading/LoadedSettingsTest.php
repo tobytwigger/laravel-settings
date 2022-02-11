@@ -104,4 +104,13 @@ class LoadedSettingsTest extends TestCase
         $loaded->loadMany(['setting3']);
     }
 
+    /** @test */
+    public function eagerLoad_creates_an_instance_and_loads_the_setting(){
+        $this->createSetting('setting1', 'My Setting One');
+
+        $this->assertEquals([], app(LoadedSettings::class)->getLoadingSettings());
+        LoadedSettings::eagerLoad('setting1');
+        $this->assertEquals(['setting1'], app(LoadedSettings::class)->getLoadingSettings());
+    }
+
 }
