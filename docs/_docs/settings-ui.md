@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Settings UI
-nav_order: 8
+nav_order: 5
 ---
 
 # Settings UI
