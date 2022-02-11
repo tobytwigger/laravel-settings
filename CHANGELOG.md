@@ -7,8 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.0.0] - 2022-02-11
+
 ### Fixed
 - Autoloading of service provider
+
+### Added
+- Integrated with Vue.js.
+- API for controlling settings.
+- Protect settings with read and write permissions.
+
+### Changed
+- Moved to the elbowspaceuk package name
+- `withAnyGroups` is now `withAnyGroup`
 
 ## [v0.0.2] - 2021-11-17
 
