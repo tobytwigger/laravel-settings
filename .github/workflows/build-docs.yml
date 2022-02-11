@@ -3,7 +3,7 @@ name: Build docs and commit to build branch
 on:
   push:
     branches:
-      - develop
+      - master
 
 jobs:
   build:
