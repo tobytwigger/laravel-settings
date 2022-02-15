@@ -24,20 +24,20 @@ class ESConfig
 
     private function getGetApiUrl(): ?string
     {
-        return route('settings.get', [], true);
+        return route('settings.get');
     }
 
     private function getUpdateApiUrl(): ?string
     {
-        return route('settings.update', [], true);
+        return route('settings.update');
     }
 
     public function getConfig(): array
     {
         return [
-            'api_enabled' => true,
-            'api_get_url' => 'http://localhost::4000/api/settings',
-            'api_update_url' => 'http://localhost::4000/api/settings',
+            'api_enabled' => $this->isApiEnabled(),
+            'api_get_url' => $this->getGetApiUrl(),
+            'api_update_url' => $this->getUpdateApiUrl(),
         ];
     }
 
