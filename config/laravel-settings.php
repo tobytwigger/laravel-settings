@@ -64,7 +64,7 @@ return [
      */
     'routes' => [
         'api' => [
-            // Should we register routes?
+            // Should we register routes? If this is false, any changes made via the js package will not be saved.
             'enabled' => true,
             // What should we prefix the URL with?
             'prefix' => 'api/settings',
