@@ -30,8 +30,11 @@ class BladeTest extends TestCase
 
         Setting::loadManySettings(['setting1', 'setting2']);
 
-        ESConfig::share('config1', 'value1');
-        ESConfig::share('config2', ['val2', 'val3']);
+        $esConfig = $this->prophesize(ESConfig::class);
+        $esConfig->getConfig()->willReturn([
+            'config1' => 'value1', 'config2' => ['val2', 'val3']
+        ]);
+        $this->app->instance(ESConfig::class, $esConfig->reveal());
 
         $this->assertDirectiveOutput(
             '<script>window.ESSettings=window.ESSettings||{};window.ESSettingsConfig=window.ESSettingsConfig||{};'

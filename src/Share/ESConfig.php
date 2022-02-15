@@ -2,33 +2,43 @@
 
 namespace Settings\Share;
 
+use Illuminate\Contracts\Config\Repository;
 use Settings\Contracts\SettingStore;
 use Settings\Exceptions\SettingNotRegistered;
 
 class ESConfig
 {
 
-    private array $config = [];
 
-    public function add(string $key, mixed $value): void
+    private Repository $config;
+
+    public function __construct(Repository $config)
     {
-        $this->config[$key] = $value;
+        $this->config = $config;
     }
 
-    public function addMany(array $config): void
+    private function isApiEnabled(): bool
     {
-        $this->config = array_merge($this->config, $config);
+        return $this->config->get('laravel-settings.routes.api.enabled', true);
+    }
+
+    private function getGetApiUrl(): ?string
+    {
+        return route('settings.get', [], true);
+    }
+
+    private function getUpdateApiUrl(): ?string
+    {
+        return route('settings.update', [], true);
     }
 
     public function getConfig(): array
     {
-        return $this->config;
-    }
-
-    public static function share(string $key, mixed $value): void
-    {
-        $instance = app(ESConfig::class);
-        $instance->add($key, $value);
+        return [
+            'api_enabled' => true,
+            'api_get_url' => 'http://localhost::4000/api/settings',
+            'api_update_url' => 'http://localhost::4000/api/settings',
+        ];
     }
 
 }
