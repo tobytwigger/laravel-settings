@@ -5,7 +5,7 @@ namespace Settings\Tests\Unit\Http\Middleware;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
 use Settings\Http\Middleware\ShareSettingsWithJs;
-use Settings\Loading\LoadedSettings;
+use Settings\Share\LoadedSettings;
 use Settings\Tests\TestCase;
 
 class ShareSettingsWithJsTest extends TestCase

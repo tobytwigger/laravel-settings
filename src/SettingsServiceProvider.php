@@ -23,10 +23,8 @@ use Settings\Decorators\RedirectDynamicCallsDecorator;
 use Settings\Decorators\SerializationDecorator;
 use Settings\Decorators\SettingExistsDecorator;
 use Settings\Decorators\ValidationDecorator;
-use Settings\Http\Middleware\ShareSettingsWithJs;
-use Settings\Loading\DisplayLoadedSettings;
-use Settings\Loading\LoadedSettings;
-use Settings\Rules\SettingsRule;
+use Settings\Share\ESConfig;
+use Settings\Share\LoadedSettings;
 use Settings\Store\SingletonSettingStore;
 
 /**
@@ -41,6 +39,7 @@ class SettingsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(LoadedSettings::class);
+        $this->app->singleton(ESConfig::class);
         $this->registerBindings();
         $this->setupTypes();
         App::booted(fn($app) => AppNotBootedDecorator::$booted = true);
@@ -161,7 +160,7 @@ class SettingsServiceProvider extends ServiceProvider
     private function defineSettingsBladeDirective(BladeCompiler $compiler)
     {
         $compiler->directive('settings', function() {
-            return '<?php echo sprintf("<script>%s</script>", app(\Settings\Loading\DisplayLoadedSettings::class)->toString()); ?>';
+            return '<?php echo sprintf("<script>%s</script>", app(\Settings\Share\ShareJavaScript::class)->toString()); ?>';
         });
     }
 

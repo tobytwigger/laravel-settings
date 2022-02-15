@@ -8,7 +8,7 @@ use Settings\Anonymous\AnonymousSetting;
 use Settings\Anonymous\AnonymousSettingFactory;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingStore;
-use Settings\Loading\LoadedSettings;
+use Settings\Share\LoadedSettings;
 use Settings\Setting;
 use Settings\SettingService;
 use Settings\Store\Query;

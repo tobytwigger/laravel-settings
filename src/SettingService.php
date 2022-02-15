@@ -11,7 +11,7 @@ use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingService as SettingServiceContract;
 use Settings\Exceptions\PersistedSettingNotFound;
 use Settings\Exceptions\SettingNotRegistered;
-use Settings\Loading\LoadedSettings;
+use Settings\Share\LoadedSettings;
 use Settings\Store\Query;
 
 class SettingService implements SettingServiceContract

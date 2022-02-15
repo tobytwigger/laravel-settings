@@ -114,5 +114,5 @@ For settings that should be loaded on every request, such as a site name, you ca
 For settings that should only be loaded on some requests, add this to your controller or middleware.
 
 ```php
-\Settings\Loading\LoadedSettings::eagerLoad('site_name');
+\Settings\Share\LoadedSettings::eagerLoad('site_name');
 ```

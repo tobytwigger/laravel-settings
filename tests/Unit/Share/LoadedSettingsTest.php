@@ -1,10 +1,10 @@
 <?php
 
-namespace Settings\Tests\Unit\Loading;
+namespace Settings\Tests\Unit\Share;
 
 use Settings\Contracts\SettingStore;
 use Settings\Exceptions\SettingNotRegistered;
-use Settings\Loading\LoadedSettings;
+use Settings\Share\LoadedSettings;
 use Settings\Tests\TestCase;
 use Settings\Tests\Traits\CreatesSettings;
 
