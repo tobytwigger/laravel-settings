@@ -5,6 +5,7 @@ namespace Settings\Share;
 use Illuminate\Contracts\Config\Repository;
 use Settings\Contracts\SettingStore;
 use Settings\Exceptions\SettingNotRegistered;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class ESConfig
 {
@@ -24,12 +25,20 @@ class ESConfig
 
     private function getGetApiUrl(): ?string
     {
-        return route('settings.get');
+        try {
+            return route('settings.get');
+        } catch (RouteNotFoundException) {
+            return null;
+        }
     }
 
     private function getUpdateApiUrl(): ?string
     {
-        return route('settings.update');
+        try {
+            return route('settings.update');
+        } catch (RouteNotFoundException) {
+            return null;
+        }
     }
 
     public function getConfig(): array
