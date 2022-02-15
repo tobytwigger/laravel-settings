@@ -19,6 +19,7 @@ class FakeSetting extends Setting
     private string $type;
     private bool $canWrite;
     private bool $canRead;
+    public ?string $alias = null;
 
     public function __construct(string $key, mixed $defaultValue, array|string $rules = [], bool $shouldEncrypt = true, ?int $resolveId = null, array $groups = [], string $type = GlobalSetting::class, bool $canRead = true, bool $canWrite = true)
     {
@@ -31,6 +32,11 @@ class FakeSetting extends Setting
         $this->type = $type;
         $this->canWrite = $canWrite;
         $this->canRead = $canRead;
+    }
+
+    public function alias(): ?string
+    {
+        return $this->alias;
     }
 
     public function resolveId(): ?int

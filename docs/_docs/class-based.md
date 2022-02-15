@@ -251,7 +251,7 @@ This example would handle a complex data object, such as something returned from
 
 Often you will start using anonymous settings and move to class-based settings as your application grows. To make this as simple as possible, you can alias a class-based setting and use it as though it was an anonymous setting.
 
-You can alias a setting through config or the service provider
+You can alias a setting through config or the service provider, or define it directly on your setting class. You only need to use one of the following methods.
 
 ```php
 <?php
@@ -270,6 +270,14 @@ public function boot()
     settings()->alias('siteName', \App\Setting\SiteName::class);
     \Settings\Setting::alias('siteName', \App\Setting\SiteName::class);
 }
+
+// app/Settings/SiteName.php
+
+public function alias(): ?string
+{
+    return 'siteName';
+}
+
 ```
 
 You can now use the site name setting as though it had a key `siteName`. You can now access it in the following ways
