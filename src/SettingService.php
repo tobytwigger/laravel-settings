@@ -11,7 +11,7 @@ use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\SettingService as SettingServiceContract;
 use Settings\Exceptions\PersistedSettingNotFound;
 use Settings\Exceptions\SettingNotRegistered;
-use Settings\Loading\LoadedSettings;
+use Settings\Share\LoadedSettings;
 use Settings\Store\Query;
 
 class SettingService implements SettingServiceContract
@@ -32,7 +32,13 @@ class SettingService implements SettingServiceContract
 
     public function register(Setting|array $settings, array $extraGroups = []): void
     {
-        $this->store()->register(Arr::wrap($settings), $extraGroups);
+        $settings = Arr::wrap($settings);
+        $this->store()->register($settings, $extraGroups);
+        foreach($settings as $setting) {
+            if($setting->alias()) {
+                $this->alias($setting->alias(), $setting->key());
+            }
+        }
     }
 
     public function alias(string $alias, string $key): void

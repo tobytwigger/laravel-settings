@@ -4,7 +4,7 @@ namespace Settings\Http\Middleware;
 
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
-use Settings\Loading\LoadedSettings;
+use Settings\Share\LoadedSettings;
 
 class ShareSettingsWithJs
 {

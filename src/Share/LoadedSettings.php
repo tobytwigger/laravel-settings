@@ -1,6 +1,6 @@
 <?php
 
-namespace Settings\Loading;
+namespace Settings\Share;
 
 use Settings\Contracts\SettingStore;
 use Settings\Exceptions\SettingNotRegistered;

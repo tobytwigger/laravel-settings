@@ -117,4 +117,9 @@ abstract class Setting
         return true;
     }
 
+    public function alias(): ?string
+    {
+        return null;
+    }
+
 }

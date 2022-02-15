@@ -116,7 +116,7 @@ class QueryExecutorTest extends TestCase
         $this->assertEquals(count($allowed), $filtered->count());
 
         $allowedKeys = collect($allowed)->map(fn(Setting $setting) => $setting->key());
-        foreach($filtered->shift() as $setting) {
+        foreach($filtered as $setting) {
             $this->assertContains($setting->key(), $allowedKeys);
         }
     }

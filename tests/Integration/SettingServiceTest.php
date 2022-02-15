@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Settings\Contracts\CastsSettingValue;
+use Settings\Contracts\SettingStore;
 use Settings\DatabaseSettings\SavedSetting;
 use Settings\Exceptions\SettingNotRegistered;
 use Settings\Setting;
@@ -144,6 +145,24 @@ class SettingServiceTest extends TestCase
             ['testing', '123'],
             Setting::getValue('key-object')->another
         );
+    }
+
+    /** @test */
+    public function it_registers_an_alias_if_the_setting_has_one(){
+        $setting1 = $this->createSetting('setting1', 'value1');
+        $setting2 = $this->createSetting('setting2', 'value2');
+        $setting1->alias = 'alias1';
+        $setting2->alias = null;
+
+        Setting::register($setting1);
+        Setting::register($setting2);
+
+        /** @var SettingStore $store */
+        $store = app(SettingStore::class);
+
+        $this->assertTrue($store->has('setting1'));
+        $this->assertTrue($store->has('setting2'));
+        $this->assertTrue($store->has('alias1'));
     }
 
 }
