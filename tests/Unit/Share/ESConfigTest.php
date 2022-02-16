@@ -19,8 +19,8 @@ class ESConfigTest extends TestCase
 
         $this->assertEquals([
             'api_enabled' => true,
-            'api_get_url' => 'http://localhost::4000/api/settings',
-            'api_update_url' => 'http://localhost::4000/api/settings',
+            'api_get_url' => 'http://localhost/setting',
+            'api_update_url' => 'http://localhost/setting',
         ], $esConfig->getConfig());
     }
 

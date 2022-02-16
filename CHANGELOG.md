@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.0.3] - 2022-02-15
+
 ### Added
 - Can register a setting alias directly on the setting
 - Pass ES configuration to the frontend package immediately

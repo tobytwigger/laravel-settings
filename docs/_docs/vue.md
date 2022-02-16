@@ -98,6 +98,14 @@ To set a setting value you should call `this.$settings.setValue('site_name', 'My
 
 You can also just set `$setting` directly with `this.$setting.site_name = 'My New Site Name'`.
 
+If you're working with an input that uses v-model, you can use the setting directly. This will automatically update the value in your database when v-model is triggered.
+
+```vue
+<template>
+    <input type="checkbox" v-model="$setting.dark_mode" />
+</template>
+```
+
 ## Loading
 
 To increase performance, we don't share every setting with the frontend on every page. Instead, we only load the settings that are actually needed by you.
