@@ -80,6 +80,14 @@ The `$settings` property contains a set of functions to help you work with setti
 </script>
 ```
 
+If you're working with an input that uses v-model, you can use the setting directly. This will automatically update the value in your database.
+
+```vue
+<template>
+    <input type="checkbox" v-model="$setting.dark_mode" />
+</template>
+```
+
 ### Setting
 
 To set a setting value you should call `this.$settings.setValue('site_name', 'My new site name')` in your Vue component. You can set multiple at a time by passing through an object of key-value pairs of settings to `this.$settings.setValues()`.
