@@ -1,10 +1,10 @@
 ---
 layout: docs
-title: JavaScript
+title: Vue
 nav_order: 4
 ---
 
-# JavaScript
+# Vue
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,22 +18,19 @@ nav_order: 4
 
 ---
 
-Settings can easily be retrieved in blade templates as normal. If you're using a frontend framework like Vue, you can pass through settings to your root Vue component from your blade template.
+If you're using Vue, we've put together a package to let you access and change settings directly from your components. 
 
-If you use Vue, we've put together a package to make this easier. This allows you to get and set any setting from any Vue component without having to pass it through from parent components.
+## Setup
 
-We currently only support Vue, but let us know if you're interested in using this package with a different framework.
-
-## Vue
-
-### Setup
-
+**Install**
 First you'll need to install the package using npm or yarn.
 
 ```shell
 npm install --save @elbowspaceuk/laravel-settings-vue
+yarn add @elbowspaceuk/laravel-settings-vue
 ```
 
+**Initialise**
 In your `app.js` file, where you create your Vue instance, add the following to initialise the plugin.
 
 ```js
@@ -46,7 +43,20 @@ Vue.use(Settings, {
 ```
 Note you must pass an axios instance to the Settings plugin. This must be ready to make api calls - if you are using the standard Laravel template this is set up for you and bound to `window.axios`, so the above snippet will work.
 
-You should also add the `\Settings\Http\Middleware\ShareSettingsWithJs` middleware to your `web` group in `app/Http/Kernel.php`, and add `@settings` to the head of your base blade template.
+**Eager load settings**
+You should also add the `\Settings\Http\Middleware\ShareSettingsWithJs` middleware to your `web` group in `app/Http/Kernel.php`.
+
+```php
+protected $middlewareGroups = [
+    'web' => [
+        ...
+        \Settings\Http\Middleware\ShareSettingsWithJs::class,
+    ],
+];
+```
+
+**Share settings**
+Finally, add `@settings` to the head of your base blade template.
 
 ```blade
 // layout.blade.php
@@ -56,7 +66,7 @@ You should also add the `\Settings\Http\Middleware\ShareSettingsWithJs` middlewa
 </head>
 ```
 
-### Getting
+## Getting values
 
 From any Vue component, in the template or a method/computed property/watcher, you have access to a `$setting` property and a `$settings` property.
 
@@ -67,7 +77,7 @@ The `$settings` property contains a set of functions to help you work with setti
 ```vue
 <template>
     <div>Your theme is { { $setting.theme } }</div>
-    <div>THrough a computed property it's the same: {{currentTheme}}</div>
+    <div>Through a computed property it's the same: {{currentTheme}}</div>
 </template>
 <script>
     export default {
@@ -80,21 +90,27 @@ The `$settings` property contains a set of functions to help you work with setti
 </script>
 ```
 
-### Setting
+## Setting values
+
+When you set a setting, we make an API call in the background to update the setting on your server. For this to work, you must not have disabled the API in the configuration, and you should ensure API calls can be made using `axios`.
 
 To set a setting value you should call `this.$settings.setValue('site_name', 'My new site name')` in your Vue component. You can set multiple at a time by passing through an object of key-value pairs of settings to `this.$settings.setValues()`.
 
-### Loading
+You can also just set `$setting` directly with `this.$setting.site_name = 'My New Site Name'`.
 
-In order to make your settings available to the frontend, you need to tell laravel settings you want to make use of the setting. This prevents us loading every setting every time which could be slow. There are two ways to share your settings with your Vue component. You can either do it from your component directly, or eager load them by specifying which settings to load in your Laravel app.
+## Loading
 
-#### Loading through JS
+To increase performance, we don't share every setting with the frontend on every page. Instead, we only load the settings that are actually needed by you.
+
+There are two ways to share your settings with your Vue component. You can either do it from your component directly, or eager load them by specifying which settings to load in your Laravel app.
+
+### Loading through JS
 
 Before you can make use of a setting, call `this.$settings.loadSetting('theme')` and pass it the setting key or alias to load. This will be loaded in the background. During loading `this.$setting.theme` will be undefined, but once the setting is ready it will reactively update to the value.
 
 You can load many settings at the same time with `this.$settings.loadSettings(['theme', 'site_name'])`.
 
-#### Eager Loading
+### Eager Loading
 
 To avoid the overhead of loading settings from your javascript, you should try and mark settings to share in your laravel app. Any settings loaded this way will be instantly available without having to load them with `loadSettings()`
 
