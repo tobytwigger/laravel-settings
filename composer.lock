@@ -6679,23 +6679,23 @@
         },
         {
             "name": "orchestra/testbench",
-            "version": "v7.0.1",
+            "version": "v7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/testbench.git",
-                "reference": "9b0df08ef283ce78e4d40edf20c3b3194a58fd2a"
+                "reference": "5d051afc1eb6e3dc4b0f67404e02349e3ae56910"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/testbench/zipball/9b0df08ef283ce78e4d40edf20c3b3194a58fd2a",
-                "reference": "9b0df08ef283ce78e4d40edf20c3b3194a58fd2a",
+                "url": "https://api.github.com/repos/orchestral/testbench/zipball/5d051afc1eb6e3dc4b0f67404e02349e3ae56910",
+                "reference": "5d051afc1eb6e3dc4b0f67404e02349e3ae56910",
                 "shasum": ""
             },
             "require": {
                 "fakerphp/faker": "^1.9.2",
                 "laravel/framework": "^9.0",
                 "mockery/mockery": "^1.4.4",
-                "orchestra/testbench-core": "^7.0.1",
+                "orchestra/testbench-core": "^7.0.2",
                 "php": "^8.0",
                 "phpunit/phpunit": "^9.5.10",
                 "spatie/laravel-ray": "^1.28",
@@ -6732,7 +6732,7 @@
             ],
             "support": {
                 "issues": "https://github.com/orchestral/testbench/issues",
-                "source": "https://github.com/orchestral/testbench/tree/v7.0.1"
+                "source": "https://github.com/orchestral/testbench/tree/v7.0.2"
             },
             "funding": [
                 {
@@ -6744,20 +6744,20 @@
                     "type": "liberapay"
                 }
             ],
-            "time": "2022-02-14T06:22:02+00:00"
+            "time": "2022-02-16T00:55:11+00:00"
         },
         {
             "name": "orchestra/testbench-core",
-            "version": "v7.0.1",
+            "version": "v7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/testbench-core.git",
-                "reference": "c28b819c77c5dbf4a94196ffce7dc2ff61a28899"
+                "reference": "06fc0055c3e99f469f9f4fa346b7d677974f8fef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/c28b819c77c5dbf4a94196ffce7dc2ff61a28899",
-                "reference": "c28b819c77c5dbf4a94196ffce7dc2ff61a28899",
+                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/06fc0055c3e99f469f9f4fa346b7d677974f8fef",
+                "reference": "06fc0055c3e99f469f9f4fa346b7d677974f8fef",
                 "shasum": ""
             },
             "require": {
@@ -6836,7 +6836,7 @@
                     "type": "liberapay"
                 }
             ],
-            "time": "2022-02-14T05:57:44+00:00"
+            "time": "2022-02-16T00:42:51+00:00"
         },
         {
             "name": "pimple/pimple",
