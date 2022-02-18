@@ -4,6 +4,7 @@ namespace Settings\Tests\Unit\Collection;
 
 use FormSchema\Schema\Form;
 use Settings\Collection\SettingCollection;
+use Settings\Setting;
 use Settings\Store\Query;
 use Settings\Tests\TestCase;
 use Settings\Tests\Traits\CreatesSettings;
@@ -36,9 +37,9 @@ class SettingCollectionTest extends TestCase
 
     /** @test */
     public function toForm_converts_a_search_to_a_form(){
-        $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2']);
-        $setting2 = $this->createSetting('key2', 'val2', 'string', true, 1, ['group1', 'group3']);
-        $setting3 = $this->createSetting('key3', 'val3', 'string', true, null, ['group2', 'group3']);
+        $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2'], fieldOptions: \FormSchema\Generator\Field::textInput('key1')->setValue('val1'));
+        $setting2 = $this->createSetting('key2', 'val2', 'string', true, 1, ['group1', 'group3'], fieldOptions: \FormSchema\Generator\Field::textInput('key2')->setValue('val2'));
+        $setting3 = $this->createSetting('key3', 'val3', 'string', true, null, ['group2', 'group3'], fieldOptions: \FormSchema\Generator\Field::textInput('key3')->setValue('val3'));
 
         \Settings\Setting::setValue('key2', 'val2-updated');
         \Settings\Setting::setValue('key3', 'val3-updated');
@@ -91,6 +92,30 @@ class SettingCollectionTest extends TestCase
         $form = (new SettingCollection([$setting1]))->toForm();
         $this->assertInstanceOf(Form::class, $form);
         $this->assertEquals('success', $form->getTitle());
+
+        SettingCollection::$convertToFormUsing = null;
+    }
+
+    /** @test */
+    public function toForm_ignores_settings_without_a_field(){
+        $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2'], fieldOptions: \FormSchema\Generator\Field::textInput('key1')->setValue('val1'));
+        $setting2 = $this->createSetting('key2', 'val2', 'string', true, 1, ['group1', 'group3']);
+        $setting3 = $this->createSetting('key3', 'val3', 'string', true, null, ['group2', 'group3'], fieldOptions: \FormSchema\Generator\Field::textInput('key3')->setValue('val3'));
+
+        \Settings\Setting::setValue('key2', 'val2-updated');
+        \Settings\Setting::setValue('key3', 'val3-updated');
+
+        $form = (new SettingCollection([$setting1, $setting2, $setting3]))->toForm();
+
+        $this->assertInstanceOf(Form::class, $form);
+        $this->assertCount(2, $form->groups());
+
+        $this->assertCount(1, $form->groups()[0]->fields());
+        $this->assertEquals('key1', $form->groups()[0]->fields()[0]->getId());
+
+        $this->assertCount(1, $form->groups()[1]->fields());
+        $this->assertEquals('key3', $form->groups()[1]->fields()[0]->getId());
+
     }
 
 }

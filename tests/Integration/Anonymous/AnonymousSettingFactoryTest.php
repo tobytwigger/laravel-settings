@@ -145,5 +145,32 @@ class AnonymousSettingFactoryTest extends TestCase
         $this->assertEquals('Some Random Type', $setting->type());
         $this->assertEquals(5, $setting->resolveId());
     }
+
+    /** @test */
+    public function it_makes_an_anonymous_setting_with_a_null_field()
+    {
+        AnonymousSettingFactory::mapType('customType', fn() => 1);
+
+        $setting = AnonymousSettingFactory::make(
+            'customType',
+            'key1',
+            'Default Val',
+            null,
+            ['group1', 'group2'],
+            'string'
+        );
+
+        $this->assertCount(0, \Settings\Setting::search()->get());
+
+        $this->assertInstanceOf(AnonymousSetting::class, $setting);
+        $this->assertEquals('key1', $setting->key());
+        $this->assertEquals('customType', $setting->type());
+        $this->assertEquals('string', $setting->rules());
+        $this->assertNull($setting->fieldOptions());
+        $this->assertEquals('Default Val', $setting->defaultValue());
+        $this->assertEquals(['group1', 'group2'], $setting->getGroups());
+        $this->assertEquals(1, $setting->resolveId());
+        $this->assertEquals('customType', $setting->type());
+    }
 }
 

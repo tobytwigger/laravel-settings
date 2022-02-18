@@ -116,14 +116,14 @@ class SettingsServiceProvider extends ServiceProvider
             if(is_string($setting)) {
                 Setting::register(app($setting));
             } elseif(is_array($setting)) {
-                if(!Arr::has($setting, ['type', 'key', 'defaultValue', 'fieldOptions'])) {
+                if(!Arr::has($setting, ['type', 'key', 'defaultValue'])) {
                     throw new \Exception(sprintf('Setting [%s] does not have type, key, defaultValue and fieldOptions defined in config', json_encode($setting)));
                 }
                 Setting::create(
                     $setting['type'],
                     $setting['key'],
                     $setting['defaultValue'],
-                    unserialize($setting['fieldOptions']),
+                    $setting['fieldOptions'] !== null ? unserialize($setting['fieldOptions']) : null,
                     $setting['groups'] ?? [],
                     $setting['rules'] ?? []
                 );

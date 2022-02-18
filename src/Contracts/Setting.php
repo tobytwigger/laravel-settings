@@ -23,9 +23,12 @@ abstract class Setting
     /**
      * The field schema to show the user when editing the value.
      *
-     * @return Field
+     * @return ?Field
      */
-    abstract public function fieldOptions(): Field;
+    public function fieldOptions(): ?Field
+    {
+        return null;
+    }
 
     public function shouldEncrypt(): bool
     {

@@ -143,17 +143,17 @@ class SettingService implements SettingServiceContract
         return $this->settingStore;
     }
 
-    public function create(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting
+    public function create(string $type, string $key, mixed $defaultValue, ?Field $fieldOptions = null, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting
     {
         return AnonymousSettingFactory::anonymous($type, $key, $defaultValue, $fieldOptions, $groups, $rules, $resolveIdUsing);
     }
 
-    public function createUser(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting
+    public function createUser(string $key, mixed $defaultValue, ?Field $fieldOptions = null, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting
     {
         return AnonymousSettingFactory::anonymous('user', $key, $defaultValue, $fieldOptions, $groups, $rules, $resolveIdUsing);
     }
 
-    public function createGlobal(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting
+    public function createGlobal(string $key, mixed $defaultValue, ?Field $fieldOptions = null, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting
     {
         return AnonymousSettingFactory::anonymous('global', $key, $defaultValue, $fieldOptions, $groups, $rules, $resolveIdUsing);
     }
