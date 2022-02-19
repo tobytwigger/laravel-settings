@@ -39,6 +39,7 @@ class SettingCollection extends Collection
                     }
                 }
                 $settingCollection->map(fn(Setting $setting) => $setting->fieldOptions())
+                    ->filter(fn(?Field $field) => $field !== null)
                     ->each(fn(Field $field) => $group->addField($field));
                 return $group;
             })

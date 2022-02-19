@@ -67,11 +67,11 @@ interface SettingService extends CreatesQuery
      */
     public function getSettingByKey(string $key): Setting;
 
-    public function create(string $type, string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting;
+    public function create(string $type, string $key, mixed $defaultValue, ?Field $fieldOptions = null, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting;
 
-    public function createUser(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting;
+    public function createUser(string $key, mixed $defaultValue, ?Field $fieldOptions = null, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting;
 
-    public function createGlobal(string $key, mixed $defaultValue, Field $fieldOptions, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting;
+    public function createGlobal(string $key, mixed $defaultValue, ?Field $fieldOptions = null, array $groups = ['default'], array|string $rules = [], ?\Closure $resolveIdUsing = null): Setting;
 
     public function loadSetting(string $key): void;
 

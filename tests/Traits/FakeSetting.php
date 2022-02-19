@@ -20,8 +20,9 @@ class FakeSetting extends Setting
     private bool $canWrite;
     private bool $canRead;
     public ?string $alias = null;
+    private ?Field $fieldOptions;
 
-    public function __construct(string $key, mixed $defaultValue, array|string $rules = [], bool $shouldEncrypt = true, ?int $resolveId = null, array $groups = [], string $type = GlobalSetting::class, bool $canRead = true, bool $canWrite = true)
+    public function __construct(string $key, mixed $defaultValue, array|string $rules = [], bool $shouldEncrypt = true, ?int $resolveId = null, array $groups = [], string $type = GlobalSetting::class, bool $canRead = true, bool $canWrite = true, ?Field $fieldOptions = null)
     {
         $this->key = $key;
         $this->rules = $rules;
@@ -32,6 +33,7 @@ class FakeSetting extends Setting
         $this->type = $type;
         $this->canWrite = $canWrite;
         $this->canRead = $canRead;
+        $this->fieldOptions = $fieldOptions;
     }
 
     public function alias(): ?string
@@ -69,10 +71,9 @@ class FakeSetting extends Setting
         return $this->groups;
     }
 
-    public function fieldOptions(): Field
+    public function fieldOptions(): ?Field
     {
-       return \FormSchema\Generator\Field::textInput($this->key())
-           ->setValue($this->defaultValue());
+       return $this->fieldOptions;
     }
 
     public function validator($value): Validator

@@ -108,19 +108,7 @@ If you're working with an input that uses v-model, you can use the setting direc
 
 ## Loading
 
-To increase performance, we don't share every setting with the frontend on every page. Instead, we only load the settings that are actually needed by you.
-
-There are two ways to share your settings with your Vue component. You can either do it from your component directly, or eager load them by specifying which settings to load in your Laravel app.
-
-### Loading through JS
-
-Before you can make use of a setting, call `this.$settings.loadSetting('theme')` and pass it the setting key or alias to load. This will be loaded in the background. During loading `this.$setting.theme` will be undefined, but once the setting is ready it will reactively update to the value.
-
-You can load many settings at the same time with `this.$settings.loadSettings(['theme', 'site_name'])`.
-
-### Eager Loading
-
-To avoid the overhead of loading settings from your javascript, you should try and mark settings to share in your laravel app. Any settings loaded this way will be instantly available without having to load them with `loadSettings()`
+To avoid the overhead of loading settings from your javascript you can eager load settings you know you'll be using. Any settings loaded this way will be instantly available without additional API calls.
 
 For settings that should be loaded on every request, such as a site name, you can put them into the config
 

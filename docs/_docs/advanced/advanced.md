@@ -1,11 +1,11 @@
 ---
 layout: docs 
 title: Advanced
-nav_order: 6
+nav_order: 7
 has_children: true
 ---
 
-# Laravel Settings
+# Advanced
 
 {: .no_toc }
 

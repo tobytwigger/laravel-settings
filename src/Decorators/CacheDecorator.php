@@ -31,7 +31,7 @@ class CacheDecorator implements PersistedSettingRepository
         return md5($key);
     }
 
-    private function ttl(): int
+    private function ttl(): ?int
     {
         return config('laravel-settings.cache.ttl', 3600);
     }

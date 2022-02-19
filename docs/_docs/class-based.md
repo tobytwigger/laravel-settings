@@ -4,7 +4,7 @@ title: Class-based Settings
 nav_order: 3
 ---
 
-# Class-based Settings
+# Class-Based Settings
 
 {: .no_toc }
 
@@ -48,17 +48,6 @@ class SiteName extends GlobalSetting
     public function defaultValue()
     {
         return 'My Site Name';
-    }
-
-    /**
-     * The field schema to show the user when editing the value.
-     *
-     * @throws \Exception
-     * @return Field
-     */
-    public function fieldOptions(): \FormSchema\Schema\Field
-    {
-        return \FormSchema\Generator\Field::textInput($this->key())->setValue($this->defaultValue());
     }
 
     /**
@@ -145,7 +134,7 @@ When using anonymous settings, hardcode the key and value and just pass the resu
 
 ```php
     // app/Settings/Class.php
-    public function fieldOptions(): \FormSchema\Schema\Field
+    public function fieldOptions(): ?\FormSchema\Schema\Field
     {
         return \FormSchema\Generator\Field::textInput($this->key())->setValue($this->defaultValue());
     }
@@ -155,7 +144,7 @@ When using anonymous settings, hardcode the key and value and just pass the resu
 
 ```
 
-Fields are currently a required property of any setting, to allow you to dynamically create setting pages.
+If you omit this function, or this function returns null, your setting will not show up in automatically generated forms but it can be used everywhere else. This is recommended if you do not plan on using the form scheme generator elsewhere.
 
 ### Validation
 
