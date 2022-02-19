@@ -29,7 +29,17 @@ echo \Settings\Setting::getValue('dark_mode'); // true
 ```vue
 <template>
     <div :class="{'dark-mode': $setting.dark_mode}"></div>
+    <button @click="toggleDarkMode">Toggle</button>
 </template>
+<script>
+    export default {
+        methods: {
+            toggleDarkMode() {
+                this.$setting.dark_mode = !this.$setting.dark_mode;
+            }
+        }
+    }
+</script>
 ```
 
 ## Documentation
