@@ -3,9 +3,18 @@
     "description": "Settings for Laravel",
     "type": "library",
     "keywords": [
-        "laravel",
+        "config",
+        "open-source",
+        "php",
         "settings",
-        "config"
+        "vuejs",
+        "laravel",
+        "database",
+        "vue",
+        "persistence",
+        "configuration",
+        "settings-storage",
+        "settings-repository"
     ],
     "license": "MIT",
     "homepage": "https://github.com/ElbowSpaceUK/laravel-settings",
