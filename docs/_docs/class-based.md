@@ -4,7 +4,7 @@ title: Class-based Settings
 nav_order: 3
 ---
 
-# Class-based Settings
+# Class-Based Settings
 
 {: .no_toc }
 

@@ -11,8 +11,8 @@ return [
      * Config related to the caching of settings
      */
     'cache' => [
-        // How long, in seconds, to cache a setting value for.
-        'ttl' => 3600
+        // How long, in seconds, to cache a setting value for. Null will cache forever.
+        'ttl' => null
     ],
 
     /*

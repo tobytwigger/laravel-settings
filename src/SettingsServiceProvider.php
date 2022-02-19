@@ -123,7 +123,7 @@ class SettingsServiceProvider extends ServiceProvider
                     $setting['type'],
                     $setting['key'],
                     $setting['defaultValue'],
-                    $setting['fieldOptions'] !== null ? unserialize($setting['fieldOptions']) : null,
+                    (isset($setting['fieldOptions']) && $setting['fieldOptions'] !== null) ? unserialize($setting['fieldOptions']) : null,
                     $setting['groups'] ?? [],
                     $setting['rules'] ?? []
                 );

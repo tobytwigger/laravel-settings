@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Made forms optional
+- Let you put `null` for cache ttl to cache forever
 
 ## [v1.0.3] - 2022-02-15
 
