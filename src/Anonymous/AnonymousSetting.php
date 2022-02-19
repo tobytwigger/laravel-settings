@@ -17,7 +17,7 @@ class AnonymousSetting extends Setting
 
     private mixed $defaultValue;
 
-    private Field $fieldOptions;
+    private ?Field $fieldOptions;
 
     private string|array $rules;
 
@@ -26,7 +26,7 @@ class AnonymousSetting extends Setting
      */
     private array $groups;
 
-    public function __construct(string $type, string $key, mixed $defaultValue, \Closure $resolveIdUsing, Field $fieldOptions, array $groups = ['default'], array|string $rules = [])
+    public function __construct(string $type, string $key, mixed $defaultValue, \Closure $resolveIdUsing, ?Field $fieldOptions = null, array $groups = ['default'], array|string $rules = [])
     {
         $this->type = $type;
         $this->key = $key;
@@ -52,7 +52,7 @@ class AnonymousSetting extends Setting
         return $this->defaultValue;
     }
 
-    public function fieldOptions(): Field
+    public function fieldOptions(): ?Field
     {
         return $this->fieldOptions;
     }
