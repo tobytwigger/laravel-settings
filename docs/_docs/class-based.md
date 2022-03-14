@@ -65,7 +65,7 @@ class SiteName extends GlobalSetting
     /**
      * @return array
      */
-    public static function group(): array
+    public static function groups(): array
     {
         return ['branding', 'appearance'];
     }
@@ -166,7 +166,7 @@ Groups are a way to order settings to the user. By grouping together similar set
 The `group` function should return an array of groups the setting is in. When retrieving a form schema to represent settings, the first group will be taken as the 'main' group.
 
 ```php
-    public function group(): array
+    public function groups(): array
     {
         return ['branding', 'appearance'];
     }
