@@ -1,5 +1,5 @@
 {
-    "name": "elbowspaceuk/laravel-settings",
+    "name": "tobytwigger/laravel-settings",
     "description": "Settings for Laravel",
     "type": "library",
     "keywords": [
@@ -17,8 +17,8 @@
         "settings-repository"
     ],
     "license": "MIT",
-    "homepage": "https://github.com/ElbowSpaceUK/laravel-settings",
-    "readme": "https://github.com/ElbowSpaceUK/laravel-settings/blob/master/README.md",
+    "homepage": "https://github.com/tobytwigger/laravel-settings",
+    "readme": "https://github.com/tobytwigger/laravel-settings/blob/master/README.md",
     "authors": [
         {
             "name": "Toby Twigger",
@@ -28,8 +28,8 @@
     ],
     "support": {
         "email": "tobytwigger1@gmail.com",
-        "issues":"https://github.com/ElbowSpaceUK/laravel-settings/issues",
-        "docs":"https://elbowspaceuk.github.io/laravel-settings/"
+        "issues":"https://github.com/tobytwigger/laravel-settings/issues",
+        "docs":"https://tobytwigger.github.io/laravel-settings/"
     },
     "funding": [
         {

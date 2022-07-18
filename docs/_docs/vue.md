@@ -26,8 +26,8 @@ If you're using Vue, we've put together a package to let you access and change s
 First you'll need to install the package using npm or yarn.
 
 ```shell
-npm install --save @elbowspaceuk/laravel-settings-vue
-yarn add @elbowspaceuk/laravel-settings-vue
+npm install --save @tobytwigger/laravel-settings-vue
+yarn add @tobytwigger/laravel-settings-vue
 ```
 
 **Initialise**
@@ -35,7 +35,7 @@ In your `app.js` file, where you create your Vue instance, add the following to 
 
 ```js
 // app.js
-import Settings from '@elbowspaceuk/laravel-settings-vue';
+import Settings from '@tobytwigger/laravel-settings-vue';
 
 Vue.use(Settings, {
     axios: axios
