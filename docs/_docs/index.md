@@ -34,7 +34,7 @@ Laravel Settings provides simple but flexible settings to any Laravel app.
 All you need to do to use this project is pull it into an existing Laravel app using composer.
 
 ```console
-composer require elbowspaceuk/laravel-settings
+composer require tobytwigger/laravel-settings
 ```
 
 You can publish the configuration file by running
