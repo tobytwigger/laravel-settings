@@ -1,8 +1,8 @@
 # Laravel Settings
 > Powerful and feature rich settings for Laravel.
 
-[![Latest Version](https://img.shields.io/github/v/release/ElbowSpaceUK/laravel-settings?label=Latest%20Version&sort=semver&style=plastic)](https://github.com/ElbowSpaceUK/laravel-settings/releases)
-[![Build](https://github.com/ElbowSpaceUK/laravel-settings/actions/workflows/build-status.yml/badge.svg?branch=develop)](https://github.com/ElbowSpaceUK/laravel-settings/actions/workflows/build-status.yml)
+[![Latest Version](https://img.shields.io/github/v/release/tobytwigger/laravel-settings?label=Latest%20Version&sort=semver&style=plastic)](https://github.com/tobytwigger/laravel-settings/releases)
+[![Build](https://github.com/tobytwigger/laravel-settings/actions/workflows/build-status.yml/badge.svg?branch=develop)](https://github.com/tobytwigger/laravel-settings/actions/workflows/build-status.yml)
 
 ## Contents
 
