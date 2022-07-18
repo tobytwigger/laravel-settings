@@ -46,7 +46,7 @@ echo \Settings\Setting::getValue('dark_mode'); // true
 
 We've taken care over documenting everything you'll need to get started and use Laravel settings fully.
 
-[Check out the docs](https://elbowspaceuk.github.io/laravel-settings) on our documentation site.
+[Check out the docs](https://tobytwigger.github.io/laravel-settings) on our documentation site.
 
 [comment]: <> (To build them locally, you'll need to have ruby &#40;we'd recommend using rbenv&#41; and the gem bundler &#40;https://bundler.io/&#41; installed. Run `bundle install && bundle exec jekyll serve` in the docs folder.)
 
