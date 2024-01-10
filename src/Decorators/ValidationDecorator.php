@@ -37,10 +37,7 @@ class ValidationDecorator extends BaseSettingServiceDecorator
     private function validateValue(string $key, mixed $value)
     {
         $setting = $this->settingStore->getByKey($key);
-        $validator = Validator::make(
-            ['setting' => $value],
-            ['setting' => $setting->rules()]
-        );
+        $validator = $setting->validator($value);
         $validator->validate();
     }
 

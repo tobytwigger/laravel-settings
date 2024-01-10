@@ -39,7 +39,7 @@
     ],
     "require": {
         "laravel/framework": "^8.0|^9.0|^10.0",
-        "php": "^8.0",
+        "php": "^8.1",
         "tobytwigger/form-schema-generator": "^3.0"
     },
     "require-dev": {
