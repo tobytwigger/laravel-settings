@@ -84,7 +84,7 @@ class UpdateSettingControllerTest extends TestCase
         ]);
         $response->assertStatus(422);
         $response->assertJsonValidationErrors([
-            'settings' => ['The settings must be an array.']
+            'settings' => ['The settings field must be an array.']
         ]);
         $this->assertEquals('My Site Name', Setting::getValue('siteName'));
     }
@@ -120,7 +120,7 @@ class UpdateSettingControllerTest extends TestCase
         ]);
         $response->assertStatus(422);
         $response->assertJsonValidationErrors([
-            'siteName' => ['The site name must be a string.'],
+            'siteName' => ['The site name field must be a string.'],
         ]);
         $this->assertEquals('My Site Name', Setting::getValue('siteName'));
     }
@@ -140,9 +140,9 @@ class UpdateSettingControllerTest extends TestCase
         ]);
         $response->assertStatus(422);
         $response->assertJsonValidationErrors([
-            'siteName' => ['The site name must be a string.'],
-            'siteNameTwo' => ['The site name two must be an array.'],
-            'siteNameThree' => ['The site name three must be at least 3 characters.']
+            'siteName' => ['The site name field must be a string.'],
+            'siteNameTwo' => ['The site name two field must be an array.'],
+            'siteNameThree' => ['The site name three field must be at least 3 characters.']
         ]);
         $this->assertEquals('My Site Name', Setting::getValue('siteName'));
     }
