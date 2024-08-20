@@ -45,7 +45,7 @@ class GetSettingControllerTest extends TestCase
         $response = $this->getJson(route('settings.get', ['settings' => 'not an array']));
         $response->assertStatus(422);
         $response->assertJsonValidationErrors([
-            'settings' => ['The settings must be an array.']
+            'settings' => ['The settings field must be an array.']
         ]);
     }
 
