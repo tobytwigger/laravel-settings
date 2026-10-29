@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for Laravel 13 and PHP 8.4 / 8.5
 
 ### Changed
+- Dropped support for Laravel 10 and 11
 - Tests now run on PHPUnit 10.5+ (using `#[Test]` attributes) and ParaTest 7
 
 ## [1.0.5] - 2022-07-18
