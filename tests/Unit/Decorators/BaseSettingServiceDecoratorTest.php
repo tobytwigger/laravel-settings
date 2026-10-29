@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Decorators;
 
 use FormSchema\Generator\Field;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Anonymous\AnonymousSetting;
 use Settings\Contracts\Setting;
 use Settings\Contracts\SettingService;
@@ -31,7 +32,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         return $this->baseService->reveal();
     }
 
-    /** @test */
+    #[Test]
     public function withGroup_proxies_the_underlying_service()
     {
         $this->baseService->withGroup('GroupName')->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
@@ -39,7 +40,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->withGroup('GroupName');
     }
 
-    /** @test */
+    #[Test]
     public function withAnyGroups_proxies_the_underlying_service()
     {
         $this->baseService->withAnyGroup(['group1', 'group2'])->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
@@ -47,7 +48,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->withAnyGroup(['group1', 'group2']);
     }
 
-    /** @test */
+    #[Test]
     public function withAllGroups_proxies_the_underlying_service()
     {
         $this->baseService->withAllGroups(['group1', 'group2'])->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
@@ -55,7 +56,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->withAllGroups(['group1', 'group2']);
     }
 
-    /** @test */
+    #[Test]
     public function withType_proxies_the_underlying_service()
     {
         $this->baseService->withType('Type1')->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
@@ -63,7 +64,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->withType('Type1');
     }
 
-    /** @test */
+    #[Test]
     public function withGlobalType_proxies_the_underlying_service()
     {
         $this->baseService->withGlobalType()->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
@@ -71,7 +72,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->withGlobalType();
     }
 
-    /** @test */
+    #[Test]
     public function withUserType_proxies_the_underlying_service()
     {
         $this->baseService->withUserType()->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
@@ -79,7 +80,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->withUserType();
     }
 
-    /** @test */
+    #[Test]
     public function search_proxies_the_underlying_service()
     {
         $this->baseService->search()->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
@@ -87,7 +88,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->search();
     }
 
-    /** @test */
+    #[Test]
     public function alias_proxies_the_underlying_service()
     {
         $this->baseService->alias('alias', 'key')->shouldBeCalled();
@@ -95,7 +96,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->alias('alias', 'key');
     }
 
-    /** @test */
+    #[Test]
     public function store_proxies_the_underlying_service()
     {
         $this->baseService->store()->shouldBeCalled()->willReturn($this->prophesize(SettingStore::class)->reveal());
@@ -103,7 +104,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->store();
     }
 
-    /** @test */
+    #[Test]
     public function register_proxies_the_underlying_service()
     {
         $this->baseService->register([], ['group1'])->shouldBeCalled();
@@ -111,7 +112,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->register([], ['group1']);
     }
 
-    /** @test */
+    #[Test]
     public function registerGroup_proxies_the_underlying_service()
     {
         $this->baseService->registerGroup('key', 'title', 'subtitle')->shouldBeCalled();
@@ -119,7 +120,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->registerGroup('key', 'title', 'subtitle');
     }
 
-    /** @test */
+    #[Test]
     public function getValue_proxies_the_underlying_service()
     {
         $this->baseService->getValue('key', 2)->shouldBeCalled()->willReturn($this->prophesize(Query::class)->reveal());
@@ -127,7 +128,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->getValue('key', 2);
     }
 
-    /** @test */
+    #[Test]
     public function setDefaultValue_proxies_the_underlying_service()
     {
         $this->baseService->setDefaultValue('key1', 1)->shouldBeCalled();
@@ -135,7 +136,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->setDefaultValue('key1', 1);
     }
 
-    /** @test */
+    #[Test]
     public function setValue_proxies_the_underlying_service()
     {
         $this->baseService->setValue('key3', 'test', 1)->shouldBeCalled();
@@ -143,7 +144,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->setValue('key3', 'test', 1);
     }
 
-    /** @test */
+    #[Test]
     public function getSettingByKey_proxies_the_underlying_service()
     {
         $this->baseService->getSettingByKey('key4')->shouldBeCalled()->willReturn($this->prophesize(Setting::class)->reveal());
@@ -151,7 +152,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->getSettingByKey('key4');
     }
 
-    /** @test */
+    #[Test]
     public function create_proxies_the_underlying_service()
     {
         $this->baseService->create('customType', 'key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null)->shouldBeCalled()->willReturn($this->prophesize(AnonymousSetting::class)->reveal());
@@ -159,7 +160,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->create('customType', 'key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null);
     }
 
-    /** @test */
+    #[Test]
     public function createUser_proxies_the_underlying_service()
     {
         $this->baseService->createUser('key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null)->shouldBeCalled()->willReturn($this->prophesize(AnonymousSetting::class)->reveal());
@@ -167,7 +168,7 @@ class BaseSettingServiceDecoratorTest extends TestCase
         $decorator->createUser('key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null);
     }
 
-    /** @test */
+    #[Test]
     public function createGlobal_proxies_the_underlying_service()
     {
         $this->baseService->createGlobal('key3', 'val1', Field::text('key3'), ['group3', 'group1'], 'string', null)->shouldBeCalled()->willReturn($this->prophesize(AnonymousSetting::class)->reveal());

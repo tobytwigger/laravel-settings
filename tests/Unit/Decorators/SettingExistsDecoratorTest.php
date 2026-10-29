@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Decorators;
 
 use Settings\Contracts\SettingService;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Contracts\SettingStore;
 use Settings\Decorators\AppNotBootedDecorator;
 use Settings\Decorators\SettingExistsDecorator;
@@ -15,7 +16,7 @@ class SettingExistsDecoratorTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_proxies_getValue_if_the_setting_key_exists(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -28,7 +29,7 @@ class SettingExistsDecoratorTest extends TestCase
 
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_setValue_if_the_setting_key_exists(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -40,7 +41,7 @@ class SettingExistsDecoratorTest extends TestCase
         $decorator->setValue('siteName', 'new-value', 1);
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_setDefaultValue_if_the_setting_key_exists(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -52,7 +53,7 @@ class SettingExistsDecoratorTest extends TestCase
         $decorator->setDefaultValue('siteName', 'new-value');
     }
 
-    /** @test */
+    #[Test]
     public function getValue_throws_an_exception_if_the_setting_does_not_exist(){
         $this->expectException(SettingNotRegistered::class);
 
@@ -61,7 +62,7 @@ class SettingExistsDecoratorTest extends TestCase
         $decorator->getValue('siteName', 1);
     }
 
-    /** @test */
+    #[Test]
     public function setValue_throws_an_exception_if_the_setting_does_not_exist(){
         $this->expectException(SettingNotRegistered::class);
 
@@ -70,7 +71,7 @@ class SettingExistsDecoratorTest extends TestCase
         $decorator->setValue('siteName', 'new-value', 1);
     }
 
-    /** @test */
+    #[Test]
     public function setDefaultValue_throws_an_exception_if_the_setting_does_not_exist(){
         $this->expectException(SettingNotRegistered::class);
 

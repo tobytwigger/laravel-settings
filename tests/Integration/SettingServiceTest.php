@@ -3,6 +3,7 @@
 namespace Settings\Tests\Integration;
 
 use Illuminate\Support\Facades\Cache;
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -20,7 +21,7 @@ class SettingServiceTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_gets_the_default_value_of_the_dummy_global_setting()
     {
         $this->createSetting('key1', ['default' => 'value'], ['array'], true, null);
@@ -30,7 +31,7 @@ class SettingServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function the_default_value_can_be_overridden_for_the_dummy_global_setting()
     {
         $setting = $this->createSetting('key1', ['default' => 'value'], ['array'], true, null);
@@ -43,7 +44,7 @@ class SettingServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function the_default_value_can_be_overridden_using_set_value_for_the_dummy_global_setting()
     {
         $setting = $this->createSetting('key1', ['default' => 'value'], ['array'], true, null);
@@ -56,7 +57,7 @@ class SettingServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function settings_can_be_aliased()
     {
         $setting = $this->createSetting('key1', ['default' => 'value'], ['array'], true, null);
@@ -70,7 +71,7 @@ class SettingServiceTest extends TestCase
         $this->assertEquals(['My new value 2'], Setting::getValue('key2'));
     }
 
-    /** @test */
+    #[Test]
     public function a_value_can_be_set_for_a_user_for_a_global_setting()
     {
         $setting = $this->createSetting('key1', ['default' => 'value'], ['array'], true, null);
@@ -91,7 +92,7 @@ class SettingServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function a_value_can_be_set_for_a_user_for_a_model_setting()
     {
         $setting = $this->createSetting('key1', ['default' => 'value'], ['array'], true, 2);
@@ -108,7 +109,7 @@ class SettingServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_if_the_setting_does_not_exist(){
         $this->expectException(SettingNotRegistered::class);
         $this->expectExceptionMessage('Setting [wrong-key] has not been registered.');
@@ -116,7 +117,7 @@ class SettingServiceTest extends TestCase
         Setting::getValue('wrong-key');
     }
 
-    /** @test */
+    #[Test]
     public function it_gets_the_default_value_of_the_dummy_global_setting_through_the_setting()
     {
         $setting = $this->createSetting(FakeSetting::class, ['default' => 'value'], ['array'], true, null);
@@ -127,7 +128,7 @@ class SettingServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function complex_objects_can_be_saved(){
         $settingObject = $this->createSetting('key-object', ['default' => 'value'], [], true, null);
 
@@ -147,7 +148,7 @@ class SettingServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_an_alias_if_the_setting_has_one(){
         $setting1 = $this->createSetting('setting1', 'value1');
         $setting2 = $this->createSetting('setting2', 'value2');

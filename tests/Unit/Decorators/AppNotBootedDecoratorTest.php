@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Decorators;
 
 use Settings\Decorators\AppNotBootedDecorator;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Exceptions\AppNotBooted;
 use Settings\SettingService;
 use Settings\Store\Query;
@@ -13,7 +14,7 @@ class AppNotBootedDecoratorTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_if_the_app_is_not_booted()
     {
         $this->expectException(AppNotBooted::class);
@@ -22,7 +23,7 @@ class AppNotBootedDecoratorTest extends TestCase
         \Settings\Setting::withType('type')->get();
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_throw_an_exception_if_the_app_is_booted()
     {
         AppNotBootedDecorator::$booted = true;
@@ -32,7 +33,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $this->assertCount(0, $val);
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_getValue_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -46,7 +47,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $this->assertEquals('test-value', $decorator->getValue('siteName', 1));
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_setDefaultValue_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -60,7 +61,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $decorator->setDefaultValue('siteName', 'new-value');
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_setValue_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -74,7 +75,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $decorator->setValue('siteName', 'new-value', 1);
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_withGroup_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -88,7 +89,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $this->assertInstanceOf(Query::class, $decorator->withGroup('groupName'));
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_withAnyGroups_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -102,7 +103,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $this->assertInstanceOf(Query::class, $decorator->withAnyGroup(['groupName']));
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_withAllGroups_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -116,7 +117,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $this->assertInstanceOf(Query::class, $decorator->withAllGroups(['groupName']));
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_withType_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -130,7 +131,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $this->assertInstanceOf(Query::class, $decorator->withType('type'));
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_withGlobalType_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -144,7 +145,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $this->assertInstanceOf(Query::class, $decorator->withGlobalType());
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_withUserType_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -158,7 +159,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $this->assertInstanceOf(Query::class, $decorator->withUserType());
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_getSettingByKey_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 
@@ -172,7 +173,7 @@ class AppNotBootedDecoratorTest extends TestCase
         $this->assertEquals($setting, $decorator->getSettingByKey('siteName'));
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_search_if_app_is_booted(){
         AppNotBootedDecorator::$booted = true;
 

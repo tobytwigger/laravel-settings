@@ -3,12 +3,13 @@
 namespace Settings\Tests\Unit\DatabaseSettings;
 
 use Settings\DatabaseSettings\SavedSetting;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Tests\TestCase;
 
 class SavedSettingTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_can_be_created(){
         $data = SavedSetting::factory()->make()->toArray();
 

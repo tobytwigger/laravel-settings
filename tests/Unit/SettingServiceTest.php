@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit;
 
 use FormSchema\Generator\Field;
+use PHPUnit\Framework\Attributes\Test;
 use Prophecy\Argument;
 use Settings\Anonymous\AnonymousSetting;
 use Settings\Anonymous\AnonymousSettingFactory;
@@ -21,7 +22,7 @@ class SettingServiceTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function register_registers_a_setting(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -33,7 +34,7 @@ class SettingServiceTest extends TestCase
         $service->register($setting, ['group1']);
     }
 
-    /** @test */
+    #[Test]
     public function registerGroup_registers_a_group(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -45,7 +46,7 @@ class SettingServiceTest extends TestCase
         $service->registerGroup('group1', 'Group 1', 'Grp 1 Subtitle');
     }
 
-    /** @test */
+    #[Test]
     public function alias_registers_an_alias(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -58,7 +59,7 @@ class SettingServiceTest extends TestCase
     }
 
 
-    /** @test */
+    #[Test]
     public function search_returns_a_new_query(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -66,7 +67,7 @@ class SettingServiceTest extends TestCase
         $this->assertInstanceOf(Query::class, $service->search());
     }
 
-    /** @test */
+    #[Test]
     public function store_returns_the_store_instance(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -76,7 +77,7 @@ class SettingServiceTest extends TestCase
         $this->assertEquals($store->reveal(), $service->store());
     }
 
-    /** @test */
+    #[Test]
     public function getSettingByKey_returns_a_setting_class_by_key(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -84,7 +85,7 @@ class SettingServiceTest extends TestCase
         $this->assertEquals($setting, $service->getSettingByKey('siteName'));
     }
 
-    /** @test */
+    #[Test]
     public function create_returns_a_new_registered_setting(){
         $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class), $this->prophesize(LoadedSettings::class)->reveal());
 
@@ -113,7 +114,7 @@ class SettingServiceTest extends TestCase
         $this->assertEquals('customType', $setting->type());
     }
 
-    /** @test */
+    #[Test]
     public function createUser_returns_a_new_registered_user_setting(){
         $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class), $this->prophesize(LoadedSettings::class)->reveal());
 
@@ -134,7 +135,7 @@ class SettingServiceTest extends TestCase
         $this->assertEquals(4, $setting->resolveId());
     }
 
-    /** @test */
+    #[Test]
     public function createGlobal_returns_a_new_registered_global_setting(){
         $service = new SettingService(app(PersistedSettingRepository::class), app(SettingStore::class), $this->prophesize(LoadedSettings::class)->reveal());
 
@@ -151,7 +152,7 @@ class SettingServiceTest extends TestCase
         $this->assertNull($setting->resolveId());
     }
 
-    /** @test */
+    #[Test]
     public function with_functions_returns_a_new_query(){
         $setting = new SettingService($this->prophesize(PersistedSettingRepository::class)->reveal(), $this->prophesize(SettingStore::class)->reveal(), $this->prophesize(LoadedSettings::class)->reveal());
         $this->assertInstanceOf(Query::class, $setting->withGroup('GroupName'));
@@ -162,7 +163,7 @@ class SettingServiceTest extends TestCase
         $this->assertInstanceOf(Query::class, $setting->withUserType());
     }
 
-    /** @test */
+    #[Test]
     public function loadSettings_loads_settings(){
         $loadSettings = $this->prophesize(LoadedSettings::class);
         $loadSettings->load('setting1')->shouldBeCalled();
@@ -176,7 +177,7 @@ class SettingServiceTest extends TestCase
         $setting->loadSetting('setting1');
     }
 
-    /** @test */
+    #[Test]
     public function loadManySettings_loads_many_settings(){
         $loadSettings = $this->prophesize(LoadedSettings::class);
         $loadSettings->loadMany(['setting1', 'setting2'])->shouldBeCalled();

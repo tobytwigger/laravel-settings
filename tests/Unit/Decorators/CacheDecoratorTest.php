@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Decorators;
 
 use Illuminate\Contracts\Cache\Repository as Cache;
+use PHPUnit\Framework\Attributes\Test;
 use Prophecy\Argument;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\Setting;
@@ -21,7 +22,7 @@ class CacheDecoratorTest extends TestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function it_remembers_a_call_to_getValueWithId(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -35,7 +36,7 @@ class CacheDecoratorTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_changes_key_on_id(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -51,7 +52,7 @@ class CacheDecoratorTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function the_ttl_can_be_controlled_through_config(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -65,7 +66,7 @@ class CacheDecoratorTest extends TestCase
         $decorator->getValueWithId($setting, 5);
     }
 
-    /** @test */
+    #[Test]
     public function it_remembers_a_call_to_getDefaultValue(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -79,7 +80,7 @@ class CacheDecoratorTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_sets_the_new_value_in_cache_when_it_sets_a_new_value(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -93,7 +94,7 @@ class CacheDecoratorTest extends TestCase
         $this->assertEquals('new-value', $decorator->getValueWithId($setting, 5));
     }
 
-    /** @test */
+    #[Test]
     public function it_sets_the_new_default_value_in_cache_when_it_sets_a_new_default_value(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 

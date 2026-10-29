@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Contracts;
 
 use FormSchema\Schema\Field;
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Arr;
 use Settings\Contracts\Setting;
 use Settings\Contracts\SettingService;
@@ -11,7 +12,7 @@ use Settings\Tests\TestCase;
 class SettingTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function shouldEncrypt_returns_the_value_of_the_shouldEncrypt_property_if_set(){
         $setting = new SettingTestDummySetting();
 
@@ -22,7 +23,7 @@ class SettingTest extends TestCase
         $this->assertFalse($setting->shouldEncrypt());
     }
 
-    /** @test */
+    #[Test]
     public function shouldEncrypt_returns_the_config_default_if_the_shouldEncrypt_property_is_null(){
         $setting = new SettingTestDummySetting();
 
@@ -34,13 +35,13 @@ class SettingTest extends TestCase
         $this->assertFalse($setting->shouldEncrypt());
     }
 
-    /** @test */
+    #[Test]
     public function key_returns_the_name_of_the_extending_class(){
         $setting = new SettingTestDummySetting();
         $this->assertEquals(SettingTestDummySetting::class, $setting->key());
     }
 
-    /** @test */
+    #[Test]
     public function validator_returns_a_validator_with_the_rules_defined(){
         $setting = new SettingTestDummySetting();
         $validator = $setting->validator('test');
@@ -53,7 +54,7 @@ class SettingTest extends TestCase
         $this->assertEquals('test', Arr::first($data));
     }
 
-    /** @test */
+    #[Test]
     public function getValue_calls_the_setting_service_with_a_key(){
         $settingService = $this->prophesize(SettingService::class);
         $settingService->getValue(SettingTestDummySetting::class, 5)->shouldBeCalled()->willReturn('value');
@@ -62,7 +63,7 @@ class SettingTest extends TestCase
         $this->assertEquals('value', SettingTestDummySetting::getValue(5));
     }
 
-    /** @test */
+    #[Test]
     public function setDefaultValue_calls_the_setting_service_with_a_key(){
         $settingService = $this->prophesize(SettingService::class);
         $settingService->setDefaultValue(SettingTestDummySetting::class, 'default-value')->shouldBeCalled();
@@ -71,7 +72,7 @@ class SettingTest extends TestCase
         SettingTestDummySetting::setDefaultValue('default-value');
     }
 
-    /** @test */
+    #[Test]
     public function setValue_calls_the_setting_service_with_a_key(){
         $settingService = $this->prophesize(SettingService::class);
         $settingService->setValue(SettingTestDummySetting::class, 'new-value', 10)->shouldBeCalled();
@@ -80,7 +81,7 @@ class SettingTest extends TestCase
         SettingTestDummySetting::setValue('new-value', 10);
     }
 
-    /** @test */
+    #[Test]
     public function groups_can_be_appended(){
         $setting = new SettingTestDummySetting();
 

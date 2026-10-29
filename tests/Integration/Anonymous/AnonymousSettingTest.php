@@ -3,6 +3,7 @@
 namespace Settings\Tests\Integration\Anonymous;
 
 use FormSchema\Generator\Field;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Anonymous\AnonymousSetting;
 use Settings\DatabaseSettings\SavedSetting;
 use Settings\Setting;
@@ -13,7 +14,7 @@ class AnonymousSettingTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function an_anonymous_setting_can_be_created()
     {
         $setting = new AnonymousSetting(
@@ -38,7 +39,7 @@ class AnonymousSettingTest extends TestCase
         $this->assertEquals('string', $setting->rules());
     }
 
-    /** @test */
+    #[Test]
     public function a_value_can_be_set_and_got_for_an_anonymous_setting()
     {
         $setting = new AnonymousSetting(
@@ -57,7 +58,7 @@ class AnonymousSettingTest extends TestCase
         $this->assertEquals('New Value', \Settings\Setting::getValue('key1'));
     }
 
-    /** @test */
+    #[Test]
     public function a_default_value_can_be_set_and_is_returned(){
         $setting = new AnonymousSetting(
             'customType',
@@ -78,7 +79,7 @@ class AnonymousSettingTest extends TestCase
         $this->assertEquals('New Custom Value', \Settings\Setting::getValue('key1', 1));
     }
 
-    /** @test */
+    #[Test]
     public function the_hardcoded_default_value_is_given_as_default(){
 
         $setting = new AnonymousSetting(
@@ -95,7 +96,7 @@ class AnonymousSettingTest extends TestCase
         $this->assertEquals('Default Val', \Settings\Setting::getValue('key1'));
     }
 
-    /** @test */
+    #[Test]
     public function the_resolveId_correctly_resolves_an_id(){
         $setting = new AnonymousSetting(
             'customType',

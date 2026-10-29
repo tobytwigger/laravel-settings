@@ -3,6 +3,7 @@
 namespace Settings\Tests\Integration\Http\Controllers;
 
 use Illuminate\Support\Facades\Crypt;
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\DB;
 use Settings\DatabaseSettings\SavedSetting;
 use Settings\Setting;
@@ -13,7 +14,7 @@ class UpdateSettingControllerTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_updates_settings(){
         $this->createSetting('siteName', 'My Site Name');
 
@@ -26,7 +27,7 @@ class UpdateSettingControllerTest extends TestCase
         $this->assertEquals('My new site name', Setting::getValue('siteName'));
     }
 
-    /** @test */
+    #[Test]
     public function it_updates_many_settings(){
         $this->createSetting('siteName', 'My Site Name');
         $this->createSetting('mainColour', 'Orange');
@@ -45,7 +46,7 @@ class UpdateSettingControllerTest extends TestCase
         $this->assertEquals('new-settings@example.co.uk', Setting::getValue('mailFrom'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_updated_values(){
         $this->createSetting('siteName', 'My Site Name');
         $this->createSetting('mainColour', 'Orange');
@@ -66,7 +67,7 @@ class UpdateSettingControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_general_structure(){
         $this->createSetting('siteName', 'My Site Name');
 
@@ -89,7 +90,7 @@ class UpdateSettingControllerTest extends TestCase
         $this->assertEquals('My Site Name', Setting::getValue('siteName'));
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_setting_keys(){
         $this->createSetting('siteName', 'My Site Name');
         $this->createSetting('siteNameTwo', 'My Site Name Two');
@@ -109,7 +110,7 @@ class UpdateSettingControllerTest extends TestCase
         $this->assertEquals('My Site Name Two', Setting::getValue('siteNameTwo'));
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_setting_values(){
         $this->createSetting('siteName', 'My Site Name', ['string']);
 
@@ -125,7 +126,7 @@ class UpdateSettingControllerTest extends TestCase
         $this->assertEquals('My Site Name', Setting::getValue('siteName'));
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_multiple_setting_values(){
         $this->createSetting('siteName', 'My Site Name', ['string']);
         $this->createSetting('siteNameTwo', 'My Site Name Two', ['array']);
@@ -147,7 +148,7 @@ class UpdateSettingControllerTest extends TestCase
         $this->assertEquals('My Site Name', Setting::getValue('siteName'));
     }
 
-    /** @test */
+    #[Test]
     public function it_authorizes_if_you_cant_write_to_any_setting(){
         $this->createSetting('siteName', 'My Site Name', canRead: true, canWrite: true);
         $this->createSetting('siteNameTwo', 'My Site Name Two', canRead: true, canWrite: false);
@@ -166,7 +167,7 @@ class UpdateSettingControllerTest extends TestCase
         $this->assertEquals('My Site Name Two', Setting::getValue('siteNameTwo'));
     }
 
-    /** @test */
+    #[Test]
     public function you_can_update_write_only_settings(){
         $this->createSetting('siteName', 'My Site Name', canRead: false, canWrite: true);
         $this->createSetting('siteNameTwo', 'My Site Name Two', canRead: false, canWrite: true);
@@ -183,7 +184,7 @@ class UpdateSettingControllerTest extends TestCase
         $this->assertEquals('My new site name two', Crypt::decrypt(SavedSetting::where('key', 'siteNameTwo')->firstOrFail()->value));
     }
 
-    /** @test */
+    #[Test]
     public function it_authorizes_before_validating(){
         $this->createSetting('siteName', 'My Site Name', ['string'], canRead: false, canWrite: false);
 

@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Decorators;
 
 use Prophecy\Argument;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Contracts\CastsSettingValue;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Decorators\AppNotBootedDecorator;
@@ -17,7 +18,7 @@ class SerializationDecoratorTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_unserializes_a_value_if_retrieved_with_the_id(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -29,7 +30,7 @@ class SerializationDecoratorTest extends TestCase
         $this->assertEquals('test-value', $decorator->getValueWithId($setting, 5));
     }
 
-    /** @test */
+    #[Test]
     public function it_unserializes_a_default_value(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -41,7 +42,7 @@ class SerializationDecoratorTest extends TestCase
         $this->assertEquals('test-value', $decorator->getDefaultValue($setting));
     }
 
-    /** @test */
+    #[Test]
     public function it_serializes_a_value_if_set_with_the_id(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -53,7 +54,7 @@ class SerializationDecoratorTest extends TestCase
         $decorator->setValue($setting, 'new-value', 5);
     }
 
-    /** @test */
+    #[Test]
     public function it_serializes_a_default_value_when_set(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -66,7 +67,7 @@ class SerializationDecoratorTest extends TestCase
 
     }
 
-    /** @test */
+    #[Test]
     public function settings_can_control_serialization(){
         $object = new class {
             public $test = 1;

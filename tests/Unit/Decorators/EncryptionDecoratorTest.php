@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Decorators;
 
 use Illuminate\Support\Facades\Crypt;
+use PHPUnit\Framework\Attributes\Test;
 use Prophecy\Argument;
 use Settings\Contracts\PersistedSettingRepository;
 use Settings\Contracts\Setting;
@@ -16,7 +17,7 @@ class EncryptionDecoratorTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_decrypts_a_value_if_retrieved_with_the_id(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -28,7 +29,7 @@ class EncryptionDecoratorTest extends TestCase
         $this->assertEquals('test-value', $decorator->getValueWithId($setting, 5));
     }
 
-    /** @test */
+    #[Test]
     public function it_decrypts_a_default_value(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -40,7 +41,7 @@ class EncryptionDecoratorTest extends TestCase
         $this->assertEquals('test-value', $decorator->getDefaultValue($setting));
     }
 
-    /** @test */
+    #[Test]
     public function it_encrypts_a_value_if_set_with_the_id(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -52,7 +53,7 @@ class EncryptionDecoratorTest extends TestCase
         $decorator->setValue($setting, 'new-value', 5);
     }
 
-    /** @test */
+    #[Test]
     public function it_encrypts_a_default_value_when_set(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
