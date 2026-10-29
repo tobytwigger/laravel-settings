@@ -3,6 +3,7 @@
 namespace Settings\Tests\Integration\Anonymous;
 
 use FormSchema\Generator\Field;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Anonymous\AnonymousSetting;
 use Settings\Anonymous\AnonymousSettingFactory;
 use Settings\Tests\TestCase;
@@ -12,7 +13,7 @@ class AnonymousSettingFactoryTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_makes_an_anonymous_setting()
     {
         AnonymousSettingFactory::mapType('customType', fn() => 1);
@@ -41,7 +42,7 @@ class AnonymousSettingFactoryTest extends TestCase
         $this->assertEquals('customType', $setting->type());
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_an_anonymous_setting()
     {
         AnonymousSettingFactory::mapType('customType', fn() => 1);
@@ -58,7 +59,7 @@ class AnonymousSettingFactoryTest extends TestCase
         $this->assertCount(1, \Settings\Setting::search()->get());
     }
 
-    /** @test */
+    #[Test]
     public function anonymous_is_an_alias_of_create()
     {
         AnonymousSettingFactory::mapType('customType', fn() => 1);
@@ -75,7 +76,7 @@ class AnonymousSettingFactoryTest extends TestCase
         $this->assertCount(1, \Settings\Setting::search()->get());
     }
 
-    /** @test */
+    #[Test]
     public function the_resolveId_correctly_resolves_an_id(){
         AnonymousSettingFactory::mapType('customType', fn() => 1);
         AnonymousSettingFactory::mapType('customType2', fn() => 10);
@@ -113,7 +114,7 @@ class AnonymousSettingFactoryTest extends TestCase
         $this->assertEquals(null, $setting3->resolveId());
     }
 
-    /** @test */
+    #[Test]
     public function the_resolveId_callback_can_be_overridden_for_an_anonymous_setting(){
         AnonymousSettingFactory::mapType('customType', fn() => 100);
 
@@ -130,7 +131,7 @@ class AnonymousSettingFactoryTest extends TestCase
         $this->assertEquals(200, $setting->resolveId());
     }
 
-    /** @test */
+    #[Test]
     public function when_a_resolveId_resolver_is_given_the_rule_type_does_not_matter(){
         $setting = AnonymousSettingFactory::create(
             'Some Random Type',
@@ -146,7 +147,7 @@ class AnonymousSettingFactoryTest extends TestCase
         $this->assertEquals(5, $setting->resolveId());
     }
 
-    /** @test */
+    #[Test]
     public function it_makes_an_anonymous_setting_with_a_null_field()
     {
         AnonymousSettingFactory::mapType('customType', fn() => 1);

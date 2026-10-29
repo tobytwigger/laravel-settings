@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Decorators;
 
 use Illuminate\Validation\ValidationException;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Contracts\SettingStore;
 use Settings\Decorators\AppNotBootedDecorator;
 use Settings\Decorators\RedirectDynamicCallsDecorator;
@@ -17,7 +18,7 @@ class RedirectDynamicCallsDecoratorTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function get_forwards_the_call_to_get_value_with_arguments(){
         $setting = $this->createSetting('siteName', 'Site Name 1', ['string']);
 
@@ -30,7 +31,7 @@ class RedirectDynamicCallsDecoratorTest extends TestCase
         $this->assertEquals('global-value', $decorator->getSiteName());
     }
 
-    /** @test */
+    #[Test]
     public function set_forwards_the_call_to_set_value_with_arguments(){
         $setting = $this->createSetting('siteName', 'Site Name 1', ['string']);
 
@@ -43,7 +44,7 @@ class RedirectDynamicCallsDecoratorTest extends TestCase
         $decorator->setSiteName('new-global-value');
     }
 
-    /** @test */
+    #[Test]
     public function values_set_through_aliases_still_get_validated(){
         $this->expectException(ValidationException::class);
 
@@ -54,28 +55,28 @@ class RedirectDynamicCallsDecoratorTest extends TestCase
     }
 
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_if_a_setting_is_not_found_on_get(){
         $this->expectException(SettingNotRegistered::class);
 
         Setting::getSiteName();
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_if_a_setting_is_not_found_on_set(){
         $this->expectException(SettingNotRegistered::class);
 
         Setting::setSiteName('value');
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_a_method_call_exception_if_method_isnt_get_or_set(){
         $this->expectException(\BadMethodCallException::class);
 
         Setting::testingUnknownFunction();
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_a_method_call_exception_if_method_is_set_without_a_value(){
         $this->expectException(\BadMethodCallException::class);
 

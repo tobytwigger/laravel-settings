@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Share;
 
 use Illuminate\Contracts\Config\Repository;
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\URL;
 use Settings\Share\ESConfig;
 use Settings\Tests\TestCase;
@@ -10,7 +11,7 @@ use Settings\Tests\TestCase;
 class ESConfigTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_calculates_all_the_config(){
         $repository = $this->prophesize(Repository::class);
         $repository->get('laravel-settings.routes.api.enabled', true)->willReturn(true);

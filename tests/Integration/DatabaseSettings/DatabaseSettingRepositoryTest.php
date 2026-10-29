@@ -3,6 +3,7 @@
 namespace Settings\Tests\Integration\DatabaseSettings;
 
 use Settings\Contracts\Setting;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\DatabaseSettings\DatabaseSettingRepository;
 use Settings\DatabaseSettings\SavedSetting;
 use Settings\Exceptions\PersistedSettingNotFound;
@@ -21,7 +22,7 @@ class DatabaseSettingRepositoryTest extends TestCase
         $this->repository = new DatabaseSettingRepository();
     }
 
-    /** @test */
+    #[Test]
     public function getValueWithId_returns_value_of_the_setting_if_a_setting_is_found(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
         SavedSetting::factory(['key' => 'siteName', 'value' => 'Site Name 2', 'model_id' => 5])->create();
@@ -29,7 +30,7 @@ class DatabaseSettingRepositoryTest extends TestCase
         $this->assertEquals('Site Name 2', $this->repository->getValueWithId($setting, 5));
     }
 
-    /** @test */
+    #[Test]
     public function getValueWithId_throws_an_exception_if_the_setting_is_not_found(){
         $this->expectException(PersistedSettingNotFound::class);
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
@@ -37,7 +38,7 @@ class DatabaseSettingRepositoryTest extends TestCase
         $this->repository->getValueWithId($setting, 5);
     }
 
-    /** @test */
+    #[Test]
     public function getDefaultValue_returns_default_of_the_setting_if_a_setting_is_found(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
         SavedSetting::factory(['key' => 'siteName', 'value' => 'Site Name 2', 'model_id' => null])->create();
@@ -45,7 +46,7 @@ class DatabaseSettingRepositoryTest extends TestCase
         $this->assertEquals('Site Name 2', $this->repository->getDefaultValue($setting));
     }
 
-    /** @test */
+    #[Test]
     public function getDefaultValue_throws_an_exception_if_the_setting_default_is_not_found(){
         $this->expectException(PersistedSettingNotFound::class);
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
@@ -53,7 +54,7 @@ class DatabaseSettingRepositoryTest extends TestCase
         $this->repository->getDefaultValue($setting);
     }
 
-    /** @test */
+    #[Test]
     public function setDefaultValue_creates_a_new_entry_without_a_model_id(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -68,7 +69,7 @@ class DatabaseSettingRepositoryTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function setDefaultValue_updates_an_old_entry_if_it_exists(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -91,7 +92,7 @@ class DatabaseSettingRepositoryTest extends TestCase
 
     }
 
-    /** @test */
+    #[Test]
     public function setValue_creates_a_new_entry_without_a_model_id(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -106,7 +107,7 @@ class DatabaseSettingRepositoryTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function setValue_updates_an_old_entry_if_it_exists(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 

@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Share;
 
 use Settings\Contracts\SettingStore;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Exceptions\SettingNotRegistered;
 use Settings\Share\LoadedSettings;
 use Settings\Tests\TestCase;
@@ -12,7 +13,7 @@ class LoadedSettingsTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function single_settings_can_be_added(){
         $this->createSetting('setting1', 'My Setting One');
         $this->createSetting('setting2', 'My Setting Two');
@@ -29,7 +30,7 @@ class LoadedSettingsTest extends TestCase
         $this->assertEquals(['setting1', 'setting2', 'setting3'], $loaded->getLoadingSettings());
     }
 
-    /** @test */
+    #[Test]
     public function many_settings_can_be_added()
     {
         $this->createSetting('setting1', 'My Setting One');
@@ -51,7 +52,7 @@ class LoadedSettingsTest extends TestCase
         $this->assertEquals(['setting1', 'setting2', 'setting3', 'setting4', 'setting5'], $loaded->getLoadingSettings());
     }
 
-    /** @test */
+    #[Test]
     public function duplicates_are_ignored(){
         $this->createSetting('setting1', 'My Setting One');
         $this->createSetting('setting2', 'My Setting Two');
@@ -73,7 +74,7 @@ class LoadedSettingsTest extends TestCase
         $this->assertEquals(['setting1', 'setting2', 'setting3'], $loaded->getLoadingSettings());
     }
 
-    /** @test */
+    #[Test]
     public function load_throws_an_exception_if_the_setting_key_is_not_found(){
         $this->expectException(SettingNotRegistered::class);
         $this->expectExceptionMessage('Setting [setting3] has not been registered.');
@@ -89,7 +90,7 @@ class LoadedSettingsTest extends TestCase
         $loaded->load('setting3');
     }
 
-    /** @test */
+    #[Test]
     public function loadMany_throws_an_exception_if_the_setting_key_is_not_found(){
         $this->expectException(SettingNotRegistered::class);
         $this->expectExceptionMessage('Setting [setting3] has not been registered.');
@@ -104,7 +105,7 @@ class LoadedSettingsTest extends TestCase
         $loaded->loadMany(['setting3']);
     }
 
-    /** @test */
+    #[Test]
     public function eagerLoad_creates_an_instance_and_loads_the_setting(){
         $this->createSetting('setting1', 'My Setting One');
 

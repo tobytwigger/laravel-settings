@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Store;
 
 use Settings\Collection\SettingCollection;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Setting;
 use Settings\Store\Query;
 use Settings\Tests\TestCase;
@@ -19,19 +20,19 @@ class QueryTest extends TestCase
         return app(static::class);
     }
 
-    /** @test */
+    #[Test]
     public function newQuery_returns_a_new_query_instance()
     {
         $this->assertInstanceOf(Query::class, Query::newQuery());
     }
 
-    /** @test */
+    #[Test]
     public function get_returns_a_collection_instance()
     {
         $this->assertInstanceOf(SettingCollection::class, Query::newQuery()->get());
     }
 
-    /** @test */
+    #[Test]
     public function no_searches_returns_all_settings()
     {
         $setting1 = $this->createSetting('siteName', 'Site Name 1', 'string');
@@ -46,13 +47,13 @@ class QueryTest extends TestCase
         $this->assertEquals($setting3, $collection->shift());
     }
 
-    /** @test */
+    #[Test]
     public function first_returns_null_if_no_settings_registered()
     {
         $this->assertNull(Query::newQuery()->first());
     }
 
-    /** @test */
+    #[Test]
     public function first_returns_the_first_setting_if_settings_found()
     {
         $setting1 = $this->createSetting('siteName', 'Site Name 1', 'string');

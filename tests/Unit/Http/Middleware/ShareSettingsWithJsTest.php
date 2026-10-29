@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Http\Middleware;
 
 use Illuminate\Contracts\Config\Repository;
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Http\Request;
 use Settings\Http\Middleware\ShareSettingsWithJs;
 use Settings\Share\LoadedSettings;
@@ -11,7 +12,7 @@ use Settings\Tests\TestCase;
 class ShareSettingsWithJsTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_shares_settings_from_config(){
         $repository = $this->prophesize(Repository::class);
         $repository->get('laravel-settings.js.autoload', [])->shouldBeCalled()->willReturn([

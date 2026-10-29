@@ -3,6 +3,7 @@
 namespace Settings\Tests\Integration\Decorators;
 
 use Illuminate\Validation\ValidationException;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Setting;
 use Settings\Tests\TestCase;
 use Settings\Tests\Traits\CreatesSettings;
@@ -11,7 +12,7 @@ class RedirectDynamicCallsDecoratorTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function different_setting_casing_works(){
         $setting = $this->createSetting('site-name-one', 'Site Name 1', ['string']);
         $setting = $this->createSetting('SiteNameTwo', 'Site Name 2', ['string']);
@@ -26,7 +27,7 @@ class RedirectDynamicCallsDecoratorTest extends TestCase
         $this->assertEquals('Site Name 5', Setting::getSiteNameFive());
     }
 
-    /** @test */
+    #[Test]
     public function aliases_can_be_set_and_got_from_the_settings_service_using_shorthand(){
         $setting = $this->createSetting('\My\Namespace\SiteName', 'Site Name 1', ['string']);
         Setting::alias('siteName', '\My\Namespace\SiteName');
@@ -38,7 +39,7 @@ class RedirectDynamicCallsDecoratorTest extends TestCase
         $this->assertEquals('SiteName2', Setting::getSiteName());
     }
 
-    /** @test */
+    #[Test]
     public function values_set_through_aliases_still_get_validated(){
         $this->expectException(ValidationException::class);
 

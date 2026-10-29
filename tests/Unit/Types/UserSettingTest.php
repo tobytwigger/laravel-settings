@@ -3,13 +3,14 @@
 namespace Settings\Tests\Unit\Types;
 
 use FormSchema\Schema\Field;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Tests\TestCase;
 use Settings\Types\UserSetting;
 
 class UserSettingTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function resolveId_returns_the_user_id(){
         $guard = $this->prophesize(\Illuminate\Contracts\Auth\Guard::class);
         $guard->id()->shouldBeCalled()->willReturn(4);
@@ -18,12 +19,12 @@ class UserSettingTest extends TestCase
         $this->assertEquals(4, (new UserSettingTestDummySetting())->resolveId());
     }
 
-    /** @test */
+    #[Test]
     public function resolveId_returns_null_if_no_user_is_logged_in(){
         $this->assertNull((new UserSettingTestDummySetting())->resolveId());
     }
 
-    /** @test */
+    #[Test]
     public function resolveId_can_be_overridden(){
         $guard = $this->prophesize(\Illuminate\Contracts\Auth\Guard::class);
         $guard->id()->willReturn(4);
@@ -35,7 +36,7 @@ class UserSettingTest extends TestCase
 
     }
 
-    /** @test */
+    #[Test]
     public function the_type_is_correct()
     {
         $this->assertEquals(UserSetting::class, (new UserSettingTestDummySetting())->type());

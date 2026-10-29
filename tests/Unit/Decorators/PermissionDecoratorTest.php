@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Decorators;
 
 use Settings\Contracts\SettingService;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Contracts\SettingStore;
 use Settings\Decorators\PermissionDecorator;
 use Settings\Exceptions\SettingNotRegistered;
@@ -15,7 +16,7 @@ class PermissionDecoratorTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_proxies_getValue_when_can_read_is_true(){
         $setting = $this->createSetting('siteName', 'Site Name 1 - default', 'string', canRead: true, canWrite: false);
         $baseSetting = $this->prophesize(SettingService::class);
@@ -24,7 +25,7 @@ class PermissionDecoratorTest extends TestCase
         $this->assertEquals('Site Name 1', $decorator->getValue('siteName'));
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_for_getValue_when_can_read_is_false(){
         $this->expectException(SettingUnauthorized::class);
 
@@ -35,7 +36,7 @@ class PermissionDecoratorTest extends TestCase
         $decorator->getValue('siteName');
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_getSettingByKey_when_can_read_is_true(){
         $setting = $this->createSetting('siteName', 'Site Name 1 - default', 'string', canRead: true, canWrite: false);
         $baseSetting = $this->prophesize(SettingService::class);
@@ -44,7 +45,7 @@ class PermissionDecoratorTest extends TestCase
         $this->assertEquals($setting, $decorator->getSettingByKey('siteName'));
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_for_getSettingByKey_when_can_read_is_false(){
         $this->expectException(SettingUnauthorized::class);
 
@@ -55,7 +56,7 @@ class PermissionDecoratorTest extends TestCase
         $decorator->getSettingByKey('siteName');
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_setValue_when_can_write_is_true(){
         $setting = $this->createSetting('siteName', 'Site Name 1 - default', 'string', canRead: false, canWrite: true);
         $baseSetting = $this->prophesize(SettingService::class);
@@ -64,7 +65,7 @@ class PermissionDecoratorTest extends TestCase
         $decorator->setValue('siteName','New Value');
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_for_setValue_when_can_write_is_false(){
         $this->expectException(SettingUnauthorized::class);
 
@@ -75,7 +76,7 @@ class PermissionDecoratorTest extends TestCase
         $decorator->setValue('siteName','New Value');
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_setDefaultValue_when_can_write_is_true(){
         $setting = $this->createSetting('siteName', 'Site Name 1 - default', 'string', canRead: false, canWrite: true);
         $baseSetting = $this->prophesize(SettingService::class);
@@ -84,7 +85,7 @@ class PermissionDecoratorTest extends TestCase
         $decorator->setDefaultValue('siteName','New Value');
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_for_setDefaultValue_when_can_write_is_false(){
         $this->expectException(SettingUnauthorized::class);
 

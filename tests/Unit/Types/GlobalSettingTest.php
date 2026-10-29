@@ -3,18 +3,19 @@
 namespace Settings\Tests\Unit\Types;
 
 use FormSchema\Schema\Field;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Tests\TestCase;
 use Settings\Types\GlobalSetting;
 
 class GlobalSettingTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function resolveId_returns_null(){
         $this->assertNull((new GlobalSettingTestDummySetting())->resolveId());
     }
 
-    /** @test */
+    #[Test]
     public function the_type_is_correct()
     {
         $this->assertEquals(GlobalSetting::class, (new GlobalSettingTestDummySetting())->type());

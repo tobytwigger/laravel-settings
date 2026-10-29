@@ -38,15 +38,15 @@
         }
     ],
     "require": {
-        "laravel/framework": "^10.0|^11.0|^12.0",
+        "laravel/framework": "^10.0|^11.0|^12.0|^13.0",
         "php": "^8.2",
         "tobytwigger/form-schema-generator": "^3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.4",
+        "phpunit/phpunit": "^10.5|^11.5|^12.5|^13.0",
         "phpspec/prophecy-phpunit": "^2.0",
-        "orchestra/testbench": "^6.2|^7.0|^8.0|^9.0",
-        "brianium/paratest": "^6.3"
+        "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+        "brianium/paratest": "^7.3"
     },
     "suggest": {
     },
@@ -75,6 +75,6 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/paratest --colors --verbose --configuration phpunit.xml"
+        "test": "vendor/bin/paratest --colors --configuration phpunit.xml"
     }
 }

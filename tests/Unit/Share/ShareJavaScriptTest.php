@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Share;
 
 use Settings\Contracts\SettingService;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Contracts\SettingStore;
 use Settings\Share\ESConfig;
 use Settings\Share\ShareJavaScript;
@@ -14,7 +15,7 @@ class ShareJavaScriptTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function toString_returns_the_settings_and_config_as_a_string(){
         $setting1 = $this->createSetting('setting1', 'My Setting One');
         $setting2 = $this->createSetting('setting2', 'My Setting Two');

@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Decorators;
 
 use Illuminate\Validation\ValidationException;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Contracts\SettingStore;
 use Settings\Decorators\AppNotBootedDecorator;
 use Settings\Decorators\ValidationDecorator;
@@ -16,7 +17,7 @@ class ValidationDecoratorTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_proxies_setValue_if_the_validation_passes(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -28,7 +29,7 @@ class ValidationDecoratorTest extends TestCase
         $decorator->setValue('siteName', 'new-value', 1);
     }
 
-    /** @test */
+    #[Test]
     public function it_proxies_setDefaultValue_if_the_validation_passes(){
         $setting = $this->createSetting('siteName', 'Site Name 1', 'string');
 
@@ -40,7 +41,7 @@ class ValidationDecoratorTest extends TestCase
         $decorator->setDefaultValue('siteName', 'new-value');
     }
 
-    /** @test */
+    #[Test]
     public function setValue_throws_an_exception_if_the_validation_fails(){
         $this->expectException(ValidationException::class);
 
@@ -54,7 +55,7 @@ class ValidationDecoratorTest extends TestCase
         $decorator->setValue('siteName', ['new-value'], 1);
     }
 
-    /** @test */
+    #[Test]
     public function setDefaultValue_throws_an_exception_if_the_validation_fails(){
         $this->expectException(ValidationException::class);
 

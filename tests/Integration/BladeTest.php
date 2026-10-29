@@ -3,6 +3,7 @@
 namespace Settings\Tests\Integration;
 
 use Illuminate\View\Compilers\BladeCompiler;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Setting;
 use Settings\Share\ESConfig;
 use Settings\Tests\TestCase;
@@ -22,7 +23,7 @@ class BladeTest extends TestCase
         $this->blade = resolve('blade.compiler');
     }
 
-    /** @test */
+    #[Test]
     public function it_renders_the_right_js()
     {
         $setting1 = $this->createSetting('setting1', 'My Setting One');

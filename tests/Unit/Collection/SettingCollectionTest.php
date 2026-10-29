@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Collection;
 
 use FormSchema\Schema\Form;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Collection\SettingCollection;
 use Settings\Setting;
 use Settings\Store\Query;
@@ -13,7 +14,7 @@ class SettingCollectionTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function toKeyValuePair_converts_the_settings_to_key_value_pairs()
     {
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null);
@@ -30,12 +31,12 @@ class SettingCollectionTest extends TestCase
         ]), (new SettingCollection([$setting1, $setting2, $setting3]))->toKeyValuePair());
     }
 
-    /** @test */
+    #[Test]
     public function toKeyValuePair_returns_an_array_if_no_settings_are_registered(){
         $this->assertEquals(SettingCollection::make([]), (new SettingCollection())->toKeyValuePair());
     }
 
-    /** @test */
+    #[Test]
     public function toForm_converts_a_search_to_a_form(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2'], fieldOptions: \FormSchema\Generator\Field::textInput('key1')->setValue('val1'));
         $setting2 = $this->createSetting('key2', 'val2', 'string', true, 1, ['group1', 'group3'], fieldOptions: \FormSchema\Generator\Field::textInput('key2')->setValue('val2'));
@@ -57,7 +58,7 @@ class SettingCollectionTest extends TestCase
 
     }
 
-    /** @test */
+    #[Test]
     public function toForm_adds_group_meta_information_if_present(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2']);
         $setting2 = $this->createSetting('key2', 'val2', 'string', true, 1, ['group2', 'group3']);
@@ -80,7 +81,7 @@ class SettingCollectionTest extends TestCase
         $this->assertNull($form->groups()[2]->getSubtitle());
     }
 
-    /** @test */
+    #[Test]
     public function how_the_form_is_created_can_be_controlled(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2']);
 
@@ -96,7 +97,7 @@ class SettingCollectionTest extends TestCase
         SettingCollection::$convertToFormUsing = null;
     }
 
-    /** @test */
+    #[Test]
     public function toForm_ignores_settings_without_a_field(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2'], fieldOptions: \FormSchema\Generator\Field::textInput('key1')->setValue('val1'));
         $setting2 = $this->createSetting('key2', 'val2', 'string', true, 1, ['group1', 'group3']);

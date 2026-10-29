@@ -3,6 +3,7 @@
 namespace Settings\Tests\Integration\Store;
 
 use Settings\Contracts\Setting;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Store\Query;
 use Settings\Tests\TestCase;
 use Settings\Tests\Traits\CreatesSettings;
@@ -13,7 +14,7 @@ class QueryExecutorTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_filters_by_a_group(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2']);
         $setting2 = $this->createSetting('key2', 'val1', 'string', true, null, ['group2', 'group3']);
@@ -24,7 +25,7 @@ class QueryExecutorTest extends TestCase
         ], Query::newQuery()->withGroup('group2')->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_by_having_many_groups(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2']);
         $setting2 = $this->createSetting('key2', 'val1', 'string', true, null, ['group2', 'group3']);
@@ -39,7 +40,7 @@ class QueryExecutorTest extends TestCase
         ], Query::newQuery()->withAllGroups(['group3', 'group1'])->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_includes_extra_groups_with_filtering(){
         $setting1 = $this->makeSetting('key1', 'val1', 'string', true, null, ['group1', 'group3']);
         $setting2 = $this->makeSetting('key2', 'val1', 'string', true, null, []);
@@ -53,7 +54,7 @@ class QueryExecutorTest extends TestCase
         ], Query::newQuery()->withGroup('group2')->withGroup('group1')->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_by_having_one_of_many_groups(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2']);
         $setting2 = $this->createSetting('key2', 'val1', 'string', true, null, ['group2', 'group3']);
@@ -65,7 +66,7 @@ class QueryExecutorTest extends TestCase
         ], Query::newQuery()->withAnyGroup(['group2', 'group1'])->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_by_having_a_type(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2'], 'type');
         $setting2 = $this->createSetting('key2', 'val1', 'string', true, null, ['group2', 'group3'], 'type2');
@@ -76,7 +77,7 @@ class QueryExecutorTest extends TestCase
         ], Query::newQuery()->withType('type2')->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_by_being_global(){
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2'], GlobalSetting::class);
         $setting2 = $this->createSetting('key2', 'val1', 'string', true, null, ['group2', 'group3'], 'type');
@@ -91,7 +92,7 @@ class QueryExecutorTest extends TestCase
         ], Query::newQuery()->withGlobalType()->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_by_being_a_user()
     {
         $setting1 = $this->createSetting('key1', 'val1', 'string', true, null, ['group1', 'group2'], UserSetting::class);

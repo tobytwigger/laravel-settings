@@ -3,6 +3,7 @@
 namespace Settings\Tests\Unit\Store;
 
 use Settings\Collection\SettingCollection;
+use PHPUnit\Framework\Attributes\Test;
 use Settings\Contracts\Setting;
 use Settings\Contracts\SettingStore;
 use Settings\Exceptions\SettingNotRegistered;
@@ -23,7 +24,7 @@ class SingletonSettingStoreTest extends TestCase
         $this->store = new SingletonSettingStore();
     }
 
-    /** @test */
+    #[Test]
     public function getByKey_gets_a_setting_by_key(){
         $setting = $this->makeSetting('siteName', 'Site Name 1', 'string');
         $this->store->register([$setting], []);
@@ -31,14 +32,14 @@ class SingletonSettingStoreTest extends TestCase
         $this->assertEquals($setting, $this->store->getByKey('siteName'));
     }
 
-    /** @test */
+    #[Test]
     public function getByKey_throws_an_exception_if_a_setting_not_found(){
         $this->expectException(SettingNotRegistered::class);
 
         $this->store->getByKey('siteName');
     }
 
-    /** @test */
+    #[Test]
     public function getByKey_accepts_an_alias(){
         $setting = $this->makeSetting('siteName', 'Site Name 1', 'string');
         $this->store->register([$setting], []);
@@ -48,7 +49,7 @@ class SingletonSettingStoreTest extends TestCase
         $this->assertEquals($setting, $this->store->getByKey('my site name'));
     }
 
-    /** @test */
+    #[Test]
     public function has_checks_if_a_setting_exists(){
         $setting = $this->makeSetting('siteName', 'Site Name 1', 'string');
         $this->store->register([$setting], []);
@@ -57,7 +58,7 @@ class SingletonSettingStoreTest extends TestCase
         $this->assertFalse($this->store->has('invalid'));
     }
 
-    /** @test */
+    #[Test]
     public function has_takes_aliases_into_account(){
         $setting = $this->makeSetting('siteName', 'Site Name 1', 'string');
         $this->store->alias('my site name', 'siteName');
@@ -68,7 +69,7 @@ class SingletonSettingStoreTest extends TestCase
         $this->assertFalse($this->store->has('invalid'));
     }
 
-    /** @test */
+    #[Test]
     public function there_can_be_many_aliases(){
         $setting = $this->makeSetting('siteName', 'Site Name 1', 'string');
         $this->store->alias('my site name', 'siteName');
@@ -84,7 +85,7 @@ class SingletonSettingStoreTest extends TestCase
         $this->assertEquals($setting, $this->store->getByKey('my site name two'));
     }
 
-    /** @test */
+    #[Test]
     public function all_returns_all_settings()
     {
         $setting1 = $this->makeSetting('siteName', 'Site Name 1', 'string');
@@ -102,7 +103,7 @@ class SingletonSettingStoreTest extends TestCase
 
     }
 
-    /** @test */
+    #[Test]
     public function groupIsRegistered_returns_if_a_group_is_registered(){
         $this->store->registerGroup('group1', 'Group 1', 'Grp 1 Subtitle');
 
@@ -110,26 +111,26 @@ class SingletonSettingStoreTest extends TestCase
         $this->assertFalse($this->store->groupIsRegistered('group2'));
     }
 
-    /** @test */
+    #[Test]
     public function getGroupTitle_returns_the_registered_group_title(){
         $this->store->registerGroup('group1', 'Group 1', 'Grp 1 Subtitle');
 
         $this->assertEquals('Group 1', $this->store->getGroupTitle('group1'));
     }
 
-    /** @test */
+    #[Test]
     public function getGroupTitle_returns_null_if_no_title_registered(){
         $this->assertNull($this->store->getGroupTitle('group1'));
     }
 
-    /** @test */
+    #[Test]
     public function getGroupSubtitle_returns_the_registered_group_subtitle(){
         $this->store->registerGroup('group1', 'Group 1', 'Grp 1 Subtitle');
 
         $this->assertEquals('Grp 1 Subtitle', $this->store->getGroupSubtitle('group1'));
     }
 
-    /** @test */
+    #[Test]
     public function getGroupSubtitle_returns_null_if_no_subtitle_registered(){
         $this->assertNull($this->store->getGroupSubtitle('group1'));
 

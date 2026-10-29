@@ -3,6 +3,7 @@
 namespace Settings\Tests\Integration\Http\Controllers;
 
 use Illuminate\Support\Facades\Crypt;
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\DB;
 use Settings\DatabaseSettings\SavedSetting;
 use Settings\Setting;
@@ -13,14 +14,14 @@ class GetSettingControllerTest extends TestCase
 {
     use CreatesSettings;
 
-    /** @test */
+    #[Test]
     public function it_gets_one_setting(){
         $this->createSetting('siteName', 'My Site Name');
         $response = $this->getJson(route('settings.get', ['settings' => ['siteName']]));
         $response->assertExactJson(['siteName' => 'My Site Name']);
     }
 
-    /** @test */
+    #[Test]
     public function it_gets_many_settings(){
         $this->createSetting('siteName', 'My Site Name');
         $this->createSetting('mainColour', 'Orange');
@@ -34,7 +35,7 @@ class GetSettingControllerTest extends TestCase
 
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_general_structure(){
         $response = $this->getJson(route('settings.get'));
         $response->assertStatus(422);
@@ -49,7 +50,7 @@ class GetSettingControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_setting_keys(){
         $this->createSetting('siteName', 'My Site Name');
         $this->createSetting('siteNameTwo', 'My Site Name Two');
@@ -61,7 +62,7 @@ class GetSettingControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_authorizes_if_you_cant_read_to_any_setting(){
         $this->createSetting('siteName', 'My Site Name', canRead: true, canWrite: false);
         $this->createSetting('siteNameTwo', 'My Site Name Two', canRead: false, canWrite: false);
@@ -75,7 +76,7 @@ class GetSettingControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_authorizes_before_validating(){
         $this->createSetting('siteName', 'My Site Name', ['string'], canRead: false, canWrite: false);
 
